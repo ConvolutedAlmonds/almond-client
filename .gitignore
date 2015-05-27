@@ -4,3 +4,8 @@
 node_modules/
 platforms/
 plugins/
+
+# ignore sass output files
+# if you're missing these, run 'gulp sass'
+www/css/ionic.app.css
+www/css/ionic.app.min.css
