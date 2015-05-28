@@ -38,8 +38,9 @@ angular.module('almond.controllers', [])
 })
 
 .controller('MapCtrl', function($scope, $stateParams) {
-  console.log("Yo!")
-  // google.maps.event.addDomListener(window, 'load', function() {
+  $scope.lat = undefined;
+  $scope.long = undefined;
+
       var myLatlng = new google.maps.LatLng(37.3000, -120.4833);
   
       var mapOptions = {
@@ -58,8 +59,34 @@ angular.module('almond.controllers', [])
               map: map,
               title: "My Location"
           });
+          $scope.lat = pos.coords.latitude;
+          $scope.long = pos.coords.longitude;
+          console.log("got position")
+          displayRoute()
       });
   
+
+      function displayRoute() {
+          var directionsService = new google.maps.DirectionsService();
+          console.log("dR sees : " + $scope.lat + " " + $scope.long);
+          console.log(typeof $scope.lat);
+          var start = new google.maps.LatLng($scope.lat, $scope.long);
+          var end = new google.maps.LatLng(37.3000, -120.4833);
+          var directionsDisplay = new google.maps.DirectionsRenderer();// also, constructor can get "DirectionsRendererOptions" object
+          directionsDisplay.setMap(map); // map should be already initialized.
+
+          var request = {
+              origin : start,
+              destination : end,
+              travelMode : google.maps.TravelMode.DRIVING
+          };
+          var directionsService = new google.maps.DirectionsService(); 
+          directionsService.route(request, function(response, status) {
+              if (status == google.maps.DirectionsStatus.OK) {
+                  directionsDisplay.setDirections(response);
+              }
+          });
+      }
+
       $scope.map = map;
   });
-// });
