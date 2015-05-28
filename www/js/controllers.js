@@ -45,7 +45,8 @@ angular.module('almond.controllers', [])
       var mapOptions = {
           center: myLatlng,
           zoom: 16,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          disableDefaultUI: true
       };
   
       var map = new google.maps.Map(document.getElementById("map"), mapOptions);
