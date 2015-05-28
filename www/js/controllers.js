@@ -37,5 +37,6 @@ angular.module('almond.controllers', [])
   // put dummy data here!
 })
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
+.controller('MapCtrl', function($scope, $stateParams) {
+  
 });
