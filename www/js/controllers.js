@@ -41,11 +41,11 @@ angular.module('almond.controllers', [])
   $scope.lat = undefined;
   $scope.long = undefined;
 
-      var myLatlng = new google.maps.LatLng(37.3000, -120.4833);
+      var myLatlng = new google.maps.LatLng(37.7483, -122.4367); // SF, home sweet home
   
       var mapOptions = {
           center: myLatlng,
-          zoom: 16,
+          zoom: 12,
           mapTypeId: google.maps.MapTypeId.ROADMAP,
           disableDefaultUI: true
       };
