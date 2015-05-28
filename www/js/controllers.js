@@ -33,13 +33,26 @@ angular.module('almond.controllers', [])
   };
 })
 
-.controller('StartCtrl', function($scope) {
+.controller('StartCtrl', function($scope, userLocation) {
   // put dummy data here!
+  userLocation.getCoords().then(function(coords){
+    $scope.lat = coords.latitude;
+    $scope.long = coords.longitude;
+  });
 })
 
-.controller('MapCtrl', function($scope, $stateParams) {
-  $scope.lat = undefined;
-  $scope.long = undefined;
+.controller('MapCtrl', function($scope, $stateParams, userLocation) {
+  userLocation.getCoords().then(function(coords){
+    $scope.lat = coords.latitude;
+    $scope.long = coords.longitude;
+    map.setCenter(new google.maps.LatLng(coords.latitude, coords.longitude));
+    var myLocation = new google.maps.Marker({
+        position: new google.maps.LatLng(coords.latitude, coords.longitude),
+        map: map,
+        title: "My Location"
+    });
+    displayRoute()
+  })
 
       var myLatlng = new google.maps.LatLng(37.7483, -122.4367); // SF, home sweet home
   
@@ -51,19 +64,6 @@ angular.module('almond.controllers', [])
       };
   
       var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-  
-      navigator.geolocation.getCurrentPosition(function(pos) {
-          map.setCenter(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
-          var myLocation = new google.maps.Marker({
-              position: new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude),
-              map: map,
-              title: "My Location"
-          });
-          $scope.lat = pos.coords.latitude;
-          $scope.long = pos.coords.longitude;
-          console.log("got position")
-          displayRoute()
-      });
   
 
       function displayRoute() {

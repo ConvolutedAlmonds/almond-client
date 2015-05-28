@@ -91,4 +91,23 @@ angular.module('almond', ['ionic', 'almond.controllers'])
         },
         replace: true
     }
-});
+})
+.factory('userLocation', function($q) {
+  return {
+    getCoords: function() {
+      var deferred = $q.defer();
+      console.log("HEY FROM USERLOCATION SERVICE")
+      navigator.geolocation.getCurrentPosition(function(pos) {
+        if(pos) {
+          deferred.resolve({
+            latitude: pos.coords.latitude,
+            longitude: pos.coords.longitude
+          })
+        } else {
+          deferred.reject("Geolocation API didn't return coordinates :(");
+        }
+        });
+      return deferred.promise;
+    }
+  };
+  });

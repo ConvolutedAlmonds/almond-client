@@ -3,7 +3,8 @@
     <center><h1>Where To?</h1></center>
     <button class="button button-block button-outline button-positive icon-left">
       <i class="ion-ios-location-outline"></i>
-      <reverse-geocode lat="40.730885" lng="-73.997383" />
+      <span ng-if="!lat">Getting your location...</span>
+      <reverse-geocode ng-if="lat" lat="{{lat}}" lng="{{long}}" />
     </button>
     <div class="list list-inset">
       <label class="item item-input">
