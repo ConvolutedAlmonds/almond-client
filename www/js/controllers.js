@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('almond.controllers', [])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
   // Form data for the login modal
@@ -33,16 +33,83 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];
+.controller('OptionsCtrl', function($scope, userLocation) {
+  $scope.event = {
+    title: "Onsite Interview",
+    location: "944 Market Street, San Francisco",
+    locationName: "Hack Reactor",
+    placeId: "ChIJXd_HvYWAhYAR9tpKaPJ4aME", // google maps PlaceID
+    time: 1434790800 // epoch time. we'll use moment.js on the view to format this
+  }
+  $scope.options = [
+    {
+      mode: "Driving",
+      travelTime: 15, // in minutes
+      cost: 3 // estimated cost in USD. Gas cost? Tolls? Wear and tear?
+
+    },
+    {
+      mode: "Uber",
+      travelTime: 21,
+      cost: 9
+    }
+  ]
 })
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
-});
+.controller('StartCtrl', function($scope, userLocation) {
+  // put dummy data here!
+  userLocation.getCoords().then(function(coords){
+    $scope.lat = coords.latitude;
+    $scope.long = coords.longitude;
+  });
+})
+
+.controller('MapCtrl', function($scope, $stateParams, userLocation) {
+  userLocation.getCoords().then(function(coords){
+    $scope.lat = coords.latitude;
+    $scope.long = coords.longitude;
+    map.setCenter(new google.maps.LatLng(coords.latitude, coords.longitude));
+    var myLocation = new google.maps.Marker({
+        position: new google.maps.LatLng(coords.latitude, coords.longitude),
+        map: map,
+        title: "My Location"
+    });
+    displayRoute()
+  })
+
+      var myLatlng = new google.maps.LatLng(37.7483, -122.4367); // SF, home sweet home
+  
+      var mapOptions = {
+          center: myLatlng,
+          zoom: 12,
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          disableDefaultUI: true
+      };
+  
+      var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+  
+
+      function displayRoute() {
+          var directionsService = new google.maps.DirectionsService();
+          console.log("dR sees : " + $scope.lat + " " + $scope.long);
+          console.log(typeof $scope.lat);
+          var start = new google.maps.LatLng($scope.lat, $scope.long);
+          var end = new google.maps.LatLng(37.3000, -120.4833);
+          var directionsDisplay = new google.maps.DirectionsRenderer();// also, constructor can get "DirectionsRendererOptions" object
+          directionsDisplay.setMap(map); // map should be already initialized.
+
+          var request = {
+              origin : start,
+              destination : end,
+              travelMode : google.maps.TravelMode.DRIVING
+          };
+          var directionsService = new google.maps.DirectionsService(); 
+          directionsService.route(request, function(response, status) {
+              if (status == google.maps.DirectionsStatus.OK) {
+                  directionsDisplay.setDirections(response);
+              }
+          });
+      }
+
+      $scope.map = map;
+  });

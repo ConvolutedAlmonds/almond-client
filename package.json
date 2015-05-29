@@ -19,7 +19,11 @@
     "cordova-plugin-console",
     "cordova-plugin-whitelist",
     "cordova-plugin-splashscreen",
-    "com.ionic.keyboard"
+    "com.ionic.keyboard",
+    {
+      "locator": "https://git-wip-us.apache.org/repos/asf/cordova-plugin-geolocation.git",
+      "id": "cordova-plugin-geolocation"
+    }
   ],
   "cordovaPlatforms": [
     "ios",

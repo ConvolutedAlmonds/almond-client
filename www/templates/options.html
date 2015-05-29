@@ -1,0 +1,15 @@
+<ion-view view-title="Options">
+  <ion-content>
+    <center>{{event.title}} at {{event.locationName}}</center>
+    <div class="card" ng-repeat="o in options">
+      <div class="item item-text-wrap">
+        <h1>{{o.mode}}</h1>
+        will take <b>{{o.travelTime}}</b> minutes
+        and will cost <b>${{o.cost}}</b>
+      </div>
+    </div>
+    <div class="bar bar-footer bar-energized">
+      <div class="title">Your event starts in {{event.time}}.</div>
+    </div>
+  </ion-content>
+</ion-view>
