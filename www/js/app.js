@@ -74,6 +74,16 @@ angular.module('almond', ['ionic', 'almond.controllers'])
         controller: 'MapCtrl'
       }
     }
+  })
+
+  .state('app.settings', {
+    url: "/settings",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/settings.html" //,
+        // controller: 'MapCtrl'
+      }
+    }
   });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/start');
