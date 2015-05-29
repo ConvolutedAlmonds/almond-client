@@ -56,6 +56,15 @@ angular.module('almond', ['ionic', 'almond.controllers'])
         }
       }
     })
+    .state('app.options', {
+      url: "/options",
+      views: {
+        'menuContent': {
+          templateUrl: "templates/options.html",
+          controller: 'OptionsCtrl'
+        }
+      }
+    })
 
   .state('app.map', {
     url: "/map",

@@ -33,6 +33,10 @@ angular.module('almond.controllers', [])
   };
 })
 
+.controller('OptionsCtrl', function($scope, userLocation) {
+
+})
+
 .controller('StartCtrl', function($scope, userLocation) {
   // put dummy data here!
   userLocation.getCoords().then(function(coords){
