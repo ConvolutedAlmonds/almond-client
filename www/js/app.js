@@ -131,14 +131,18 @@ angular.module('almond', ['ionic', 'almond.controllers'])
       var deferred = $q.defer();
       console.log("HEY FROM USERLOCATION SERVICE")
       navigator.geolocation.getCurrentPosition(function(pos) {
-        if(pos) {
           deferred.resolve({
             latitude: pos.coords.latitude,
             longitude: pos.coords.longitude
           })
-        } else {
+        },function(error) {
           deferred.reject("Geolocation API didn't return coordinates :(");
-        }
+          console.error(error)
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0
         });
       return deferred.promise;
     }

@@ -65,17 +65,20 @@ angular.module('almond.controllers', [])
 })
 
 .controller('MapCtrl', function($scope, $stateParams, userLocation) {
-  userLocation.getCoords().then(function(coords){
-    $scope.lat = coords.latitude;
-    $scope.long = coords.longitude;
-    map.setCenter(new google.maps.LatLng(coords.latitude, coords.longitude));
-    var myLocation = new google.maps.Marker({
-        position: new google.maps.LatLng(coords.latitude, coords.longitude),
-        map: map,
-        title: "My Location"
-    });
-    displayRoute()
-  })
+  function updateLoc() {
+    userLocation.getCoords().then(function(coords){
+      $scope.lat = coords.latitude;
+      $scope.long = coords.longitude;
+      map.setCenter(new google.maps.LatLng(coords.latitude, coords.longitude));
+      var myLocation = new google.maps.Marker({
+          position: new google.maps.LatLng(coords.latitude, coords.longitude),
+          map: map,
+          title: "My Location"
+      });
+      // displayRoute()
+    })
+  }
+  setInterval(updateLoc,5000);
 
       var myLatlng = new google.maps.LatLng(37.7483, -122.4367); // SF, home sweet home
   
