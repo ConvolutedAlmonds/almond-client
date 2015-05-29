@@ -80,7 +80,21 @@ angular.module('almond', ['ionic', 'almond.controllers'])
             geocoder.geocode({ 'latLng': latlng }, function (results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
                     if (results[1]) {
-                        element.text(results[1].formatted_address);
+                        element.text(
+                          results[0].address_components.filter(function(v){
+                            if(
+                                v.types.indexOf('street_number') !== -1 ||
+                                v.types.indexOf('route') !== -1 // ||
+                                // v.types.indexOf('neighborhood') !== -1 ||
+                                // v.types.indexOf('sublocality_level_1') !== -1
+                                ) { return true; }
+                            else { return false };
+                          })
+                          .map(function(v){
+                              return v.long_name;
+                          })
+                          .join(" ")
+                          );
                     } else {
                         element.text('Location not found');
                     }
