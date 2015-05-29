@@ -34,7 +34,26 @@ angular.module('almond.controllers', [])
 })
 
 .controller('OptionsCtrl', function($scope, userLocation) {
+  $scope.event = {
+    title: "Onsite Interview",
+    location: "944 Market Street, San Francisco",
+    locationName: "Hack Reactor",
+    placeId: "ChIJXd_HvYWAhYAR9tpKaPJ4aME", // google maps PlaceID
+    time: 1434790800 // epoch time. we'll use moment.js on the view to format this
+  }
+  $scope.options = [
+    {
+      mode: "Driving",
+      travelTime: 15, // in minutes
+      cost: 3 // estimated cost in USD. Gas cost? Tolls? Wear and tear?
 
+    },
+    {
+      mode: "Uber",
+      travelTime: 21,
+      cost: 9
+    }
+  ]
 })
 
 .controller('StartCtrl', function($scope, userLocation) {
