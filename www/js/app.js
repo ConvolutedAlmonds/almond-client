@@ -73,7 +73,7 @@ angular.module('almond', ['ionic', 'almond.controllers'])
 .directive('reverseGeocode', function () {
     return {
         restrict: 'E',
-        template: '<span></span>',
+        template: '<span>Locating...</span>',
         link: function (scope, element, attrs) {
             var geocoder = new google.maps.Geocoder();
             var latlng = new google.maps.LatLng(attrs.lat, attrs.lng);
