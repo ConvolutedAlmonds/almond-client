@@ -1,15 +1,13 @@
 <ion-view view-title="Travel Modes">
   <ion-content>
     <center>{{event.title}} at {{event.locationName}}</center>
-    <a href="#/app/start">
-      <div class="card" ng-repeat="o in travelModes">
-        <div class="item item-text-wrap">
-          <h1>{{o.mode}}</h1>
-          will take <b>{{o.travelTime}}</b> minutes
-          and will cost <b>${{o.cost}}</b>
-        </div>
+    <div class="card" ng-repeat="o in travelModes">
+      <div class="item item-text-wrap">
+        <h1>{{o.mode}}</h1>
+        will take <b>{{o.travelTime}}</b> minutes
+        and will cost <b>${{o.cost}}</b>
       </div>
-    </a>
+    </div>
     <div class="bar bar-footer bar-energized">
       <div class="title">Your event starts in <span am-time-ago="event.time"></span></div>
     </div>
