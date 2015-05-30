@@ -99,7 +99,8 @@ angular.module('almond.controllers', [])
           center: myLatlng,
           zoom: 12,
           mapTypeId: google.maps.MapTypeId.ROADMAP,
-          disableDefaultUI: true
+          disableDefaultUI: true,
+          styles: [{ featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }]}]
       };
   
       var map = new google.maps.Map(document.getElementById("map"), mapOptions);
