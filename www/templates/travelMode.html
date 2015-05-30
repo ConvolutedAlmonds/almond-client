@@ -1,5 +1,21 @@
 <ion-view view-title="{{travelMode.title}}">
   <ion-content>
-    this is a travel mode
+
+  <div ng-if="activeTab === 'directions'">
+    Directions go here
+  </div>
+
+  <div ng-if="activeTab === 'map'">
+    The dog ate our map
+  </div>
+
+    <div class="tabs tabs-stable">
+      <a ng-click="activeTab = 'directions'" class="tab-item {{activeTab === 'directions' ? 'active' : ''}}">
+        Directions
+      </a>
+      <a ng-click="activeTab = 'map'" class="tab-item {{activeTab === 'map' ? 'active' : ''}}">
+        Map
+      </a>
+    </div>
   </ion-content>
 </ion-view>

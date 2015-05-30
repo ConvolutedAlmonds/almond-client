@@ -75,6 +75,26 @@ angular.module('almond.controllers', [])
 .controller('TravelModeCtrl', function($scope,$stateParams) {
   $scope.travelMode = {};
   $scope.travelMode.title = $stateParams.travelMode;
+  $scope.activeTab = 'directions';
+})
+
+.controller('SettingsCtrl', function($scope) {
+  $scope.settings = {
+    travelModes: {
+      uber: {
+        enabled: false,
+        title: "Uber"
+      },
+      driving: {
+        enabled: true,
+        title:"Driving"
+      },
+      transit: {
+        enabled: true,
+        title: "Public Transit"
+      }
+    }
+  }
 })
 
 .controller('MapCtrl', function($scope, $stateParams, userLocation) {
