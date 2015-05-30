@@ -2,37 +2,15 @@
   <ion-content>
 
   <ul class="list">
-
-    <li class="item item-toggle">
-       Driving
+    <li class="item item-toggle" ng-repeat="mode in settings.travelModes">
+       {{mode.title}}
        <label class="toggle toggle-positive">
-         <input type="checkbox">
+         <input type="checkbox" ng-model="mode.enabled">
          <div class="track">
            <div class="handle"></div>
          </div>
        </label>
     </li>
-    <li class="item item-toggle">
-       Public Transportation
-       <label class="toggle toggle-positive">
-         <input type="checkbox">
-         <div class="track">
-           <div class="handle"></div>
-         </div>
-       </label>
-    </li>
-    <li class="item item-toggle">
-       Uber
-       <label class="toggle toggle-positive">
-         <input type="checkbox">
-         <div class="track">
-           <div class="handle"></div>
-         </div>
-       </label>
-    </li>
-
-
-
   </ul>
 
   </ion-content>

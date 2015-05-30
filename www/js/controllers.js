@@ -78,6 +78,25 @@ angular.module('almond.controllers', [])
   $scope.activeTab = 'directions';
 })
 
+.controller('SettingsCtrl', function($scope) {
+  $scope.settings = {
+    travelModes: {
+      uber: {
+        enabled: false,
+        title: "Uber"
+      },
+      driving: {
+        enabled: true,
+        title:"Driving"
+      },
+      transit: {
+        enabled: true,
+        title: "Public Transit"
+      }
+    }
+  }
+})
+
 .controller('MapCtrl', function($scope, $stateParams, userLocation) {
   function updateLoc() {
     userLocation.getCoords().then(function(coords){

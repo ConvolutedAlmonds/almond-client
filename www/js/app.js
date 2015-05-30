@@ -90,8 +90,8 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment'])
     url: "/settings",
     views: {
       'menuContent': {
-        templateUrl: "templates/settings.html" //,
-        // controller: 'MapCtrl'
+        templateUrl: "templates/settings.html",
+        controller: 'SettingsCtrl'
       }
     }
   });
