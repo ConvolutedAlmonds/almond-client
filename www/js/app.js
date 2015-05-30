@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('almond', ['ionic', 'almond.controllers'])
+angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -56,12 +56,22 @@ angular.module('almond', ['ionic', 'almond.controllers'])
         }
       }
     })
-    .state('app.options', {
-      url: "/options",
+    .state('app.travelModes', {
+      url: "/travelModes",
       views: {
         'menuContent': {
-          templateUrl: "templates/options.html",
-          controller: 'OptionsCtrl'
+          templateUrl: "templates/travelModes.html",
+          controller: 'TravelModesCtrl'
+        }
+      }
+    })
+
+    .state('app.travelMode', {
+      url: "/travelMode/{travelMode}",
+      views: {
+        'menuContent': {
+          templateUrl: "templates/travelMode.html",
+          controller: 'TravelModeCtrl'
         }
       }
     })
@@ -124,6 +134,9 @@ angular.module('almond', ['ionic', 'almond.controllers'])
         },
         replace: true
     }
+})
+.constant('angularMomentConfig', {
+    preprocess: 'unix' // optional
 })
 .factory('userLocation', function($q) {
   return {
