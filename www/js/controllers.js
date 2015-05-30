@@ -64,6 +64,10 @@ angular.module('almond.controllers', [])
   });
 })
 
+.controller('TravelModeCtrl', function($scope) {
+
+})
+
 .controller('MapCtrl', function($scope, $stateParams, userLocation) {
   function updateLoc() {
     userLocation.getCoords().then(function(coords){
