@@ -125,6 +125,9 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment'])
         replace: true
     }
 })
+.constant('angularMomentConfig', {
+    preprocess: 'unix' // optional
+})
 .factory('userLocation', function($q) {
   return {
     getCoords: function() {
