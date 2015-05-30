@@ -33,7 +33,7 @@ angular.module('almond.controllers', [])
   };
 })
 
-.controller('OptionsCtrl', function($scope, userLocation) {
+.controller('TravelModesCtrl', function($scope, userLocation) {
   $scope.event = {
     title: "Onsite Interview",
     location: "944 Market Street, San Francisco",
@@ -41,7 +41,7 @@ angular.module('almond.controllers', [])
     placeId: "ChIJXd_HvYWAhYAR9tpKaPJ4aME", // google maps PlaceID
     time: 1434790800 // epoch time. we'll use moment.js on the view to format this
   }
-  $scope.options = [
+  $scope.travelModes = [
     {
       mode: "Driving",
       travelTime: 15, // in minutes

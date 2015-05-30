@@ -1,8 +1,8 @@
-<ion-view view-title="Options">
+<ion-view view-title="Travel Modes">
   <ion-content>
     <center>{{event.title}} at {{event.locationName}}</center>
     <a href="#/app/start">
-      <div class="card" ng-repeat="o in options">
+      <div class="card" ng-repeat="o in travelModes">
         <div class="item item-text-wrap">
           <h1>{{o.mode}}</h1>
           will take <b>{{o.travelTime}}</b> minutes

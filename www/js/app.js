@@ -56,12 +56,12 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment'])
         }
       }
     })
-    .state('app.options', {
-      url: "/options",
+    .state('app.travelModes', {
+      url: "/travelModes",
       views: {
         'menuContent': {
-          templateUrl: "templates/options.html",
-          controller: 'OptionsCtrl'
+          templateUrl: "templates/travelModes.html",
+          controller: 'TravelModesCtrl'
         }
       }
     })
