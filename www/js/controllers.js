@@ -75,6 +75,7 @@ angular.module('almond.controllers', [])
 .controller('TravelModeCtrl', function($scope,$stateParams) {
   $scope.travelMode = {};
   $scope.travelMode.title = $stateParams.travelMode;
+  $scope.activeTab = 'directions';
 })
 
 .controller('MapCtrl', function($scope, $stateParams, userLocation) {
