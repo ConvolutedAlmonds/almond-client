@@ -62,6 +62,14 @@ angular.module('almond.controllers', [])
     $scope.lat = coords.latitude;
     $scope.long = coords.longitude;
   });
+  $scope.user = {
+    nextEvent: {
+      title: "Onsite Interview",
+      address: "944 Market Street",
+      location: "Hack Reactor",
+      time: 69696969 // epoch time
+    }
+  }
 })
 
 .controller('TravelModeCtrl', function($scope) {
