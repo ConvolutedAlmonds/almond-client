@@ -56,20 +56,23 @@ angular.module('almond.controllers', [])
   ]
 })
 
-.controller('StartCtrl', function($scope, userLocation) {
+.controller('StartCtrl', function($scope, userLocation, $rootScope) {
   // put dummy data here!
   userLocation.getCoords().then(function(coords){
     $scope.lat = coords.latitude;
     $scope.long = coords.longitude;
   });
-  $scope.user = {
-    nextEvent: {
-      title: "Onsite Interview",
-      address: "944 Market Street",
-      location: "Hack Reactor",
-      time: 69696969 // epoch time
-    }
+
+  function updateRootScope(key,val) {
+    $rootScope[key] = val;
   }
+
+  getEvents(function(data){
+    $scope.nextEvent = {
+      title: data.events.items[0].summary,
+      address: data.events.items[0].location
+    }
+  })
 })
 
 .controller('TravelModeCtrl', function($scope,$stateParams) {
