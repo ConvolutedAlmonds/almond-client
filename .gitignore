@@ -7,7 +7,7 @@ plugins/
 www/lib/*
 www.zip
 !www/lib/ionic/
-
+!www/lib/ion-google-place/
 # ignore sass output files
 # if you're missing these, run 'gulp sass'
 www/css/ionic.app.css
