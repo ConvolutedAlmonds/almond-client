@@ -19,7 +19,12 @@ angular.module('almond.controllers', [])
   // Open the login modal
   $scope.login = function() {
     $scope.modal.show();
+
   };
+
+  $scope.authorizeUser = function() {
+    authorizeUser();
+  }
 
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
