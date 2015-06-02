@@ -10,7 +10,6 @@
     "angular-reverse-geocode": "*",
     "angular-ui-router": "~0.2.15",
     "angular-sanitize": "~1.4.0",
-    "ion-google-place": "~0.0.1",
     "lodash": "~3.9.3",
     "angular-moment": "~0.10.1"
   },
