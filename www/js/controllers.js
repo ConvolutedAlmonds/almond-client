@@ -61,7 +61,8 @@ angular.module('almond.controllers', [])
   userLocation.getCoords().then(function(coords){
     $scope.lat = coords.latitude;
     $scope.long = coords.longitude;
-
+    setRootScope('userLat',coords.latitude);
+    setRootScope('userLong',coords.longitude);
   });
 
   function setRootScope(key,val) {
