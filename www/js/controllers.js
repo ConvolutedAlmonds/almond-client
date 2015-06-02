@@ -56,16 +56,22 @@ angular.module('almond.controllers', [])
   ]
 })
 
-.controller('StartCtrl', function($scope, userLocation, $rootScope) {
-  // put dummy data here!
-  userLocation.getCoords().then(function(coords){
-    $scope.lat = coords.latitude;
-    $scope.long = coords.longitude;
-  });
+.controller('StartCtrl', function($scope, $rootScope) {
+  $scope.lat = $rootScope.userLat;
+  $scope.long = $rootScope.userLong;
 
-  function updateRootScope(key,val) {
-    $rootScope[key] = val;
-  }
+  // this syncs our scope's 'lat' and 'long' properties with the coordinates 
+  // provided by the userLocation service to the rootScope.
+  $scope.$watch(function() {
+    return $rootScope.userLat;
+  }, function() {
+    $scope.lat = $rootScope.userLat;
+  }, true);
+  $scope.$watch(function() {
+    return $rootScope.userLong;
+  }, function() {
+    $scope.long = $rootScope.userLong;
+  }, true);
 
   getEvents(function(data){
     $scope.nextEvent = {

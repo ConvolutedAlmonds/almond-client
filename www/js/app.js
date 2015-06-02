@@ -6,7 +6,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $rootScope, userLocation) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -17,6 +17,19 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment'])
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
+    function setRootScope(key,val) {
+      $rootScope[key] = val;
+    }
+
+    function updateLoc() {
+      userLocation.getCoords().then(function(coords){
+        setRootScope('userLat',coords.latitude);
+        setRootScope('userLong',coords.longitude);
+      });
+    }
+    updateLoc();
+    setInterval(updateLoc,5000);
   });
 })
 
@@ -142,7 +155,7 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment'])
   return {
     getCoords: function() {
       var deferred = $q.defer();
-      console.log("HEY FROM USERLOCATION SERVICE")
+      console.log("UserLocation service ran")
       navigator.geolocation.getCurrentPosition(function(pos) {
           deferred.resolve({
             latitude: pos.coords.latitude,
