@@ -142,7 +142,7 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment'])
   return {
     getCoords: function() {
       var deferred = $q.defer();
-      console.log("HEY FROM USERLOCATION SERVICE")
+      console.log("UserLocation service ran")
       navigator.geolocation.getCurrentPosition(function(pos) {
           deferred.resolve({
             latitude: pos.coords.latitude,
