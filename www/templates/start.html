@@ -7,12 +7,16 @@
     </button>
     <div class="list list-inset">
       <button class="button button-block button-balanced">
-        Get to your <b>{{user.nextEvent.title}}!</b>
+        Get to <b>{{nextEvent.title}}!</b>
       </button>
       <label class="item item-input">
         <i class="icon ion-search placeholder-icon"></i>
-        <input type="text" placeholder="Search for a location">
+        <ion-google-place placeholder="Enter an address, Apt# and ZIP" ng-model="location" />
       </label>
+<!--       <label class="item item-input">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input type="text" placeholder="Search for a location">
+      </label> -->
     </div>
   </ion-content>
 </ion-view>

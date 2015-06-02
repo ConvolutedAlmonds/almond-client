@@ -4,9 +4,9 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment'])
+angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-google-place'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $rootScope, userLocation) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -17,6 +17,19 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment'])
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
+    function setRootScope(key,val) {
+      $rootScope[key] = val;
+    }
+
+    function updateLoc() {
+      userLocation.getCoords().then(function(coords){
+        setRootScope('userLat',coords.latitude);
+        setRootScope('userLong',coords.longitude);
+      });
+    }
+    updateLoc();
+    setInterval(updateLoc,5000);
   });
 })
 
@@ -142,7 +155,7 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment'])
   return {
     getCoords: function() {
       var deferred = $q.defer();
-      console.log("HEY FROM USERLOCATION SERVICE")
+      console.log("UserLocation service ran")
       navigator.geolocation.getCurrentPosition(function(pos) {
           deferred.resolve({
             latitude: pos.coords.latitude,

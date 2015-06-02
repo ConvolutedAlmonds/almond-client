@@ -1,6 +1,6 @@
 {
-  "name": "Almond",
-  "app_id": "6a7185ec",
+  "name": "Almond2",
+  "app_id": "79e840cf",
   "gulpStartupTasks": [
     "sass",
     "watch"
