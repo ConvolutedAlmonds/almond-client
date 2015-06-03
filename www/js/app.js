@@ -155,7 +155,6 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
   return {
     getCoords: function() {
       var deferred = $q.defer();
-      console.log("UserLocation service ran")
       navigator.geolocation.getCurrentPosition(function(pos) {
         $rootScope.$broadcast('UserLocation.Update');
         deferred.resolve({

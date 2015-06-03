@@ -121,49 +121,48 @@ angular.module('almond.controllers', [])
   function updateLoc() {
     map.setCenter(new google.maps.LatLng($rootScope.userLat, $rootScope.userLong));
     var myLocation = new google.maps.Marker({
-        position: new google.maps.LatLng($rootScope.userLat, $rootScope.userLong),
-        map: map,
-        title: "My Location"
+      position: new google.maps.LatLng($rootScope.userLat, $rootScope.userLong),
+      map: map,
+      title: "My Location"
     });
   }
   $scope.$on('UserLocation.Update',function(){
     updateLoc();
   })
 
+  var myLatlng = new google.maps.LatLng(37.7483, -122.4367); // SF, home sweet home
+
+  var mapOptions = {
+    center: myLatlng,
+    zoom: 12,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    disableDefaultUI: true,
+    styles: [{ featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }]}]
+  };
+
+  var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
   displayRoute();
 
-      var myLatlng = new google.maps.LatLng(37.7483, -122.4367); // SF, home sweet home
-  
-      var mapOptions = {
-          center: myLatlng,
-          zoom: 12,
-          mapTypeId: google.maps.MapTypeId.ROADMAP,
-          disableDefaultUI: true,
-          styles: [{ featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }]}]
-      };
-  
-      var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-  
+  function displayRoute() {
+    var directionsService = new google.maps.DirectionsService();
+    var start = new google.maps.LatLng($rootScope.userLat, $rootScope.userLong);
+    var end = $scope.destination.formatted_address;
+    var directionsDisplay = new google.maps.DirectionsRenderer();// also, constructor can get "DirectionsRendererOptions" object
+    directionsDisplay.setMap(map); // map should be already initialized.
 
-      function displayRoute() {
-          var directionsService = new google.maps.DirectionsService();
-          var start = new google.maps.LatLng($rootScope.userLat, $rootScope.userLong);
-          var end = $scope.destination.formatted_address;
-          var directionsDisplay = new google.maps.DirectionsRenderer();// also, constructor can get "DirectionsRendererOptions" object
-          directionsDisplay.setMap(map); // map should be already initialized.
-
-          var request = {
-              origin : start,
-              destination : end,
-              travelMode : google.maps.TravelMode.DRIVING
-          };
-          var directionsService = new google.maps.DirectionsService(); 
-          directionsService.route(request, function(response, status) {
-              if (status == google.maps.DirectionsStatus.OK) {
-                  directionsDisplay.setDirections(response);
-              }
-          });
+    var request = {
+      origin : start,
+      destination : end,
+      travelMode : google.maps.TravelMode.DRIVING
+    };
+    var directionsService = new google.maps.DirectionsService(); 
+    directionsService.route(request, function(response, status) {
+      if (status == google.maps.DirectionsStatus.OK) {
+        directionsDisplay.setDirections(response);
       }
+    });
+  }
 
-      $scope.map = map;
-  });
+  $scope.map = map;
+});
