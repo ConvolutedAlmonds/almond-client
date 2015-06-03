@@ -113,22 +113,18 @@ angular.module('almond.controllers', [])
   }
 })
 
-.controller('MapCtrl', function($scope, $stateParams, userLocation, destinationService) {
+.controller('MapCtrl', function($scope, $stateParams, $rootScope, destinationService) {
 
   $scope.destination = destinationService.get();
 
   function updateLoc() {
-    userLocation.getCoords().then(function(coords){
-      $scope.lat = coords.latitude;
-      $scope.long = coords.longitude;
-      map.setCenter(new google.maps.LatLng(coords.latitude, coords.longitude));
-      var myLocation = new google.maps.Marker({
-          position: new google.maps.LatLng(coords.latitude, coords.longitude),
-          map: map,
-          title: "My Location"
-      });
-      // displayRoute()
-    })
+    map.setCenter(new google.maps.LatLng($rootScope.userLat, $rootScope.userLong));
+    var myLocation = new google.maps.Marker({
+        position: new google.maps.LatLng($rootScope.userLat, $rootScope.userLong),
+        map: map,
+        title: "My Location"
+    });
+    // displayRoute()
   }
   setInterval(updateLoc,5000);
 
@@ -147,9 +143,7 @@ angular.module('almond.controllers', [])
 
       function displayRoute() {
           var directionsService = new google.maps.DirectionsService();
-          console.log("dR sees : " + $scope.lat + " " + $scope.long);
-          console.log(typeof $scope.lat);
-          var start = new google.maps.LatLng($scope.lat, $scope.long);
+          var start = new google.maps.LatLng($rootScope.userLat, $rootScope.userLong);
           var end = new google.maps.LatLng(37.3000, -120.4833);
           var directionsDisplay = new google.maps.DirectionsRenderer();// also, constructor can get "DirectionsRendererOptions" object
           directionsDisplay.setMap(map); // map should be already initialized.
