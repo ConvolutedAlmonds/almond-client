@@ -10,15 +10,15 @@
         <i class="icon ion-search placeholder-icon"></i>
         <ion-google-place placeholder="Enter an address, Apt# and ZIP" ng-model="location" ng-change="dest.update(location)" />
       </label>
-      <a href="#/app/map" ng-show="location.formatted_address">
-        <button class="button button-block button-balanced">
-          Navigate!
-        </button>
+      <a class="button button-block button-balanced" href="#/app/map" ng-show="location.formatted_address">
+        Navigate!
       </a>
-<!--       <label class="item item-input">
-        <i class="icon ion-search placeholder-icon"></i>
-        <input type="text" placeholder="Search for a location">
-      </label> -->
+      <!-- or -->
+      <a class="button button-block button-light" ng-hide="location.formatted_address">
+        <span class="assertive">Please choose a valid address.</span>
+      </a>
+
+
     </div>
   </ion-content>
 </ion-view>
