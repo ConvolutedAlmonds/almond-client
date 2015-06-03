@@ -125,7 +125,8 @@ angular.module('almond.controllers', [])
       $scope.myLocation = new google.maps.Marker({
         position: new google.maps.LatLng($rootScope.userLat, $rootScope.userLong),
         map: map,
-        title: "My Location"
+        title: "My Location",
+        icon: 'img/currentLocation.png'
       });
     } else {
       $scope.myLocation.setPosition(new google.maps.LatLng($rootScope.userLat, $rootScope.userLong));
