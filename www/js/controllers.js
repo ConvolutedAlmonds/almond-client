@@ -61,7 +61,8 @@ angular.module('almond.controllers', [])
   ]
 })
 
-.controller('StartCtrl', function($scope, $rootScope) {
+.controller('StartCtrl', function($scope, $rootScope, destinationService) {
+
   $scope.lat = $rootScope.userLat;
   $scope.long = $rootScope.userLong;
 
@@ -77,6 +78,12 @@ angular.module('almond.controllers', [])
   }, function() {
     $scope.long = $rootScope.userLong;
   }, true);
+
+  // destinationService
+
+  $scope.dest = destinationService;
+
+
 
   getEvents(function(data){
     $scope.nextEvent = {
@@ -111,56 +118,56 @@ angular.module('almond.controllers', [])
   }
 })
 
-.controller('MapCtrl', function($scope, $stateParams, userLocation) {
+.controller('MapCtrl', function($scope, $stateParams, $rootScope, destinationService) {
+
+  $scope.destination = destinationService.get();
+
+  console.dir($scope.destination);
   function updateLoc() {
-    userLocation.getCoords().then(function(coords){
-      $scope.lat = coords.latitude;
-      $scope.long = coords.longitude;
-      map.setCenter(new google.maps.LatLng(coords.latitude, coords.longitude));
-      var myLocation = new google.maps.Marker({
-          position: new google.maps.LatLng(coords.latitude, coords.longitude),
-          map: map,
-          title: "My Location"
-      });
-      // displayRoute()
-    })
+    map.setCenter(new google.maps.LatLng($rootScope.userLat, $rootScope.userLong));
+    var myLocation = new google.maps.Marker({
+      position: new google.maps.LatLng($rootScope.userLat, $rootScope.userLong),
+      map: map,
+      title: "My Location"
+    });
   }
-  setInterval(updateLoc,5000);
+  $scope.$on('UserLocation.Update',function(){
+    updateLoc();
+  })
 
-      var myLatlng = new google.maps.LatLng(37.7483, -122.4367); // SF, home sweet home
-  
-      var mapOptions = {
-          center: myLatlng,
-          zoom: 12,
-          mapTypeId: google.maps.MapTypeId.ROADMAP,
-          disableDefaultUI: true,
-          styles: [{ featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }]}]
-      };
-  
-      var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-  
+  var myLatlng = new google.maps.LatLng(37.7483, -122.4367); // SF, home sweet home
 
-      function displayRoute() {
-          var directionsService = new google.maps.DirectionsService();
-          console.log("dR sees : " + $scope.lat + " " + $scope.long);
-          console.log(typeof $scope.lat);
-          var start = new google.maps.LatLng($scope.lat, $scope.long);
-          var end = new google.maps.LatLng(37.3000, -120.4833);
-          var directionsDisplay = new google.maps.DirectionsRenderer();// also, constructor can get "DirectionsRendererOptions" object
-          directionsDisplay.setMap(map); // map should be already initialized.
+  var mapOptions = {
+    center: myLatlng,
+    zoom: 12,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    disableDefaultUI: true,
+    styles: [{ featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }]}]
+  };
 
-          var request = {
-              origin : start,
-              destination : end,
-              travelMode : google.maps.TravelMode.DRIVING
-          };
-          var directionsService = new google.maps.DirectionsService(); 
-          directionsService.route(request, function(response, status) {
-              if (status == google.maps.DirectionsStatus.OK) {
-                  directionsDisplay.setDirections(response);
-              }
-          });
+  var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+  displayRoute();
+
+  function displayRoute() {
+    var directionsService = new google.maps.DirectionsService();
+    var start = new google.maps.LatLng($rootScope.userLat, $rootScope.userLong);
+    var end = $scope.destination.formatted_address;
+    var directionsDisplay = new google.maps.DirectionsRenderer();// also, constructor can get "DirectionsRendererOptions" object
+    directionsDisplay.setMap(map); // map should be already initialized.
+
+    var request = {
+      origin : start,
+      destination : end,
+      travelMode : google.maps.TravelMode.DRIVING
+    };
+    var directionsService = new google.maps.DirectionsService(); 
+    directionsService.route(request, function(response, status) {
+      if (status == google.maps.DirectionsStatus.OK) {
+        directionsDisplay.setDirections(response);
       }
+    });
+  }
 
-      $scope.map = map;
-  });
+  $scope.map = map;
+});
