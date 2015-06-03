@@ -26,6 +26,7 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
       userLocation.getCoords().then(function(coords){
         setRootScope('userLat',coords.latitude);
         setRootScope('userLong',coords.longitude);
+        setRootScope('userAccuracy',coords.accuracy);
       });
     }
     updateLoc();
@@ -159,7 +160,8 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
         $rootScope.$broadcast('UserLocation.Update');
         deferred.resolve({
           latitude: pos.coords.latitude,
-          longitude: pos.coords.longitude
+          longitude: pos.coords.longitude,
+          accuracy: pos.coords.accuracy
         })
       },function(error) {
         deferred.reject("Geolocation API didn't return coordinates :(");
