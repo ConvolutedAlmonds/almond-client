@@ -122,14 +122,37 @@ angular.module('almond.controllers', [])
 
   $scope.destination = destinationService.get();
 
-  console.dir($scope.destination);
+  $scope.myLocation;
+  $scope.myAccuracyCircle;
+
   function updateLoc() {
-    map.setCenter(new google.maps.LatLng($rootScope.userLat, $rootScope.userLong));
-    var myLocation = new google.maps.Marker({
-      position: new google.maps.LatLng($rootScope.userLat, $rootScope.userLong),
-      map: map,
-      title: "My Location"
-    });
+    if(typeof $scope.myLocation === 'undefined') {
+      $scope.myLocation = new google.maps.Marker({
+        position: new google.maps.LatLng($rootScope.userLat, $rootScope.userLong),
+        map: map,
+        title: "My Location",
+        clickable: false,
+        icon: {
+                url: 'img/currentLocation.png',
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(25, 25),
+                scaledSize: new google.maps.Size(50, 50)
+              }
+      });
+      $scope.myAccuracyCircle = new google.maps.Circle({
+        map: map,
+        radius: $rootScope.userAccuracy,    // 10 miles in metres
+        fillColor: '#add8e6',
+        fillOpacity: 0.66,
+        strokeColor: '#3A9FBF',
+        strokeWeight: 1
+      });
+      $scope.myAccuracyCircle.bindTo('center', $scope.myLocation, 'position');
+    } else {
+      $scope.myLocation.setPosition(new google.maps.LatLng($rootScope.userLat, $rootScope.userLong));
+      $scope.myAccuracyCircle.setCenter(new google.maps.LatLng($rootScope.userLat, $rootScope.userLong));
+      $scope.myAccuracyCircle.setRadius($rootScope.userAccuracy);
+    }
   }
   $scope.$on('UserLocation.Update',function(){
     updateLoc();
@@ -146,6 +169,7 @@ angular.module('almond.controllers', [])
   };
 
   var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
 
   displayRoute();
 
