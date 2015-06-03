@@ -126,7 +126,12 @@ angular.module('almond.controllers', [])
         position: new google.maps.LatLng($rootScope.userLat, $rootScope.userLong),
         map: map,
         title: "My Location",
-        icon: 'img/currentLocation.png'
+        icon: {
+                url: 'img/currentLocation.png',
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(25, 25),
+                scaledSize: new google.maps.Size(50, 50)
+              }
       });
     } else {
       $scope.myLocation.setPosition(new google.maps.LatLng($rootScope.userLat, $rootScope.userLong));
