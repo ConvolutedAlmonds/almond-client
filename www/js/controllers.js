@@ -120,7 +120,6 @@ angular.module('almond.controllers', [])
   $scope.myLocation;
   $scope.myAccuracyCircle;
 
-  console.dir($scope.destination);
   function updateLoc() {
     if(typeof $scope.myLocation === 'undefined') {
       $scope.myLocation = new google.maps.Marker({
