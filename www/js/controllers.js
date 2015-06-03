@@ -125,11 +125,12 @@ angular.module('almond.controllers', [])
         map: map,
         title: "My Location"
     });
-    displayRoute()
   }
   $scope.$on('UserLocation.Update',function(){
     updateLoc();
   })
+
+  displayRoute();
 
       var myLatlng = new google.maps.LatLng(37.7483, -122.4367); // SF, home sweet home
   
