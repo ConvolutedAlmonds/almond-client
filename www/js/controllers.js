@@ -117,6 +117,7 @@ angular.module('almond.controllers', [])
 
   $scope.destination = destinationService.get();
 
+  console.dir($scope.destination);
   function updateLoc() {
     map.setCenter(new google.maps.LatLng($rootScope.userLat, $rootScope.userLong));
     var myLocation = new google.maps.Marker({
@@ -124,7 +125,7 @@ angular.module('almond.controllers', [])
         map: map,
         title: "My Location"
     });
-    // displayRoute()
+    displayRoute()
   }
   $scope.$on('UserLocation.Update',function(){
     updateLoc();
@@ -146,7 +147,7 @@ angular.module('almond.controllers', [])
       function displayRoute() {
           var directionsService = new google.maps.DirectionsService();
           var start = new google.maps.LatLng($rootScope.userLat, $rootScope.userLong);
-          var end = new google.maps.LatLng(37.3000, -120.4833);
+          var end = $scope.destination.formatted_address;
           var directionsDisplay = new google.maps.DirectionsRenderer();// also, constructor can get "DirectionsRendererOptions" object
           directionsDisplay.setMap(map); // map should be already initialized.
 
