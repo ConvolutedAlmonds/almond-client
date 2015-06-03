@@ -117,14 +117,25 @@ angular.module('almond.controllers', [])
 
   $scope.destination = destinationService.get();
 
+  $scope.myLocation;
+
   console.dir($scope.destination);
   function updateLoc() {
-    map.setCenter(new google.maps.LatLng($rootScope.userLat, $rootScope.userLong));
-    var myLocation = new google.maps.Marker({
-      position: new google.maps.LatLng($rootScope.userLat, $rootScope.userLong),
-      map: map,
-      title: "My Location"
-    });
+    if(typeof $scope.myLocation === 'undefined') {
+      $scope.myLocation = new google.maps.Marker({
+        position: new google.maps.LatLng($rootScope.userLat, $rootScope.userLong),
+        map: map,
+        title: "My Location",
+        icon: {
+                url: 'img/currentLocation.png',
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(25, 25),
+                scaledSize: new google.maps.Size(50, 50)
+              }
+      });
+    } else {
+      $scope.myLocation.setPosition(new google.maps.LatLng($rootScope.userLat, $rootScope.userLong));
+    }
   }
   $scope.$on('UserLocation.Update',function(){
     updateLoc();
