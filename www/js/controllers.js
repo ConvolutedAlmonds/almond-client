@@ -127,10 +127,8 @@ angular.module('almond.controllers', [])
         map: map,
         title: "My Location"
       });
-      console.log("Created new myLocation object")
     } else {
       $scope.myLocation.setPosition(new google.maps.LatLng($rootScope.userLat, $rootScope.userLong));
-      console.log("Updated existing myLocation object")
     }
   }
   $scope.$on('UserLocation.Update',function(){
