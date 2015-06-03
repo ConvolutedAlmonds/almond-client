@@ -151,29 +151,29 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
 .constant('angularMomentConfig', {
     preprocess: 'unix' // optional
 })
-.factory('userLocation', function($q) {
+.factory('userLocation', function($q, $rootScope) {
   return {
     getCoords: function() {
       var deferred = $q.defer();
-      console.log("UserLocation service ran")
       navigator.geolocation.getCurrentPosition(function(pos) {
-          deferred.resolve({
-            latitude: pos.coords.latitude,
-            longitude: pos.coords.longitude
-          })
-        },function(error) {
-          deferred.reject("Geolocation API didn't return coordinates :(");
-          console.error(error)
-        },
-        {
-          enableHighAccuracy: true,
-          timeout: 5000,
-          maximumAge: 0
-        });
-      return deferred.promise;
+        $rootScope.$broadcast('UserLocation.Update');
+        deferred.resolve({
+          latitude: pos.coords.latitude,
+          longitude: pos.coords.longitude
+        })
+      },function(error) {
+        deferred.reject("Geolocation API didn't return coordinates :(");
+        console.error(error)
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+      });
+    return deferred.promise;
     }
   };
-  })
+})
 
 .factory('destinationService', function ($rootScope) {
   'use strict';
