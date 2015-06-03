@@ -127,6 +127,7 @@ angular.module('almond.controllers', [])
         position: new google.maps.LatLng($rootScope.userLat, $rootScope.userLong),
         map: map,
         title: "My Location",
+        clickable: false,
         icon: {
                 url: 'img/currentLocation.png',
                 origin: new google.maps.Point(0, 0),
@@ -146,6 +147,7 @@ angular.module('almond.controllers', [])
     } else {
       $scope.myLocation.setPosition(new google.maps.LatLng($rootScope.userLat, $rootScope.userLong));
       $scope.myAccuracyCircle.setCenter(new google.maps.LatLng($rootScope.userLat, $rootScope.userLong));
+      $scope.myAccuracyCircle.setRadius($rootScope.userAccuracy);
     }
   }
   $scope.$on('UserLocation.Update',function(){
