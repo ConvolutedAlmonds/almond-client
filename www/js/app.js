@@ -173,4 +173,39 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
       return deferred.promise;
     }
   };
-  });
+  })
+
+.factory('destinationService', function ($rootScope) {
+  'use strict';
+  var dest;
+
+  var broadcast = function (dest) {
+    $rootScope.$broadcast('Destination.Update', dest);
+    console.log('destinationService: broadcasted')
+  };
+
+  var update = function (newDest) {
+    console.log("previous value: " + dest)
+    dest = newDest;
+    broadcast(dest);
+    console.log('destinationService: updated, new value is ' + newDest);
+  };
+  
+  var listen = function ($scope, callback) {
+    $scope.$on('Destination.Update', function (newDest) {
+      console.log("destinationService: caught Update event")
+      callback(newDest);
+    });
+    console.log('destinationService: listened')
+  };
+
+  var get = function () {
+    return dest;
+  }
+
+  return {
+    update: update,
+    listen: listen,
+    get: get
+  };
+});
