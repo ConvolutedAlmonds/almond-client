@@ -126,7 +126,9 @@ angular.module('almond.controllers', [])
     });
     // displayRoute()
   }
-  setInterval(updateLoc,5000);
+  $scope.$on('UserLocation.Update',function(){
+    updateLoc();
+  })
 
       var myLatlng = new google.maps.LatLng(37.7483, -122.4367); // SF, home sweet home
   
