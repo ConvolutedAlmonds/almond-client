@@ -56,7 +56,8 @@ angular.module('almond.controllers', [])
   ]
 })
 
-.controller('StartCtrl', function($scope, $rootScope) {
+.controller('StartCtrl', function($scope, $rootScope, destinationService) {
+
   $scope.lat = $rootScope.userLat;
   $scope.long = $rootScope.userLong;
 
@@ -72,6 +73,12 @@ angular.module('almond.controllers', [])
   }, function() {
     $scope.long = $rootScope.userLong;
   }, true);
+
+  // destinationService
+
+  $scope.dest = destinationService;
+
+
 
   getEvents(function(data){
     $scope.nextEvent = {
@@ -106,7 +113,10 @@ angular.module('almond.controllers', [])
   }
 })
 
-.controller('MapCtrl', function($scope, $stateParams, userLocation) {
+.controller('MapCtrl', function($scope, $stateParams, userLocation, destinationService) {
+
+  $scope.destination = destinationService.get();
+
   function updateLoc() {
     userLocation.getCoords().then(function(coords){
       $scope.lat = coords.latitude;
