@@ -2475,26 +2475,26 @@ var getRoutes = function(callback) {
 
     callback(data);
 
-  $(loginWindow).on('loadstop', function(e) {
-    console.log('Loadstop triggered')
-      var url = e.originalEvent.url;
-      console.log('URL:', url);
+  // $(loginWindow).on('loadstop', function(e) {
+  //   console.log('Loadstop triggered')
+  //     var url = e.originalEvent.url;
+  //     console.log('URL:', url);
 
 
-      // if (code || error){
-      //   loginWindow.close();
+  //     // if (code || error){
+  //     //   loginWindow.close();
 
-      // }
-  });
+  //     // }
+  // });
 
-  $(loginWindow).on('loaderror', function(e) {
-    console.log('error');
-  });
+  // $(loginWindow).on('loaderror', function(e) {
+  //   console.log('error');
+  // });
 
-  $(loginWindow).on('exit', function(e) {
-    console.log('exit');
+  // $(loginWindow).on('exit', function(e) {
+  //   console.log('exit');
 
-  });
+  // });
 
 };
 
