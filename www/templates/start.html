@@ -1,10 +1,10 @@
 <ion-view view-title="Start">
-  <ion-content scroll="false">
-    <span class="positive padding-top" style="display:table;margin:0 auto;font-size:16px;">
+  <ion-content>
+    <button class="button button-block button-outline button-positive icon-left">
       <i class="ion-ios-location-outline"></i>
       Current Location:
       <reverse-geocode ng-if="lat" lat="{{lat}}" lng="{{long}}" />
-    </span>
+    </button>
     <div class="list list-inset">
       <label class="item item-input">
         <i class="icon ion-search placeholder-icon"></i>
