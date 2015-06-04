@@ -2,9 +2,11 @@
   <ion-content>
 
   <div ng-if="activeTab === 'directions'">
-    <div ng-repeat="step in data.legs[0].steps">
-      this is a step
-    </div>
+    <ul class="list">
+        <li class="item" ng-repeat="step in data.legs[0].steps">
+          <span ng-bind-html="step.html_instructions"></span>
+        </li>
+    </ul>
   </div>
 
   <div ng-if="activeTab === 'map'">
