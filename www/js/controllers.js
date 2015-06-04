@@ -39,13 +39,6 @@ angular.module('almond.controllers', [])
 })
 
 .controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http) {
-  $scope.event = {
-    title: "Onsite Interview",
-    location: "944 Market Street, San Francisco",
-    locationName: "Hack Reactor",
-    placeId: "ChIJXd_HvYWAhYAR9tpKaPJ4aME", // google maps PlaceID
-    time: 1434790800 // epoch time. we'll use moment.js on the view to format this
-  }
   
   getRoutes($http, $rootScope.userLong, $rootScope.userLat, $rootScope.destination.formatted_address, function(data){
     $scope.options = data;
