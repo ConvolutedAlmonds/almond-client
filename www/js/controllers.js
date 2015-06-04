@@ -99,8 +99,7 @@ angular.module('almond.controllers', [])
   console.log("TravelModeCtrl says hi");
   var deregister = $scope.$on('TravelModes.Data', function(e,data,i,j) {
     $scope.data = data.data.results[i][j];
-    console.log("Got data from event, it was " + $scope.data)
-    console.dir($scope.data);
+    console.log("Got data from event")
   })
   $rootScope.$broadcast('TravelMode.ReadyforData');
   deregister();

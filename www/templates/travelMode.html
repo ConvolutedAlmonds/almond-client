@@ -3,14 +3,17 @@
 
   <div ng-if="activeTab === 'directions'">
     <ul class="list">
-        <li class="item item-icon-left" ng-repeat="step in data.legs[0].steps">
-          <span ng-bind-html="step.html_instructions"></span>
-          <i class="icon ion-arrow-left-c" ng-if="step.maneuver === 'turn-left'"></i>
-          <i class="icon ion-arrow-right-c" ng-if="step.maneuver === 'turn-right'"></i>
-          <span class="item-note">
-            {{step.distance.text}} | {{step.duration.text}}
-          </span>
-        </li>
+      <li class="item item-icon-left" ng-repeat="step in data.legs[0].steps">
+        <span ng-switch on="step.maneuver">
+          <i class="icon ion-location" ng-switch-default></i>
+          <i class="icon ion-arrow-left-c" ng-switch-when="turn-left"></i>
+          <i class="icon ion-arrow-right-c" ng-switch-when="turn-right"></i>
+        </span>
+        <span ng-bind-html="step.html_instructions"></span>
+        <span class="item-note">
+          {{step.distance.text}} | {{step.duration.text}}
+        </span>
+      </li>
     </ul>
   </div>
 
