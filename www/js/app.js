@@ -191,6 +191,7 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
     dest = newDest;
     broadcast(dest);
     console.log('destinationService: updated, new value is ' + newDest);
+    $rootScope.destination = newDest;
   };
   
   var listen = function ($scope, callback) {

@@ -38,7 +38,7 @@ angular.module('almond.controllers', [])
   };
 })
 
-.controller('TravelModesCtrl', function($scope, userLocation, $rootScope) {
+.controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http) {
   $scope.event = {
     title: "Onsite Interview",
     location: "944 Market Street, San Francisco",
@@ -47,7 +47,7 @@ angular.module('almond.controllers', [])
     time: 1434790800 // epoch time. we'll use moment.js on the view to format this
   }
   
-  getRoutes(function(data){
+  getRoutes($http, $rootScope.userLong, $rootScope.userLat, $rootScope.destination.formatted_address, function(data){
     $scope.options = data;
     console.dir(data);
   });
@@ -62,7 +62,7 @@ angular.module('almond.controllers', [])
 
 })
 
-.controller('StartCtrl', function($scope, $rootScope, destinationService) {
+.controller('StartCtrl', function($scope, $rootScope, destinationService, $http) {
 
   $scope.lat = $rootScope.userLat;
   $scope.long = $rootScope.userLong;
@@ -86,7 +86,7 @@ angular.module('almond.controllers', [])
 
 
 
-  getEvents(function(data){
+  getEvents($http, function(data){
     $scope.nextEvent = {
       title: data.events.items[0].summary,
       address: data.events.items[0].location
