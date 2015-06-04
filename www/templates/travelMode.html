@@ -4,7 +4,8 @@
   <div ng-if="activeTab === 'directions'">
     <ul class="list">
         <li class="item" ng-repeat="step in data.legs[0].steps">
-          <span ng-bind-html="step.html_instructions"></span>
+          <span ng-bind-html="step.html_instructions"></span><br>
+          <span style="color:grey;">{{step.distance.text}} | {{step.duration.text}}</span>
         </li>
     </ul>
   </div>
