@@ -95,6 +95,7 @@ angular.module('almond.controllers', [])
 })
 
 .controller('TravelModeCtrl', function($scope,$stateParams,$rootScope) {
+  $scope.activeTab = 'directions';
   console.log("TravelModeCtrl says hi");
   var deregister = $scope.$on('TravelModes.Data', function(e,data,i,j) {
     $scope.data = data.data.results[i][j];
