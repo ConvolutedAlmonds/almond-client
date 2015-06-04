@@ -1,5 +1,5 @@
 
-
+var serverUrl = 'http://on-time-dev.elasticbeanstalk.com'
 
 var authorizeUser = function(callback) {
 
@@ -17,34 +17,32 @@ var authorizeUser = function(callback) {
 
 };
 
-var getRoutes = function($http, callback) {
-     $.http({
-       type: 'GET',
-       url: serverUrl + '/api/routes'
-     }).success(function(data) {
-        console.log(data);
+var getRoutes = function($http, longitude, latitude, destAddress, callback) {
+    $http.post(serverUrl + '/api/routes', 
+        {
+            origin: { "longitude": longitude, "latitude": latitude },
+            destAddress : destAddress
+        }).success(function(data) {
+            console.log(data);
         callback(data);
      }).error(function(data) {
          console.log(data);
-     })
-  });
+     });
 };
 
 var getEvents = function($http, callback) {
-    $http({
-        type: 'GET',
-        url: serverUrl + '/api/upcomingEvents',
-    }).success(function(data) {
+    /*
+    $http.post(serverUrl + '/api/upcomingEvents', {msg:'hello word!'}).success(function(data) {
         callback(data);
         console.log(data);
     }).error(function(error) {
         console.log(error);
-    });
+    });*/
 };
 
 var getUberEstimates = function($http, callback) {
     $http({
-        type: 'GET',
+        type: 'POST',
         url: serverUrl + '/api/uberEstimates',
     }).success(function(data) {
         console.log(data);
@@ -52,3 +50,4 @@ var getUberEstimates = function($http, callback) {
     }).error(function(error) {
         console.log(error);
     })
+}
