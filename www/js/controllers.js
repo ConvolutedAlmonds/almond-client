@@ -46,19 +46,12 @@ angular.module('almond.controllers', [])
     placeId: "ChIJXd_HvYWAhYAR9tpKaPJ4aME", // google maps PlaceID
     time: 1434790800 // epoch time. we'll use moment.js on the view to format this
   }
-  $scope.travelModes = [
-    {
-      mode: "Driving",
-      travelTime: 15, // in minutes
-      cost: 3 // estimated cost in USD. Gas cost? Tolls? Wear and tear?
+  
+  getRoutes(function(data){
+    $scope.options = data;
+    console.dir(data);
+  });
 
-    },
-    {
-      mode: "Uber",
-      travelTime: 21,
-      cost: 9
-    }
-  ]
 })
 
 .controller('StartCtrl', function($scope, $rootScope, destinationService) {
@@ -94,9 +87,7 @@ angular.module('almond.controllers', [])
 })
 
 .controller('TravelModeCtrl', function($scope,$stateParams) {
-  $scope.travelMode = {};
-  $scope.travelMode.title = $stateParams.travelMode;
-  $scope.activeTab = 'directions';
+
 })
 
 .controller('SettingsCtrl', function($scope) {
