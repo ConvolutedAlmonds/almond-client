@@ -1,16 +1,20 @@
 <ion-view view-title="Travel Modes">
   <ion-content>
     <center>{{event.title}} at {{event.locationName}}</center>
-    <div class="card" ng-repeat="o in travelModes">
-      <div class="item item-text-wrap">
-        <h1>{{o.mode}}</h1>
-        will take <b>{{o.travelTime}}</b> minutes
-        and will cost <b>${{o.cost}}</b>
-        <a href="#/app/travelMode/{{o.mode}}">Go</a>
+    <div ng-repeat="mode in options.data.results">
+      <div class="card" ng-repeat="route in mode">
+        <div class="item item-text-wrap">
+          <h1>{{route.travelMode}}</h1>
+          will take <b>{{route.legs[0].duration.text}}</b> ({{route.legs[0].distance.text}})<br>
+          and will cost <b>{{route.fare.text || "$0"}}</b><br>
+          <span style="color:grey;font-style:italic;">via {{route.summary}}</span>
+          <a href="#/app/travelMode/{{route.mode}}" ng-click="dispatch($parent.$index,$index)">Go</a>
+        </div>
       </div>
     </div>
-    <div class="bar bar-footer bar-energized">
-      <div class="title">Your event starts <b><span am-time-ago="event.time"></span></b></div>
-    </div>
+    <br><br> <!-- a super hacky way to give padding to the cards so the footer doesn't cover them up -->
   </ion-content>
+  <div class="bar bar-footer bar-energized">
+    <div class="title">Your event starts <b><span am-time-ago="event.time"></span></b></div>
+  </div>
 </ion-view>

@@ -38,7 +38,7 @@ angular.module('almond.controllers', [])
   };
 })
 
-.controller('TravelModesCtrl', function($scope, userLocation) {
+.controller('TravelModesCtrl', function($scope, userLocation, $rootScope) {
   $scope.event = {
     title: "Onsite Interview",
     location: "944 Market Street, San Francisco",
@@ -46,19 +46,20 @@ angular.module('almond.controllers', [])
     placeId: "ChIJXd_HvYWAhYAR9tpKaPJ4aME", // google maps PlaceID
     time: 1434790800 // epoch time. we'll use moment.js on the view to format this
   }
-  $scope.travelModes = [
-    {
-      mode: "Driving",
-      travelTime: 15, // in minutes
-      cost: 3 // estimated cost in USD. Gas cost? Tolls? Wear and tear?
+  
+  getRoutes(function(data){
+    $scope.options = data;
+    console.dir(data);
+  });
 
-    },
-    {
-      mode: "Uber",
-      travelTime: 21,
-      cost: 9
-    }
-  ]
+  $scope.dispatch = function(i,j) {
+    console.log("dispatch called on TravelModesCtrl");
+    $scope.$on('TravelMode.ReadyforData',function(){
+      console.log("broadcasting data from TravelModesCtrl")
+      $rootScope.$broadcast('TravelModes.Data',$scope.options, i, j);
+    })
+  }
+
 })
 
 .controller('StartCtrl', function($scope, $rootScope, destinationService) {
@@ -93,10 +94,15 @@ angular.module('almond.controllers', [])
   })
 })
 
-.controller('TravelModeCtrl', function($scope,$stateParams) {
-  $scope.travelMode = {};
-  $scope.travelMode.title = $stateParams.travelMode;
-  $scope.activeTab = 'directions';
+.controller('TravelModeCtrl', function($scope,$stateParams,$rootScope) {
+  console.log("TravelModeCtrl says hi");
+  var deregister = $scope.$on('TravelModes.Data', function(e,data,i,j) {
+    $scope.data = data.data.results[i][j];
+    console.log("Got data from event, it was " + $scope.data)
+    console.dir($scope.data);
+  })
+  $rootScope.$broadcast('TravelMode.ReadyforData');
+  deregister();
 })
 
 .controller('SettingsCtrl', function($scope) {

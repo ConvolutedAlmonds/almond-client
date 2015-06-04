@@ -28,7 +28,6 @@ var getRoutes = function($http, callback) {
          console.log(data);
      })
   });
-
 };
 
 var getEvents = function($http, callback) {
