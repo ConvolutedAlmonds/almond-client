@@ -96,12 +96,13 @@ angular.module('almond.controllers', [])
 
 .controller('TravelModeCtrl', function($scope,$stateParams,$rootScope) {
   console.log("TravelModeCtrl says hi");
-  $scope.$on('TravelModes.Data', function(e,data,i,j) {
+  var deregister = $scope.$on('TravelModes.Data', function(e,data,i,j) {
     $scope.data = data.data.results[i][j];
     console.log("Got data from event, it was " + $scope.data)
+    console.dir($scope.data);
   })
   $rootScope.$broadcast('TravelMode.ReadyforData');
-  console.dir($scope.data)
+  deregister();
 })
 
 .controller('SettingsCtrl', function($scope) {
