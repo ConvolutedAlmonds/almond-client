@@ -1,10 +1,22 @@
-var serverUrl = 'http://localhost:3000';
+var serverUrl = 'https://fast-woodland-4766.herokuapp.com';
+
+var postAuthenticate = function($http, code, callback) {
+
+    $http.get(serverUrl + '/auth/code?code=' + code).success(function(data){
+        alert('success', data);
+    }).error(function(err) {
+        alert('error', err);
+    });
+}
 
 var authorizeUser = function(callback) {
+    alert('authorize');
     $.ajax({
-            url: serverUrl + '/auth/google',
+            url: serverUrl + '/test/route',
+            type: 'GET'
         })
         .done(function(token) {
+            alert("got result");
             console.log(token);
         })
 };
