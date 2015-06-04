@@ -2,12 +2,25 @@
   <ion-content>
     <div ng-repeat="mode in options.data.results">
       <div class="card" ng-repeat="route in mode">
-        <div class="item item-text-wrap">
-          <h1>{{route.travelMode}}</h1>
-          will take <b>{{route.legs[0].duration.text}}</b> ({{route.legs[0].distance.text}})<br>
-          and will cost <b>{{route.fare.text || "$0"}}</b><br>
-          <span style="color:grey;font-style:italic;">via {{route.summary}}</span>
-          <a href="#/app/travelMode/{{route.mode}}" ng-click="dispatch($parent.$index,$index)">Go</a>
+        <div class="row">
+          <div class="col col-10 col-center">
+            <span ng-switch on="route.travelMode" style="font-size:32px;padding-top:3em;">
+              <i class="icon ion-location" ng-switch-default></i>
+              <i class="icon ion-android-walk" ng-switch-when="walking"></i>
+              <i class="icon ion-android-bus" ng-switch-when="transit"></i>
+              <i class="icon ion-android-car" ng-switch-when="driving"></i>
+              <i class="icon ion-android-bicycle" ng-switch-when="bicycling"></i>
+            </span>
+          </div>
+          <div class="col col-90">
+            <div class="item">
+              <h1>{{route.travelMode}}</h1>
+              will take <b>{{route.legs[0].duration.text}}</b> ({{route.legs[0].distance.text}})<br>
+              and will cost <b>{{route.fare.text || "$0"}}</b><br>
+              <span style="color:grey;font-style:italic;">via {{route.summary}}</span>
+              <a href="#/app/travelMode/{{route.mode}}" ng-click="dispatch($parent.$index,$index)">Go</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
