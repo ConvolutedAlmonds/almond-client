@@ -6,17 +6,19 @@
       <reverse-geocode ng-if="lat" lat="{{lat}}" lng="{{long}}" />
     </button>
     <div class="list list-inset">
-      <button class="button button-block button-balanced">
-        Get to <b>{{nextEvent.title}}!</b>
-      </button>
       <label class="item item-input">
         <i class="icon ion-search placeholder-icon"></i>
-        <ion-google-place placeholder="Enter an address, Apt# and ZIP" ng-model="location" />
+        <ion-google-place placeholder="Enter an address, Apt# and ZIP" ng-model="location" ng-change="dest.update(location)" />
       </label>
-<!--       <label class="item item-input">
-        <i class="icon ion-search placeholder-icon"></i>
-        <input type="text" placeholder="Search for a location">
-      </label> -->
+      <a class="button button-block button-balanced" href="#/app/travelModes" ng-show="location.formatted_address">
+        Navigate!
+      </a>
+      <!-- or -->
+      <a class="button button-block button-light" ng-hide="location.formatted_address">
+        <span class="assertive">Please choose a valid address.</span>
+      </a>
+
+
     </div>
   </ion-content>
 </ion-view>

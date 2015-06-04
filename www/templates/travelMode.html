@@ -2,20 +2,32 @@
   <ion-content>
 
   <div ng-if="activeTab === 'directions'">
-    Directions go here
+    <ul class="list">
+      <li class="item item-icon-left" ng-repeat="step in data.legs[0].steps">
+        <span ng-switch on="step.maneuver">
+          <i class="icon ion-location" ng-switch-default></i>
+          <i class="icon ion-arrow-left-c" ng-switch-when="turn-left"></i>
+          <i class="icon ion-arrow-right-c" ng-switch-when="turn-right"></i>
+        </span>
+        <span ng-bind-html="step.html_instructions"></span>
+        <span class="item-note">
+          {{step.distance.text}} | {{step.duration.text}}
+        </span>
+      </li>
+    </ul>
   </div>
 
   <div ng-if="activeTab === 'map'">
     The dog ate our map
   </div>
 
-    <div class="tabs tabs-stable">
-      <a ng-click="activeTab = 'directions'" class="tab-item {{activeTab === 'directions' ? 'active' : ''}}">
-        Directions
-      </a>
-      <a ng-click="activeTab = 'map'" class="tab-item {{activeTab === 'map' ? 'active' : ''}}">
-        Map
-      </a>
-    </div>
   </ion-content>
+  <div class="tabs tabs-stable">
+    <a ng-click="activeTab = 'directions'" class="tab-item {{activeTab === 'directions' ? 'active' : ''}}">
+      Directions
+    </a>
+    <a ng-click="activeTab = 'map'" class="tab-item {{activeTab === 'map' ? 'active' : ''}}">
+      Map
+    </a>
+  </div>
 </ion-view>

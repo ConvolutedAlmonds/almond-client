@@ -19,7 +19,12 @@ angular.module('almond.controllers', [])
   // Open the login modal
   $scope.login = function() {
     $scope.modal.show();
+
   };
+
+  $scope.authorizeUser = function() {
+    authorizeUser();
+  }
 
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
@@ -42,30 +47,25 @@ angular.module('almond.controllers', [])
   };
 })
 
-.controller('TravelModesCtrl', function($scope, userLocation) {
-  $scope.event = {
-    title: "Onsite Interview",
-    location: "944 Market Street, San Francisco",
-    locationName: "Hack Reactor",
-    placeId: "ChIJXd_HvYWAhYAR9tpKaPJ4aME", // google maps PlaceID
-    time: 1434790800 // epoch time. we'll use moment.js on the view to format this
-  }
-  $scope.travelModes = [
-    {
-      mode: "Driving",
-      travelTime: 15, // in minutes
-      cost: 3 // estimated cost in USD. Gas cost? Tolls? Wear and tear?
+.controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http) {
+  
+  getRoutes($http, $rootScope.userLong, $rootScope.userLat, $rootScope.destination.formatted_address, function(data){
+    $scope.options = data;
+    console.dir(data);
+  });
 
-    },
-    {
-      mode: "Uber",
-      travelTime: 21,
-      cost: 9
-    }
-  ]
+  $scope.dispatch = function(i,j) {
+    console.log("dispatch called on TravelModesCtrl");
+    $scope.$on('TravelMode.ReadyforData',function(){
+      console.log("broadcasting data from TravelModesCtrl")
+      $rootScope.$broadcast('TravelModes.Data',$scope.options, i, j);
+    })
+  }
+
 })
 
-.controller('StartCtrl', function($scope, $rootScope) {
+.controller('StartCtrl', function($scope, $rootScope, destinationService, $http) {
+
   $scope.lat = $rootScope.userLat;
   $scope.long = $rootScope.userLong;
 
@@ -82,7 +82,13 @@ angular.module('almond.controllers', [])
     $scope.long = $rootScope.userLong;
   }, true);
 
-  getEvents(function(data){
+  // destinationService
+
+  $scope.dest = destinationService;
+
+
+
+  getEvents($http, function(data){
     $scope.nextEvent = {
       title: data.events.items[0].summary,
       address: data.events.items[0].location
@@ -90,10 +96,15 @@ angular.module('almond.controllers', [])
   })
 })
 
-.controller('TravelModeCtrl', function($scope,$stateParams) {
-  $scope.travelMode = {};
-  $scope.travelMode.title = $stateParams.travelMode;
+.controller('TravelModeCtrl', function($scope,$stateParams,$rootScope) {
   $scope.activeTab = 'directions';
+  console.log("TravelModeCtrl says hi");
+  var deregister = $scope.$on('TravelModes.Data', function(e,data,i,j) {
+    $scope.data = data.data.results[i][j];
+    console.log("Got data from event")
+  })
+  $rootScope.$broadcast('TravelMode.ReadyforData');
+  deregister();
 })
 
 .controller('SettingsCtrl', function($scope) {
@@ -115,56 +126,80 @@ angular.module('almond.controllers', [])
   }
 })
 
-.controller('MapCtrl', function($scope, $stateParams, userLocation) {
+.controller('MapCtrl', function($scope, $stateParams, $rootScope, destinationService) {
+
+  $scope.destination = destinationService.get();
+
+  $scope.myLocation;
+  $scope.myAccuracyCircle;
+
   function updateLoc() {
-    userLocation.getCoords().then(function(coords){
-      $scope.lat = coords.latitude;
-      $scope.long = coords.longitude;
-      map.setCenter(new google.maps.LatLng(coords.latitude, coords.longitude));
-      var myLocation = new google.maps.Marker({
-          position: new google.maps.LatLng(coords.latitude, coords.longitude),
-          map: map,
-          title: "My Location"
-      });
-      // displayRoute()
-    })
-  }
-  setInterval(updateLoc,5000);
-
-      var myLatlng = new google.maps.LatLng(37.7483, -122.4367); // SF, home sweet home
-  
-      var mapOptions = {
-          center: myLatlng,
-          zoom: 12,
-          mapTypeId: google.maps.MapTypeId.ROADMAP,
-          disableDefaultUI: true,
-          styles: [{ featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }]}]
-      };
-  
-      var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-  
-
-      function displayRoute() {
-          var directionsService = new google.maps.DirectionsService();
-          console.log("dR sees : " + $scope.lat + " " + $scope.long);
-          console.log(typeof $scope.lat);
-          var start = new google.maps.LatLng($scope.lat, $scope.long);
-          var end = new google.maps.LatLng(37.3000, -120.4833);
-          var directionsDisplay = new google.maps.DirectionsRenderer();// also, constructor can get "DirectionsRendererOptions" object
-          directionsDisplay.setMap(map); // map should be already initialized.
-
-          var request = {
-              origin : start,
-              destination : end,
-              travelMode : google.maps.TravelMode.DRIVING
-          };
-          var directionsService = new google.maps.DirectionsService(); 
-          directionsService.route(request, function(response, status) {
-              if (status == google.maps.DirectionsStatus.OK) {
-                  directionsDisplay.setDirections(response);
+    if(typeof $scope.myLocation === 'undefined') {
+      $scope.myLocation = new google.maps.Marker({
+        position: new google.maps.LatLng($rootScope.userLat, $rootScope.userLong),
+        map: map,
+        title: "My Location",
+        clickable: false,
+        icon: {
+                url: 'img/currentLocation.png',
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(25, 25),
+                scaledSize: new google.maps.Size(50, 50)
               }
-          });
-      }
+      });
+      $scope.myAccuracyCircle = new google.maps.Circle({
+        map: map,
+        radius: $rootScope.userAccuracy,    // 10 miles in metres
+        fillColor: '#add8e6',
+        fillOpacity: 0.66,
+        strokeColor: '#3A9FBF',
+        strokeWeight: 1
+      });
+      $scope.myAccuracyCircle.bindTo('center', $scope.myLocation, 'position');
+    } else {
+      $scope.myLocation.setPosition(new google.maps.LatLng($rootScope.userLat, $rootScope.userLong));
+      $scope.myAccuracyCircle.setCenter(new google.maps.LatLng($rootScope.userLat, $rootScope.userLong));
+      $scope.myAccuracyCircle.setRadius($rootScope.userAccuracy);
+    }
+  }
+  $scope.$on('UserLocation.Update',function(){
+    updateLoc();
+  })
 
-      $scope.map = map;
-  });
+  var myLatlng = new google.maps.LatLng(37.7483, -122.4367); // SF, home sweet home
+
+  var mapOptions = {
+    center: myLatlng,
+    zoom: 12,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    disableDefaultUI: true,
+    styles: [{ featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }]}]
+  };
+
+  var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+
+  displayRoute();
+
+  function displayRoute() {
+    var directionsService = new google.maps.DirectionsService();
+    var start = new google.maps.LatLng($rootScope.userLat, $rootScope.userLong);
+    var end = $scope.destination.formatted_address;
+    var directionsDisplay = new google.maps.DirectionsRenderer();// also, constructor can get "DirectionsRendererOptions" object
+    directionsDisplay.setMap(map); // map should be already initialized.
+
+    var request = {
+      origin : start,
+      destination : end,
+      travelMode : google.maps.TravelMode.DRIVING
+    };
+    var directionsService = new google.maps.DirectionsService(); 
+    directionsService.route(request, function(response, status) {
+      if (status == google.maps.DirectionsStatus.OK) {
+        directionsDisplay.setDirections(response);
+      }
+    });
+  }
+
+  $scope.map = map;
+});
