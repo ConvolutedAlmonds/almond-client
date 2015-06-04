@@ -38,7 +38,7 @@ angular.module('almond.controllers', [])
   };
 })
 
-.controller('TravelModesCtrl', function($scope, userLocation) {
+.controller('TravelModesCtrl', function($scope, userLocation, $rootScope) {
   $scope.event = {
     title: "Onsite Interview",
     location: "944 Market Street, San Francisco",
@@ -51,6 +51,14 @@ angular.module('almond.controllers', [])
     $scope.options = data;
     console.dir(data);
   });
+
+  $scope.dispatch = function(i,j) {
+    console.log("dispatch called on TravelModesCtrl");
+    $scope.$on('TravelMode.ReadyforData',function(){
+      console.log("broadcasting data from TravelModesCtrl")
+      $rootScope.$broadcast('TravelModes.Data',$scope.options, i, j);
+    })
+  }
 
 })
 
@@ -86,8 +94,14 @@ angular.module('almond.controllers', [])
   })
 })
 
-.controller('TravelModeCtrl', function($scope,$stateParams) {
-
+.controller('TravelModeCtrl', function($scope,$stateParams,$rootScope) {
+  console.log("TravelModeCtrl says hi");
+  $scope.$on('TravelModes.Data', function(e,data,i,j) {
+    $scope.data = data.data.results[i][j];
+    console.log("Got data from event, it was " + $scope.data)
+  })
+  $rootScope.$broadcast('TravelMode.ReadyforData');
+  console.dir($scope.data)
 })
 
 .controller('SettingsCtrl', function($scope) {

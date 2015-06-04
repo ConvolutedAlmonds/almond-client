@@ -8,7 +8,7 @@
           will take <b>{{route.legs[0].duration.text}}</b> ({{route.legs[0].distance.text}})<br>
           and will cost <b>{{route.fare.text || "$0"}}</b><br>
           <span style="color:grey;font-style:italic;">via {{route.summary}}</span>
-          <a href="#/app/travelMode/{{route.mode}}">Go</a>
+          <a href="#/app/travelMode/{{route.mode}}" ng-click="dispatch($parent.$index,$index)">Go</a>
         </div>
       </div>
     </div>
