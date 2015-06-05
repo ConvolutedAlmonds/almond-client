@@ -165,7 +165,7 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
         })
       },function(error) {
         deferred.reject("Geolocation API didn't return coordinates :(");
-        console.error(error)
+        console.warn("GPS error: " + error);
       },
       {
         enableHighAccuracy: true,
