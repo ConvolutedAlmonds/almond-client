@@ -8,3 +8,30 @@
     width: 100%;
     height: 100%;
 }
+
+html, body {
+  height: 100%;
+}
+
+
+.stackContainer {
+  position: relative;
+  left: 0px;
+  top: 0px;
+}
+
+.stack {
+  font-size: 28px;
+}
+
+.stackTop {
+  position: absolute;
+  right: 24px;
+  top: 32px;
+}
+
+.stackBottom {
+  position: absolute;
+  right: 24px;
+  bottom: 25px;
+}

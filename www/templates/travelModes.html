@@ -21,18 +21,19 @@
               </span>
               ({{route.legs[0].distance.text}})<br>
               and will cost <b>{{route.fare.text || "$0"}}</b><br>
-              <span style="color:grey;font-style:italic;">via {{route.summary}}</span>
+              <span class="item-text-wrap" style="color:grey;font-style:italic;">via {{route.summary}}</span>
             </div>
           </div>
-          <div class="col col-20">
-            <div class="row">
-              fgs
+          <div class="col col-20 stackContainer">
+            <div class="stack stackTop">
+              {{route.legs[0].duration.text}}
             </div>
-            <div class="row">
-              fds
+            <div class="stack stackBottom">
+              {{route.fare.text}}
             </div>
         </div>
       </div>
+    </div>
     </div>
     <br><br> <!-- a super hacky way to give padding to the cards so the footer doesn't cover them up -->
   </ion-content>
