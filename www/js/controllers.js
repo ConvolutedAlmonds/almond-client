@@ -22,7 +22,7 @@ angular.module('almond.controllers', [])
 
   };
 
-  var uberUrl = 'uber://?action=setPickup&pickup[formatted_address]=1455%20Market%20St%2C%20San%20Francisco%2C%20CA%2094103';
+  var uberUrl = 'uber://?action=setPickup&pickup[formatted_address]=175%20Rae%20Ave%2C%20San%20Francisco%2C%20CA%2094112';
 
   $scope.testUber = function() {
     window.open(uberUrl, 'system');
