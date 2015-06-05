@@ -21,13 +21,15 @@ html, body {
 }
 
 .stack {
-  font-size: 28px;
+  font-size: 18px;
+  z-index: 999;
 }
 
 .stackTop {
   position: absolute;
-  right: 24px;
-  top: 32px;
+  right: 18px;
+  top: 10px;
+  text-align: right;
 }
 
 .stackBottom {
