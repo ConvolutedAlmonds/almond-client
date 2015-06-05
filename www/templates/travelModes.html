@@ -1,8 +1,9 @@
 <ion-view view-title="Travel Modes">
   <ion-content>
     <div ng-repeat="mode in options.data.results">
-      <div class="card" ng-repeat="route in mode">
+      <div class="card" ng-repeat="route in mode" ng-click="go('/app/travelMode/{{route.travelMode}}')">
         <div class="row">
+        <div class="col col-10 col-center"></div>
           <div class="col col-10 col-center">
             <span ng-switch on="route.travelMode" style="font-size:32px;padding-top:3em;">
               <i class="icon ion-location" ng-switch-default></i>
@@ -13,12 +14,11 @@
             </span>
           </div>
           <div class="col col-90">
-            <div class="item">
+            <div class="item" ng-click="dispatch($parent.$index,$index);">
               <h1>{{route.travelMode}}</h1>
               will take <b>{{route.legs[0].duration.text}}</b> ({{route.legs[0].distance.text}})<br>
               and will cost <b>{{route.fare.text || "$0"}}</b><br>
               <span style="color:grey;font-style:italic;">via {{route.summary}}</span>
-              <a href="#/app/travelMode/{{route.mode}}" ng-click="dispatch($parent.$index,$index)">Go</a>
             </div>
           </div>
         </div>

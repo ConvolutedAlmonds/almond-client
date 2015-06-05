@@ -38,7 +38,11 @@ angular.module('almond.controllers', [])
   };
 })
 
-.controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http) {
+.controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http, $location) {
+
+  $scope.go = function ( path ) {
+    $location.path( path );
+  };
   
   getRoutes($http, $rootScope.userLong, $rootScope.userLat, $rootScope.destination.formatted_address, function(data){
     $scope.options = data;
