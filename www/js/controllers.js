@@ -22,6 +22,10 @@ angular.module('almond.controllers', [])
 
   };
 
+  $scope.authorizeUser = function() {
+    authorizeUser();
+  }
+
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
 
@@ -30,30 +34,43 @@ angular.module('almond.controllers', [])
     ref.addEventListener('loadstart', function(event) { 
         if((event.url).startsWith("http://localhost/callback")) {
             requestToken = (event.url).split("code=")[1];
-            //postAuthenticate($http, requestToken);
+            postAuthenticate($http, requestToken);
             alert(requestToken);
-            //ref.close();
-            //$scope.closeLogin();
+            ref.close();
         }
     });
+    // Simulate a login delay. Remove this and replace with your login
+    // code if using a login system
+    $timeout(function() {
+      $scope.closeLogin();
+    }, 1000);
   };
 })
 
-.controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http, $location) {
-  if(typeof $rootScope.destination === 'undefined') {
-    $rootScope.destination = {};
-    $rootScope.destination.formatted_address = '875 Post Street, San Francisco, CA 94109, USA';
-    $rootScope.userLat = 37.785834;
-    $rootScope.userLong = -122.406417;
-  };
-
-  $scope.go = function ( path ) {
-    $location.path( path );
-  };
+.controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http) {
   
   getRoutes($http, $rootScope.userLong, $rootScope.userLat, $rootScope.destination.formatted_address, function(data){
-    $scope.options = data;
-    console.dir(data);
+    var formattedData = {};
+
+    formattedData.data = [];
+    formattedData.data.results = [];
+    for(var i = 0; i < data.data.results.length; i++) {
+      var result = data.data.results[i];
+      var formattedResult = [];
+      for(var j = 0; j < result.length; j++) {
+        var subResult = result[j];
+        var formattedSubResult = {}
+        formattedSubResult.travelMode = subResult.travelMode;
+        formattedSubResult.fare = subResult.fare || "$0";
+        formattedSubResult.duration = subResult.legs[0].duration.text;
+        formattedSubResult.summary = subResult.summary;
+        formattedSubResult.durationByMode = [subResult.durationByMode[0], subResult.durationByMode[1]];
+        formattedResult.push(formattedSubResult);
+      }
+      formattedData.data.results.push(formattedResult); 
+    }
+    console.dir(formattedData);
+    $scope.options = formattedData;
   });
 
   $scope.dispatch = function(i,j) {
