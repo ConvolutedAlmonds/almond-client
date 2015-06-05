@@ -22,9 +22,23 @@ angular.module('almond.controllers', [])
 
   };
 
-  $scope.authorizeUser = function() {
-    authorizeUser();
-  }
+  $scope.testUber = function() {
+    openUber();
+  };
+
+  var uberUrl = 'uber://?action=setPickup&pickup[formatted_address]=1455%20Market%20St%2C%20San%20Francisco%2C%20CA%2094103';
+
+  var openUber = function() {
+    if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"uber://"]]) {
+        // Do something awesome - the app is installed! Launch App.
+        navigator.app.loadUrl(uberUrl {openExternal: true});
+        
+    }
+    else {
+        // No Uber app! Open Mobile Website.
+        alert('No uber app found')
+    }
+  };
 
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
