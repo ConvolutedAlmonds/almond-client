@@ -22,10 +22,6 @@ angular.module('almond.controllers', [])
 
   };
 
-  $scope.authorizeUser = function() {
-    authorizeUser();
-  }
-
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
 
@@ -34,16 +30,12 @@ angular.module('almond.controllers', [])
     ref.addEventListener('loadstart', function(event) { 
         if((event.url).startsWith("http://localhost/callback")) {
             requestToken = (event.url).split("code=")[1];
-            postAuthenticate($http, requestToken);
+            //postAuthenticate($http, requestToken);
             alert(requestToken);
-            ref.close();
+            //ref.close();
+            //$scope.closeLogin();
         }
     });
-    // Simulate a login delay. Remove this and replace with your login
-    // code if using a login system
-    $timeout(function() {
-      $scope.closeLogin();
-    }, 1000);
   };
 })
 
