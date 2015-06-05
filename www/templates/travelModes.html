@@ -19,7 +19,7 @@
               <span ng-repeat="mode in route.durationByMode"><b>{{mode[1]}}</b> <span ng-if="mode[0] == 'transit'">riding </span>{{mode[0]}}
               <span ng-if="!$last"><br></span>
               </span>
-              ({{route.legs[0].distance.text}})<br>
+              ({{route.distance.text}})<br>
               <span class="item-text-wrap" style="color:grey;font-style:italic;">via {{route.summary}}</span>
             </div>
           </div>

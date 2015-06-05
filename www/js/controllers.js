@@ -62,10 +62,13 @@ angular.module('almond.controllers', [])
         var formattedSubResult = {}
         formattedSubResult.travelMode = subResult.travelMode;
         formattedSubResult.fare = subResult.fare || "$0";
+        formattedSubResult.distance = subResult.legs[0].distance;
         formattedSubResult.duration = subResult.legs[0].duration.text;
         formattedSubResult.summary = subResult.summary;
         formattedSubResult.durationByMode = [subResult.durationByMode[0], subResult.durationByMode[1]];
         formattedResult.push(formattedSubResult);
+        console.log("sub", subResult.durationByMode);
+        console.log("for", formattedSubResult.durationByMode);
       }
       formattedData.data.results.push(formattedResult); 
     }
