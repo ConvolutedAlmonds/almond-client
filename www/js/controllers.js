@@ -21,12 +21,13 @@ angular.module('almond.controllers', [])
     $scope.modal.show();
 
   };
+  
+  var uberUrl = 'uber://?action=setPickup&pickup[formatted_address]=1455%20Market%20St%2C%20San%20Francisco%2C%20CA%2094103';
 
   $scope.testUber = function() {
-    openUber();
+    navigator.app.loadUrl(uberUrl, {openExternal: true});
   };
 
-  var uberUrl = 'uber://?action=setPickup&pickup[formatted_address]=1455%20Market%20St%2C%20San%20Francisco%2C%20CA%2094103';
 
   var openUber = function() {
     // if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"uber://"]]) {
