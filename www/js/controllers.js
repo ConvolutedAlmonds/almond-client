@@ -48,6 +48,12 @@ angular.module('almond.controllers', [])
 })
 
 .controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http, $location) {
+  if(typeof $rootScope.destination === 'undefined') {
+    $rootScope.destination = {};
+    $rootScope.destination.formatted_address = '875 Post Street, San Francisco, CA 94109, USA';
+    $rootScope.userLat = 37.785834;
+    $rootScope.userLong = -122.406417;
+  };
 
   $scope.go = function ( path ) {
     $location.path( path );

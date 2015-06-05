@@ -44,51 +44,35 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
     controller: 'AppCtrl'
   })
 
-  .state('app.search', {
-    url: "/search",
+  .state('app.start', {
+    url: "/start",
     views: {
       'menuContent': {
-        templateUrl: "templates/search.html"
+        templateUrl: "templates/start.html",
+        controller: 'StartCtrl'
+      }
+    }
+  })
+  
+  .state('app.travelModes', {
+    url: "/travelModes",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/travelModes.html",
+        controller: 'TravelModesCtrl'
       }
     }
   })
 
-  .state('app.browse', {
-    url: "/browse",
+  .state('app.travelMode', {
+    url: "/travelMode/{travelMode}",
     views: {
       'menuContent': {
-        templateUrl: "templates/browse.html"
+        templateUrl: "templates/travelMode.html",
+        controller: 'TravelModeCtrl'
       }
     }
   })
-    .state('app.start', {
-      url: "/start",
-      views: {
-        'menuContent': {
-          templateUrl: "templates/start.html",
-          controller: 'StartCtrl'
-        }
-      }
-    })
-    .state('app.travelModes', {
-      url: "/travelModes",
-      views: {
-        'menuContent': {
-          templateUrl: "templates/travelModes.html",
-          controller: 'TravelModesCtrl'
-        }
-      }
-    })
-
-    .state('app.travelMode', {
-      url: "/travelMode/{travelMode}",
-      views: {
-        'menuContent': {
-          templateUrl: "templates/travelMode.html",
-          controller: 'TravelModeCtrl'
-        }
-      }
-    })
 
   .state('app.map', {
     url: "/map",
@@ -165,7 +149,7 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
         })
       },function(error) {
         deferred.reject("Geolocation API didn't return coordinates :(");
-        console.error(error)
+        console.warn("GPS error: " + error);
       },
       {
         enableHighAccuracy: true,
@@ -211,4 +195,16 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
     listen: listen,
     get: get
   };
-});
+})
+
+.filter('shortenTime',function(){
+  return function(str) {
+    console.log("shortenTime-ing: " + str)
+    str = str.replace(/ mins/g,'m');
+    str = str.replace(/ min/g,'m');
+    return str;
+  };
+})
+
+
+;
