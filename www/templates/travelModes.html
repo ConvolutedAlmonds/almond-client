@@ -24,7 +24,7 @@
             </div>
           </div>
           <div class="stack stackTop">
-            <span style="color:blue;">{{route.legs[0].duration.text}}</span><br>
+            <span style="color:blue;">{{route.legs[0].duration.text | shortenTime}}</span><br>
             <span style="color:green;">{{route.fare.text || '$0'}}</span>
           </div>
       </div>
