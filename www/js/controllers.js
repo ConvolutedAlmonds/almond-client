@@ -21,7 +21,7 @@ angular.module('almond.controllers', [])
     $scope.modal.show();
 
   };
-  
+
   var uberUrl = 'uber://?action=setPickup&pickup[formatted_address]=1455%20Market%20St%2C%20San%20Francisco%2C%20CA%2094103';
 
   $scope.testUber = function() {
@@ -46,21 +46,22 @@ angular.module('almond.controllers', [])
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
 
-    var clientId = "664215290683-rv0ofoq8r51sffkujlv1garnoqrtk4s5.apps.googleusercontent.com"
-    var ref = window.open('https://accounts.google.com/o/oauth2/auth?client_id=' + clientId + '&redirect_uri=http://localhost/callback&scope=https://www.googleapis.com/auth/urlshortener&approval_prompt=force&response_type=code&access_type=offline', '_blank', 'location=no');
-    ref.addEventListener('loadstart', function(event) { 
-        if((event.url).startsWith("http://localhost/callback")) {
-            requestToken = (event.url).split("code=")[1];
-            postAuthenticate($http, requestToken);
-            alert(requestToken);
-            ref.close();
-        }
-    });
-    // Simulate a login delay. Remove this and replace with your login
-    // code if using a login system
-    $timeout(function() {
-      $scope.closeLogin();
-    }, 1000);
+    navigator.app.loadUrl(uberUrl, {openExternal: true});
+  //   var clientId = "664215290683-rv0ofoq8r51sffkujlv1garnoqrtk4s5.apps.googleusercontent.com"
+  //   var ref = window.open('https://accounts.google.com/o/oauth2/auth?client_id=' + clientId + '&redirect_uri=http://localhost/callback&scope=https://www.googleapis.com/auth/urlshortener&approval_prompt=force&response_type=code&access_type=offline', '_blank', 'location=no');
+  //   ref.addEventListener('loadstart', function(event) { 
+  //       if((event.url).startsWith("http://localhost/callback")) {
+  //           requestToken = (event.url).split("code=")[1];
+  //           postAuthenticate($http, requestToken);
+  //           alert(requestToken);
+  //           ref.close();
+  //       }
+  //   });
+  //   // Simulate a login delay. Remove this and replace with your login
+  //   // code if using a login system
+  //   $timeout(function() {
+  //     $scope.closeLogin();
+  //   }, 1000);
   };
 })
 
