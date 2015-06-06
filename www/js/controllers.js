@@ -69,8 +69,8 @@ angular.module('almond.controllers', [])
 
     formattedData.data = [];
     formattedData.data.results = [];
-    for(var i = 0; i < data.data.results.length; i++) {
-      var result = data.data.results[i];
+    for(var i = 0; i < data.directions.results.length; i++) {
+      var result = data.directions.results[i];
       var formattedResult = [];
       for(var j = 0; j < result.length; j++) {
         var subResult = result[j];
