@@ -64,7 +64,7 @@ angular.module('almond.controllers', [])
     $location.path( path );
   };
   
-  getRoutes($http, $rootScope.userLong, $rootScope.userLat, $scope.destination.formatted_address, function(data){
+  $scope.refresh = getRoutes.bind(this,$http, $rootScope.userLong, $rootScope.userLat, $scope.destination.formatted_address, function(data){
     var formattedData = {};
 
     formattedData.data = [];
@@ -88,7 +88,10 @@ angular.module('almond.controllers', [])
     }
     console.dir(formattedData);
     $scope.options = formattedData;
+    $scope.$broadcast('scroll.refreshComplete');
   });
+
+  $scope.refresh();
 
   $scope.dispatch = function(i,j) {
     console.log("dispatch called on TravelModesCtrl");
