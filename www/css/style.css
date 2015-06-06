@@ -42,3 +42,15 @@ html, body {
   right: 24px;
   bottom: 25px;
 }
+
+.travelTypeLogo {
+  position: absolute;
+  top: 35%;
+  left: 20px;
+  font-size: 48px;
+}
+
+.uberLogo {
+  width:36px;
+  height:36px;
+}
