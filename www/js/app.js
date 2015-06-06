@@ -228,23 +228,26 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
     return map;
   };
 
-  var drawRoute = function(map,sLat,sLng,endStr) {
-    var directionsService = new google.maps.DirectionsService();
-    var start = new google.maps.LatLng(sLat, sLng);
-    var end = endStr;
-    var directionsDisplay = new google.maps.DirectionsRenderer();// also, constructor can get "DirectionsRendererOptions" object
-    directionsDisplay.setMap(map); // map should be already initialized.
+  var drawRoute = function(map,routeData) {
+    var route = new google.maps.Polyline({
+      // path:google.maps.geometry.encoding.decodePath(poly),
+      strokeColor: "#0000FF",
+      strokeOpacity: 1.0,
+      strokeWeight: 2
+    }); 
 
-    var directionsService = new google.maps.DirectionsService(); 
-    directionsService.route({
-      origin : start,
-      destination : end,
-      travelMode : google.maps.TravelMode.DRIVING
-    }, function(response, status) {
-      if (status == google.maps.DirectionsStatus.OK) {
-        directionsDisplay.setDirections(response);
-      }
-    });
+    var bounds = new google.maps.LatLngBounds();
+
+
+    var steps = routeData.directions;
+    for (i=0;i<steps.length;i++) {
+      route.getPath().push(steps[i].polyline.points);
+      console.log("step " + i + ":" + steps[i].polyline.points)
+      // bounds.extend(steps[i].polyline);
+    }
+
+    map.fitBounds(bounds);
+    route.setMap(map);
   };
 
   var updateUserLocation = function(map,lat,lng,accuracy,userMarker) {

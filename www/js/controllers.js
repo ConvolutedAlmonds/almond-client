@@ -135,11 +135,12 @@ angular.module('almond.controllers', [])
 
 .controller('TravelModeCtrl', function($scope,$stateParams,$rootScope, destinationService, mapService) {
   $scope.activeTab = 'directions';
-  var userMarker;
+  var userMarker, route;
   console.log("TravelModeCtrl says hi");
   var deregister = $scope.$on('TravelModes.Data', function(e,data,i,j) {
     $scope.data = data.data.results[i][j];
     console.log("Got data from event")
+    console.dir($scope.data)
   })
   $rootScope.$broadcast('TravelMode.ReadyforData');
   deregister();
@@ -157,7 +158,7 @@ angular.module('almond.controllers', [])
   })
 
 
-  mapService.drawRoute(map,$rootScope.userLat,$rootScope.userLong,$scope.destination.formatted_address);
+  mapService.drawRoute(map,$scope.data);
 })
 
 .controller('SettingsCtrl', function($scope) {
