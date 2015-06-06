@@ -3,7 +3,7 @@
 
   <div ng-if="activeTab === 'directions'">
     <ul class="list">
-      <li class="item item-icon-left" ng-repeat="step in data.legs[0].steps">
+      <li class="item item-icon-left" ng-repeat="step in data.directions">
         <span ng-switch on="step.maneuver">
           <i class="icon ion-location" ng-switch-default></i>
           <i class="icon ion-arrow-left-c" ng-switch-when="turn-left"></i>
