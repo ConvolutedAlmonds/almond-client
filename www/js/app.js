@@ -141,6 +141,7 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
     getCoords: function() {
       var deferred = $q.defer();
       navigator.geolocation.getCurrentPosition(function(pos) {
+        $rootScope.locationHealth = 0; // 0 is good, 1 is out of date, 2 is bad
         $rootScope.$broadcast('UserLocation.Update');
         deferred.resolve({
           latitude: pos.coords.latitude,
@@ -149,7 +150,14 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
         })
       },function(error) {
         deferred.reject("Geolocation API didn't return coordinates :(");
-        console.warn("GPS error: " + error);
+        if(error.code === 3 && $rootScope.userLat) { $rootScope.locationHealth = 1; }
+        else { $rootScope.locationHealth = 2; }
+        if(error.code && error.message) {
+          console.warn('GPS error ' + error.code + ": " + error.message);
+        } else {
+            console.warn("GPS error: No error message. Error object below.");
+            console.dir(error);
+        }
       },
       {
         enableHighAccuracy: true,
