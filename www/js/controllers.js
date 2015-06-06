@@ -22,13 +22,6 @@ angular.module('almond.controllers', [])
 
   };
 
-  var uberUrl = 'uber://?action=setPickup&pickup[latitude]=37.775818&pickup[longitude]=-122.418028&dropoff[formatted_address]=1%20Telegraph%20Hill%20Blvd%2C%20San%20Francisco%2C%20CA%2094133&product_id=a1111c8c-c720-46c3-8534-2fcdd730040d';
-
-  $scope.testUber = function() {
-    window.open(uberUrl, 'system');
-    // navigator.app.loadUrl(uberUrl, {openExternal: true});
-  };
-
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
 
@@ -64,8 +57,15 @@ angular.module('almond.controllers', [])
     })
   };
 
+  // If route is from Google Directions, show step-by-step and map polyline. If Uber selection, deep link to Uber app with pre-filled fields.
   $scope.go = function ( path ) {
-    $location.path( path );
+    var choice = this.route;
+    console.log('THIS', choice);
+    if (choice.uberAppUrl) {
+      window.open(choice.uberAppUrl, 'system');
+    } else {
+      $location.path(path);
+    }
   };
 
   getRoutes($http, $rootScope.userLong, $rootScope.userLat, $scope.destination.formatted_address, function(data){
@@ -78,45 +78,52 @@ angular.module('almond.controllers', [])
       var formattedResult = [];
       for(var j = 0; j < result.length; j++) {
         var subResult = result[j];
-        var formattedSubResult = {}
-        formattedSubResult.travelMode = subResult.travelMode;
-        formattedSubResult.fare = subResult.fare || "$0";
-        formattedSubResult.distance = subResult.legs[0].distance;
-        formattedSubResult.duration = subResult.legs[0].duration.text;
-        formattedSubResult.summary = subResult.summary;
-        formattedSubResult.durationByMode = [subResult.durationByMode[0], subResult.durationByMode[1]];
-        formattedSubResult.directions = subResult.legs[0].steps;
-        console.log(formattedSubResult);
+        var formattedSubResult = {
+          travelMode: subResult.travelMode,
+          fare: subResult.fare || "$0",
+          distance: subResult.legs[0].distance,
+          duration: subResult.legs[0].duration.text,
+          summary: subResult.summary,
+          durationByMode: [subResult.durationByMode[0], subResult.durationByMode[1]],
+          directions: subResult.legs[0].steps
+        };
+
         formattedResult.push(formattedSubResult);
       }
       formattedData.data.results.push(formattedResult);
     }
 
+    var uberAppLink = 'uber://?action=setPickup' +
+      '&pickup[latitude]=' + data.misc.origin.latitude.toString() +
+      '&pickup[longitude]=' + data.misc.origin.longitude.toString() +
+      '&pickup[formatted_address]=' + encodeURIComponent(data.misc.origin.address) +
+      '&dropoff[latitude]=' + data.misc.destination.latitude.toString() +
+      '&dropoff[longitude]=' + data.misc.destination.longitude.toString() + 
+      '&dropoff[formatted_address]=' + encodeURIComponent(data.misc.destination.address);
+
     for (var i = 0; i < data.uber.length; i++) {
       var uberResult = data.uber[i];
+
       var formattedSubResult = {
         travelMode: uberResult.price_localized_display_name,
-        fare: {
-          text: uberResult.price_estimate
-        },
-        distance: {
-          text: uberResult.price_distance
-        },
+        fare: { text: uberResult.price_estimate },
+        distance: { text: uberResult.price_distance },
         duration: uberResult.price_parsedArrivalTime,
         summary: uberResult.price_display_name,
         durationByMode: [[uberResult.price_parsedArrivalTime, 'driving']],
         directions: [],
-        timeTilArrivalSec: uberResult.time_estimate,
-        timeTilArrivalParsed: uberResult.time_parsedDuration
+        timeTilArrivalSec: uberResult.time_estimate, // FIX
+        timeTilArrivalParsed: uberResult.time_parsedDuration, // FIX
+        origin: data.misc.origin,
+        destination: data.misc.destination,
+        productId: uberResult.time_product_id,
+        uberAppUrl: uberAppLink + '&product_id=' + uberResult.time_product_id
       };
-      console.log(formattedSubResult);
+
       var formattedResult = [formattedSubResult];
-      // formattedResult.push(formattedSubResult);
       formattedData.data.results.push(formattedResult);
     }
 
-    console.log('--- Formatted Data ---')
-    console.dir(formattedData);
     $scope.options = formattedData;
 
   });
