@@ -65,14 +65,36 @@ angular.module('almond.controllers', [])
   };
   
   getRoutes($http, $rootScope.userLong, $rootScope.userLat, $scope.destination.formatted_address, function(data){
-    $scope.options = data;
-    console.dir(data);
+    var formattedData = {};
+
+    formattedData.data = [];
+    formattedData.data.results = [];
+    for(var i = 0; i < data.directions.results.length; i++) {
+      var result = data.directions.results[i];
+      var formattedResult = [];
+      for(var j = 0; j < result.length; j++) {
+        var subResult = result[j];
+        var formattedSubResult = {}
+        formattedSubResult.travelMode = subResult.travelMode;
+        formattedSubResult.fare = subResult.fare || "$0";
+        formattedSubResult.distance = subResult.legs[0].distance;
+        formattedSubResult.duration = subResult.legs[0].duration.text;
+        formattedSubResult.summary = subResult.summary;
+        formattedSubResult.durationByMode = [subResult.durationByMode[0], subResult.durationByMode[1]];
+        formattedSubResult.directions = subResult.legs[0].steps;
+        formattedResult.push(formattedSubResult);
+      }
+      formattedData.data.results.push(formattedResult); 
+    }
+    console.dir(formattedData);
+    $scope.options = formattedData;
   });
 
   $scope.dispatch = function(i,j) {
     console.log("dispatch called on TravelModesCtrl");
     $scope.$on('TravelMode.ReadyforData',function(){
-      console.log("broadcasting data from TravelModesCtrl")
+      console.log("broadcasting data from TravelModesCtrl");
+      console.log($scope.options);
       $rootScope.$broadcast('TravelModes.Data',$scope.options, i, j);
     })
   }
