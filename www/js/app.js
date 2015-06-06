@@ -214,11 +214,11 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
 })
 
 .service('mapService',function(){
-  var map, userMarker, accuracyCircle;
+  var accuracyCircle;
   var create = function(id,lat,lng) {
     lat = lat || 37.7483;
     lng = lng || -122.4367;
-    map = new google.maps.Map(document.getElementById(id), {
+    var map = new google.maps.Map(document.getElementById(id), {
       center: new google.maps.LatLng(lat,lng),
       zoom: 12,
       mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -228,7 +228,7 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
     return map;
   };
 
-  var drawRoute = function(sLat,sLng,endStr) {
+  var drawRoute = function(map,sLat,sLng,endStr) {
     var directionsService = new google.maps.DirectionsService();
     var start = new google.maps.LatLng(sLat, sLng);
     var end = endStr;
@@ -247,7 +247,8 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
     });
   };
 
-  var updateUserLocation = function(lat,lng,accuracy) {
+  var updateUserLocation = function(map,lat,lng,accuracy,userMarker) {
+    userMarker = userMarker || undefined;
     if(typeof userMarker === 'undefined') {
       userMarker = new google.maps.Marker({
         position: new google.maps.LatLng(lat,lng),
@@ -275,6 +276,7 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
       accuracyCircle.setCenter(new google.maps.LatLng(lat, lng));
       accuracyCircle.setRadius(accuracy);
     }
+    return userMarker;
   };
   return {
     updateUserLocation: updateUserLocation,
