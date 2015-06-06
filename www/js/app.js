@@ -206,7 +206,6 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
 
 .filter('shortenTime',function(){
   return function(str) {
-    console.log("shortenTime-ing: " + str)
     str = str.replace(/ mins/g,'m');
     str = str.replace(/ min/g,'m');
     return str;
