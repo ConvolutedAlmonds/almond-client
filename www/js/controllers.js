@@ -153,12 +153,16 @@ angular.module('almond.controllers', [])
 
   var map = mapService.create('map');
 
+  google.maps.event.addListenerOnce(map, 'idle', function(){
+    var route = mapService.drawRoute(map,$scope.data);
+    route.setMap(map);
+  });
+
   $scope.$on('UserLocation.Update',function(){
     userMarker = mapService.updateUserLocation(map,$rootScope.userLat,$rootScope.userLong,$rootScope.userAccuracy, userMarker);
   })
 
 
-  mapService.drawRoute(map,$scope.data);
 })
 
 .controller('SettingsCtrl', function($scope) {
