@@ -60,41 +60,48 @@ angular.module('almond.controllers', [])
     })
   };
 
-  $ionicLoading.show({
-        template: 'Loading routes...'
+  $scope.showLoading = $ionicLoading.show.bind(this,{
+        template: '<span style="color:white;"><ion-spinner></ion-spinner><br>Loading routes...</span>'
       });
+  $scope.hideLoading =  $ionicLoading.hide;
 
   $scope.go = function ( path ) {
     $location.path( path );
   };
   
-  $scope.refresh = getRoutes.bind(this,$http, $rootScope.userLong, $rootScope.userLat, $scope.destination.formatted_address, function(data){
-    var formattedData = {};
+  $scope.refresh = function() {
 
-    formattedData.data = [];
-    formattedData.data.results = [];
-    for(var i = 0; i < data.directions.results.length; i++) {
-      var result = data.directions.results[i];
-      var formattedResult = [];
-      for(var j = 0; j < result.length; j++) {
-        var subResult = result[j];
-        var formattedSubResult = {}
-        formattedSubResult.travelMode = subResult.travelMode;
-        formattedSubResult.fare = subResult.fare || "$0";
-        formattedSubResult.distance = subResult.legs[0].distance;
-        formattedSubResult.duration = subResult.legs[0].duration.text;
-        formattedSubResult.summary = subResult.summary;
-        formattedSubResult.durationByMode = [subResult.durationByMode[0], subResult.durationByMode[1]];
-        formattedSubResult.directions = subResult.legs[0].steps;
-        formattedResult.push(formattedSubResult);
+    $scope.showLoading();
+    $scope.options = {};
+    getRoutes($http, $rootScope.userLong, $rootScope.userLat, $scope.destination.formatted_address, function(data){
+      var formattedData = {};
+      console.log('show loading')
+      formattedData.data = [];
+      formattedData.data.results = [];
+      for(var i = 0; i < data.directions.results.length; i++) {
+        var result = data.directions.results[i];
+        var formattedResult = [];
+        for(var j = 0; j < result.length; j++) {
+          var subResult = result[j];
+          var formattedSubResult = {}
+          formattedSubResult.travelMode = subResult.travelMode;
+          formattedSubResult.fare = subResult.fare || "$0";
+          formattedSubResult.distance = subResult.legs[0].distance;
+          formattedSubResult.duration = subResult.legs[0].duration.text;
+          formattedSubResult.summary = subResult.summary;
+          formattedSubResult.durationByMode = [subResult.durationByMode[0], subResult.durationByMode[1]];
+          formattedSubResult.directions = subResult.legs[0].steps;
+          formattedResult.push(formattedSubResult);
+        }
+        formattedData.data.results.push(formattedResult); 
       }
-      formattedData.data.results.push(formattedResult); 
-    }
-    console.dir(formattedData);
-    $scope.options = formattedData;
-    $scope.$broadcast('scroll.refreshComplete');
-    $ionicLoading.hide();
-  });
+      console.dir(formattedData);
+      $scope.options = formattedData;
+      $scope.$broadcast('scroll.refreshComplete');
+      $scope.hideLoading();
+      console.log('hide loading')
+    });
+  }
 
   $scope.refresh();
 
