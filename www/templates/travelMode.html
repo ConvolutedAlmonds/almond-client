@@ -9,7 +9,7 @@
           <i class="icon ion-arrow-left-c" ng-switch-when="turn-left"></i>
           <i class="icon ion-arrow-right-c" ng-switch-when="turn-right"></i>
         </span>
-        <span ng-bind-html="step.html_instructions"></span>
+        <span class="item-text-wrap" ng-bind-html="step.html_instructions"></span>
         <span class="item-note">
           {{step.distance.text}} | {{step.duration.text}}
         </span>
