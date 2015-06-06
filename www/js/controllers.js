@@ -47,7 +47,7 @@ angular.module('almond.controllers', [])
   };
 })
 
-.controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http, $location, destinationService) {
+.controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http, $location, destinationService, $ionicLoading) {
   if(typeof destinationService.get() === 'undefined') {
     $scope.destination = {};
     $scope.destination.formatted_address = '875 Post Street, San Francisco, CA 94109, USA';
@@ -59,6 +59,10 @@ angular.module('almond.controllers', [])
       $scope.destination = newDest;
     })
   };
+
+  $ionicLoading.show({
+        template: 'Loading routes...'
+      });
 
   $scope.go = function ( path ) {
     $location.path( path );
@@ -89,6 +93,7 @@ angular.module('almond.controllers', [])
     console.dir(formattedData);
     $scope.options = formattedData;
     $scope.$broadcast('scroll.refreshComplete');
+    $ionicLoading.hide();
   });
 
   $scope.refresh();
