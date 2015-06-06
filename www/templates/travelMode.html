@@ -1,9 +1,9 @@
 <ion-view view-title="{{travelMode.title}}">
   <ion-content>
 
-  <div ng-if="activeTab === 'directions'">
+  <div class="full" ng-show="activeTab === 'directions'">
     <ul class="list">
-      <li class="item item-icon-left" ng-repeat="step in data.legs[0].steps">
+      <li class="item item-icon-left" ng-repeat="step in data.directions">
         <span ng-switch on="step.maneuver">
           <i class="icon ion-location" ng-switch-default></i>
           <i class="icon ion-arrow-left-c" ng-switch-when="turn-left"></i>
@@ -17,8 +17,8 @@
     </ul>
   </div>
 
-  <div ng-if="activeTab === 'map'">
-    The dog ate our map
+  <div class="full" ng-show="activeTab === 'map'">
+    <div id="map" data-tap-disabled="true"></div>
   </div>
 
   </ion-content>

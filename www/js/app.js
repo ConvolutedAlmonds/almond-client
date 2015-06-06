@@ -141,6 +141,7 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
     getCoords: function() {
       var deferred = $q.defer();
       navigator.geolocation.getCurrentPosition(function(pos) {
+        $rootScope.locationHealth = 0; // 0 is good, 1 is out of date, 2 is bad
         $rootScope.$broadcast('UserLocation.Update');
         deferred.resolve({
           latitude: pos.coords.latitude,
@@ -149,7 +150,14 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
         })
       },function(error) {
         deferred.reject("Geolocation API didn't return coordinates :(");
-        console.warn("GPS error: " + error);
+        if(error.code === 3 && $rootScope.userLat) { $rootScope.locationHealth = 1; }
+        else { $rootScope.locationHealth = 2; }
+        if(error.code && error.message) {
+          console.warn('GPS error ' + error.code + ": " + error.message);
+        } else {
+            console.warn("GPS error: No error message. Error object below.");
+            console.dir(error);
+        }
       },
       {
         enableHighAccuracy: true,
@@ -175,7 +183,6 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
     dest = newDest;
     broadcast(dest);
     console.log('destinationService: updated, new value is ' + newDest);
-    $rootScope.destination = newDest;
   };
   
   var listen = function ($scope, callback) {
@@ -206,5 +213,73 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
   };
 })
 
+.service('mapService',function(){
+  var map, userMarker, accuracyCircle;
+  var create = function(id,lat,lng) {
+    lat = lat || 37.7483;
+    lng = lng || -122.4367;
+    map = new google.maps.Map(document.getElementById(id), {
+      center: new google.maps.LatLng(lat,lng),
+      zoom: 12,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      disableDefaultUI: true,
+      styles: [{ featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }]}]
+    });
+    return map;
+  };
 
+  var drawRoute = function(sLat,sLng,endStr) {
+    var directionsService = new google.maps.DirectionsService();
+    var start = new google.maps.LatLng(sLat, sLng);
+    var end = endStr;
+    var directionsDisplay = new google.maps.DirectionsRenderer();// also, constructor can get "DirectionsRendererOptions" object
+    directionsDisplay.setMap(map); // map should be already initialized.
+
+    var directionsService = new google.maps.DirectionsService(); 
+    directionsService.route({
+      origin : start,
+      destination : end,
+      travelMode : google.maps.TravelMode.DRIVING
+    }, function(response, status) {
+      if (status == google.maps.DirectionsStatus.OK) {
+        directionsDisplay.setDirections(response);
+      }
+    });
+  };
+
+  var updateUserLocation = function(lat,lng,accuracy) {
+    if(typeof userMarker === 'undefined') {
+      userMarker = new google.maps.Marker({
+        position: new google.maps.LatLng(lat,lng),
+        map: map,
+        title: "My Location",
+        clickable: false,
+        icon: {
+                url: 'img/currentLocation.png',
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(25, 25),
+                scaledSize: new google.maps.Size(50, 50)
+              }
+      });
+      accuracyCircle = new google.maps.Circle({
+        map: map,
+        radius: accuracy,    // 10 miles in metres
+        fillColor: '#add8e6',
+        fillOpacity: 0.66,
+        strokeColor: '#3A9FBF',
+        strokeWeight: 1
+      });
+      accuracyCircle.bindTo('center', userMarker, 'position');
+    } else {
+      userMarker.setPosition(new google.maps.LatLng(lat, lng));
+      accuracyCircle.setCenter(new google.maps.LatLng(lat, lng));
+      accuracyCircle.setRadius(accuracy);
+    }
+  };
+  return {
+    updateUserLocation: updateUserLocation,
+    create: create,
+    drawRoute: drawRoute
+  }
+})
 ;
