@@ -133,15 +133,36 @@ angular.module('almond.controllers', [])
   })
 })
 
-.controller('TravelModeCtrl', function($scope,$stateParams,$rootScope) {
+.controller('TravelModeCtrl', function($scope,$stateParams,$rootScope, destinationService, mapService) {
   $scope.activeTab = 'directions';
+  var userMarker, route;
   console.log("TravelModeCtrl says hi");
   var deregister = $scope.$on('TravelModes.Data', function(e,data,i,j) {
     $scope.data = data.data.results[i][j];
     console.log("Got data from event")
+    console.dir($scope.data)
   })
   $rootScope.$broadcast('TravelMode.ReadyforData');
   deregister();
+
+
+  $scope.destination = destinationService.get();
+  destinationService.listen($scope, function(newDest){
+    $scope.destination = newDest;
+  });
+
+  var map = mapService.create('map');
+
+  google.maps.event.addListenerOnce(map, 'idle', function(){
+    var route = mapService.drawRoute(map,$scope.data);
+    route.setMap(map);
+  });
+
+  $scope.$on('UserLocation.Update',function(){
+    userMarker = mapService.updateUserLocation(map,$rootScope.userLat,$rootScope.userLong,$rootScope.userAccuracy, userMarker);
+  })
+
+
 })
 
 .controller('SettingsCtrl', function($scope) {
