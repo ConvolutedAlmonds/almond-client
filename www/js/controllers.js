@@ -111,7 +111,7 @@ angular.module('almond.controllers', [])
   })
 })
 
-.controller('TravelModeCtrl', function($scope,$stateParams,$rootScope) {
+.controller('TravelModeCtrl', function($scope,$stateParams,$rootScope, destinationService, mapService) {
   $scope.activeTab = 'directions';
   console.log("TravelModeCtrl says hi");
   var deregister = $scope.$on('TravelModes.Data', function(e,data,i,j) {
@@ -120,6 +120,21 @@ angular.module('almond.controllers', [])
   })
   $rootScope.$broadcast('TravelMode.ReadyforData');
   deregister();
+
+
+  $scope.destination = destinationService.get();
+  destinationService.listen($scope, function(newDest){
+    $scope.destination = newDest;
+  });
+
+  var map = mapService.create('map');
+
+  $scope.$on('UserLocation.Update',function(){
+    mapService.updateUserLocation($rootScope.userLat,$rootScope.userLong,$rootScope.userAccuracy)
+  })
+
+
+  mapService.drawRoute($rootScope.userLat,$rootScope.userLong,$scope.destination.formatted_address);
 })
 
 .controller('SettingsCtrl', function($scope) {
