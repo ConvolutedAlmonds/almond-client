@@ -2,6 +2,7 @@
   <ion-content>
     <ion-refresher
       pulling-text="Pull to refresh..."
+      spinner="none"
       on-refresh="refresh()">
     </ion-refresher>
     <div ng-repeat="mode in options.data.results">
