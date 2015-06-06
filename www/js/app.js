@@ -213,41 +213,100 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
   };
 })
 
-.service('mapService',function(){
-  var map, userMarker, accuracyCircle;
+// This is adapted from the implementation in Project-OSRM
+// https://github.com/DennisOSRM/Project-OSRM-Web/blob/master/WebContent/routing/OSRM.RoutingGeometry.js
+.service('polylineUtilityService',function() {
+ var decode = function(str, precision) {
+   var index = 0,
+       lat = 0,
+       lng = 0,
+       coordinates = [],
+       shift = 0,
+       result = 0,
+       byte = null,
+       latitude_change,
+       longitude_change,
+       factor = Math.pow(10, precision || 5);
+
+   // Coordinates have variable length when encoded, so just keep
+   // track of whether we've hit the end of the string. In each
+   // loop iteration, a single coordinate is decoded.
+   while (index < str.length) {
+       // Reset shift, result, and byte
+       byte = null;
+       shift = 0;
+       result = 0;
+       do {
+           byte = str.charCodeAt(index++) - 63;
+           result |= (byte & 0x1f) << shift;
+           shift += 5;
+       } while (byte >= 0x20);
+       latitude_change = ((result & 1) ? ~(result >> 1) : (result >> 1));
+       shift = result = 0;
+       do {
+           byte = str.charCodeAt(index++) - 63;
+           result |= (byte & 0x1f) << shift;
+           shift += 5;
+       } while (byte >= 0x20);
+       longitude_change = ((result & 1) ? ~(result >> 1) : (result >> 1));
+       lat += latitude_change;
+       lng += longitude_change;
+       coordinates.push([lat / factor, lng / factor]);
+   }
+   return coordinates;
+ };
+ return {
+  decode: decode
+ }
+})
+
+.service('mapService',function(polylineUtilityService){
+  var accuracyCircle;
   var create = function(id,lat,lng) {
     lat = lat || 37.7483;
     lng = lng || -122.4367;
-    map = new google.maps.Map(document.getElementById(id), {
+    var mapOptions = {
       center: new google.maps.LatLng(lat,lng),
       zoom: 12,
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       disableDefaultUI: true,
       styles: [{ featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }]}]
-    });
+    };
+    var map = new google.maps.Map(document.getElementById(id), mapOptions);
     return map;
   };
 
-  var drawRoute = function(sLat,sLng,endStr) {
-    var directionsService = new google.maps.DirectionsService();
-    var start = new google.maps.LatLng(sLat, sLng);
-    var end = endStr;
-    var directionsDisplay = new google.maps.DirectionsRenderer();// also, constructor can get "DirectionsRendererOptions" object
-    directionsDisplay.setMap(map); // map should be already initialized.
+  var drawRoute = function(map,routeData) {
 
-    var directionsService = new google.maps.DirectionsService(); 
-    directionsService.route({
-      origin : start,
-      destination : end,
-      travelMode : google.maps.TravelMode.DRIVING
-    }, function(response, status) {
-      if (status == google.maps.DirectionsStatus.OK) {
-        directionsDisplay.setDirections(response);
-      }
-    });
+    // var bounds = new google.maps.LatLngBounds();
+
+    var points = [];
+
+    var steps = routeData.directions, decoded;
+    for (i=0;i<steps.length;i++) {
+      decoded = polylineUtilityService.decode(steps[i].polyline.points);
+      for (var j = 0; j < decoded.length; j++) {
+        points.push(new google.maps.LatLng(decoded[j][0],decoded[j][1]));
+        console.log("step " + i + ":" + steps[i].polyline.points)
+      };
+      // bounds.extend(new google.maps.LatLng(decoded[0],decoded[1]));
+    }
+
+    var options = {
+      path:points,
+      strokeColor: "#0000FF",
+      strokeOpacity: 1.0,
+      strokeWeight: 2
+    };
+
+    var route = new google.maps.Polyline(options); 
+
+    // map.fitBounds(bounds);
+    return route;
   };
 
-  var updateUserLocation = function(lat,lng,accuracy) {
+  var updateUserLocation = function(map,lat,lng,accuracy,userMarker) {
+    userMarker = userMarker || undefined;
     if(typeof userMarker === 'undefined') {
       userMarker = new google.maps.Marker({
         position: new google.maps.LatLng(lat,lng),
@@ -275,6 +334,7 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
       accuracyCircle.setCenter(new google.maps.LatLng(lat, lng));
       accuracyCircle.setRadius(accuracy);
     }
+    return userMarker;
   };
   return {
     updateUserLocation: updateUserLocation,
@@ -282,4 +342,5 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
     drawRoute: drawRoute
   }
 })
+
 ;
