@@ -4,10 +4,11 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-google-place'])
+angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-google-place', 'ngCordova'])
 
-.run(function($ionicPlatform, $rootScope, userLocation) {
+.run(function($ionicPlatform, $rootScope, userLocation, $cordovaSplashscreen) {
   $ionicPlatform.ready(function() {
+    $cordovaSplashscreen.hide()
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins.Keyboard) {
