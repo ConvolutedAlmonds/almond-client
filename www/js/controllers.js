@@ -44,7 +44,7 @@ angular.module('almond.controllers', [])
   };
 })
 
-.controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http, $location, destinationService) {
+.controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http, $location, destinationService, $ionicLoading) {
   if(typeof destinationService.get() === 'undefined') {
     $scope.destination = {};
     $scope.destination.formatted_address = '875 Post Street, San Francisco, CA 94109, USA';
@@ -57,6 +57,11 @@ angular.module('almond.controllers', [])
     })
   };
 
+  $scope.showLoading = $ionicLoading.show.bind(this,{
+        template: '<span style="color:white;"><ion-spinner></ion-spinner><br>Loading routes...</span>'
+      });
+  $scope.hideLoading =  $ionicLoading.hide;
+
   // If route is from Google Directions, show step-by-step and map polyline. If Uber selection, deep link to Uber app with pre-filled fields.
   $scope.go = function ( path ) {
     var choice = this.route;
@@ -67,66 +72,78 @@ angular.module('almond.controllers', [])
       $location.path(path);
     }
   };
+  
+  $scope.refresh = function() {
 
-  getRoutes($http, $rootScope.userLong, $rootScope.userLat, $scope.destination.formatted_address, function(data){
-    var formattedData = {};
-    formattedData.data = [];
-    formattedData.data.results = [];
+    $scope.showLoading();
+    $scope.options = {};
+    getRoutes($http, $rootScope.userLong, $rootScope.userLat, $scope.destination.formatted_address, function(data){
+      var formattedData = {};
+      console.log('show loading')
+      formattedData.data = [];
+      formattedData.data.results = [];
+      for(var i = 0; i < data.directions.results.length; i++) {
+        var result = data.directions.results[i];
+        var formattedResult = [];
+        for(var j = 0; j < result.length; j++) {
+          var subResult = result[j];
+          var formattedSubResult = {
+            travelMode: subResult.travelMode,
+            fare: subResult.fare || "$0",
+            distance: subResult.legs[0].distance,
+            duration: subResult.legs[0].duration.text,
+            summary: subResult.summary,
+            durationByMode: [subResult.durationByMode[0], subResult.durationByMode[1]],
+            directions: subResult.legs[0].steps
+          };
 
-    for(var i = 0; i < data.directions.results.length; i++) {
-      var result = data.directions.results[i];
-      var formattedResult = [];
-      for(var j = 0; j < result.length; j++) {
-        var subResult = result[j];
+          formattedResult.push(formattedSubResult);
+        }
+        formattedData.data.results.push(formattedResult);
+      }
+
+
+      var uberAppLink = 'uber://?action=setPickup' +
+        '&pickup[latitude]=' + data.misc.origin.latitude.toString() +
+        '&pickup[longitude]=' + data.misc.origin.longitude.toString() +
+        '&pickup[formatted_address]=' + encodeURIComponent(data.misc.origin.address) +
+        '&dropoff[latitude]=' + data.misc.destination.latitude.toString() +
+        '&dropoff[longitude]=' + data.misc.destination.longitude.toString() + 
+        '&dropoff[formatted_address]=' + encodeURIComponent(data.misc.destination.address);
+
+      for (var i = 0; i < data.uber.length; i++) {
+        var uberResult = data.uber[i];
+
         var formattedSubResult = {
-          travelMode: subResult.travelMode,
-          fare: subResult.fare || "$0",
-          distance: subResult.legs[0].distance,
-          duration: subResult.legs[0].duration.text,
-          summary: subResult.summary,
-          durationByMode: [subResult.durationByMode[0], subResult.durationByMode[1]],
-          directions: subResult.legs[0].steps
+          travelMode: uberResult.price_localized_display_name,
+          fare: { text: uberResult.price_estimate },
+          distance: { text: uberResult.price_distance },
+          duration: uberResult.price_parsedArrivalTime,
+          summary: uberResult.price_display_name,
+          durationByMode: [[uberResult.price_parsedArrivalTime, 'driving']],
+          directions: [],
+          timeTilArrivalSec: uberResult.time_estimate, // FIX
+          timeTilArrivalParsed: uberResult.time_parsedDuration, // FIX
+          origin: data.misc.origin,
+          destination: data.misc.destination,
+          productId: uberResult.time_product_id,
+          uberAppUrl: uberAppLink + '&product_id=' + uberResult.time_product_id
         };
 
-        formattedResult.push(formattedSubResult);
+        var formattedResult = [formattedSubResult];
+        formattedData.data.results.push(formattedResult);
       }
-      formattedData.data.results.push(formattedResult);
-    }
 
-    var uberAppLink = 'uber://?action=setPickup' +
-      '&pickup[latitude]=' + data.misc.origin.latitude.toString() +
-      '&pickup[longitude]=' + data.misc.origin.longitude.toString() +
-      '&pickup[formatted_address]=' + encodeURIComponent(data.misc.origin.address) +
-      '&dropoff[latitude]=' + data.misc.destination.latitude.toString() +
-      '&dropoff[longitude]=' + data.misc.destination.longitude.toString() + 
-      '&dropoff[formatted_address]=' + encodeURIComponent(data.misc.destination.address);
+      console.dir(formattedData);
+      $scope.options = formattedData;
+      $scope.$broadcast('scroll.refreshComplete');
+      $scope.hideLoading();
+      console.log('hide loading')
+    });
+  }
 
-    for (var i = 0; i < data.uber.length; i++) {
-      var uberResult = data.uber[i];
+  $scope.refresh();
 
-      var formattedSubResult = {
-        travelMode: uberResult.price_localized_display_name,
-        fare: { text: uberResult.price_estimate },
-        distance: { text: uberResult.price_distance },
-        duration: uberResult.price_parsedArrivalTime,
-        summary: uberResult.price_display_name,
-        durationByMode: [[uberResult.price_parsedArrivalTime, 'driving']],
-        directions: [],
-        timeTilArrivalSec: uberResult.time_estimate, // FIX
-        timeTilArrivalParsed: uberResult.time_parsedDuration, // FIX
-        origin: data.misc.origin,
-        destination: data.misc.destination,
-        productId: uberResult.time_product_id,
-        uberAppUrl: uberAppLink + '&product_id=' + uberResult.time_product_id
-      };
-
-      var formattedResult = [formattedSubResult];
-      formattedData.data.results.push(formattedResult);
-    }
-
-    $scope.options = formattedData;
-
-  });
 
   $scope.dispatch = function(i,j) {
     console.log("dispatch called on TravelModesCtrl");
