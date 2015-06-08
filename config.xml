@@ -8,6 +8,8 @@
       Ionic Framework Team
     </author>
   <content src="index.html"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" />
+
   <access origin="*"/>
   <access origin="*"/>
   <allow-intent href="*"/>

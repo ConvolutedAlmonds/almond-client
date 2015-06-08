@@ -4,9 +4,10 @@ var serverUrl = 'http://on-time-dev.elasticbeanstalk.com';
 var postAuthenticate = function($http, code, callback) {
 
     $http.get(serverUrl + '/auth/code?code=' + code).success(function(data){
-        alert('success', data);
+        console.log(data);
     }).error(function(err) {
         alert('error', err);
+        console.log(err);
     });
 }
 
