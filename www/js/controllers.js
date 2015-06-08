@@ -1,6 +1,6 @@
-angular.module('almond.controllers', [])
+angular.module('almond.controllers', ['ngCordovaOauth'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, Auth, AuthToken) {
   // Form data for the login modal
   $scope.loginData = {};
 
@@ -22,17 +22,26 @@ angular.module('almond.controllers', [])
 
   };
 
+  if (typeof String.prototype.startsWith != 'function') {
+      String.prototype.startsWith = function (str){
+          return this.indexOf(str) == 0;
+      };
+  }
+
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
 
-    // navigator.app.loadUrl(uberUrl, {openExternal: true});
-    var clientId = "664215290683-rv0ofoq8r51sffkujlv1garnoqrtk4s5.apps.googleusercontent.com"
-    var ref = window.open('https://accounts.google.com/o/oauth2/auth?client_id=' + clientId + '&redirect_uri=http://localhost/callback&scope=https://www.googleapis.com/auth/urlshortener&approval_prompt=force&response_type=code&access_type=offline', '_blank', 'location=no');
+    var clientId = "664215290683-thjone29b1n8md31t5n4aufbuansum0r.apps.googleusercontent.com";
+    var myUrl =     'https://accounts.google.com/o/oauth2/auth?client_id=' + clientId + '&redirect_uri=http://localhost/callback&scope=https://www.googleapis.com/auth/calendar+https://www.googleapis.com/auth/plus.login+https://www.googleapis.com/auth/userinfo.profile&approval_prompt=force&response_type=code&access_type=offline'
+
+    var ref = window.open(myUrl, '_blank', 'location=no');
     ref.addEventListener('loadstart', function(event) {
         if((event.url).startsWith("http://localhost/callback")) {
             requestToken = (event.url).split("code=")[1];
-            postAuthenticate($http, requestToken);
-            alert(requestToken);
+            // postAuthenticate($http, requestToken);
+            Auth.exchangeCode(requestToken);
+            console.log(requestToken);
+            // alert(requestToken);
             ref.close();
         }
     });
@@ -42,6 +51,12 @@ angular.module('almond.controllers', [])
       $scope.closeLogin();
     }, 1000);
   };
+
+  $scope.doLogout = function() {
+    console.log('logging out');
+    AuthToken.setToken();
+  }
+
 })
 
 .controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http, $location, destinationService) {
@@ -237,4 +252,29 @@ angular.module('almond.controllers', [])
 
 
   mapService.drawRoute($rootScope.userLat,$rootScope.userLong,$scope.destination.formatted_address);
+})
+
+.controller('EventCtrl', function($http, $location, $scope, $stateParams, $rootScope, destinationService, mapService, Auth) {
+  
+  $scope.go = function ( path ) {
+    console.log('event clicked on');
+    console.log('this:')
+    console.dir(this);
+    $location.path(path);
+  };
+
+  if (Auth.isLoggedIn()) {
+    console.log('user is logged in');
+
+    getCalendarEvents($http, function(data) {
+      console.log('got events');
+      $scope.events = data;
+
+    })
+
+  } else {
+    console.log('user is not logged in');
+  }
+
+  
 });
