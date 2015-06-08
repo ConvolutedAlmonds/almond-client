@@ -1,8 +1,15 @@
 angular.module('almond.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $state) {
   // Form data for the login modal
   $scope.loginData = {};
+  $scope.currState = $state.current.name;
+  $scope.$watch(function() {
+    return $state.current.name;
+  }, function() {
+    $scope.currState = $state.current.name;
+  }, true);
+  console.log($scope.currState);
 
   // Create the login modal that we will use later
   $ionicModal.fromTemplateUrl('templates/login.html', {
@@ -157,6 +164,11 @@ angular.module('almond.controllers', [])
 })
 
 .controller('StartCtrl', function($scope, $rootScope, destinationService, $http) {
+  $scope.$on('$ionicView.loaded', function() {
+    ionic.Platform.ready( function() {
+      if(navigator && navigator.splashscreen) navigator.splashscreen.hide();
+    });
+  });
 
   $scope.lat = $rootScope.userLat;
   $scope.long = $rootScope.userLong;

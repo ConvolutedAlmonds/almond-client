@@ -8,7 +8,6 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
 
 .run(function($ionicPlatform, $rootScope, userLocation, $cordovaSplashscreen) {
   $ionicPlatform.ready(function() {
-    $cordovaSplashscreen.hide()
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins.Keyboard) {
