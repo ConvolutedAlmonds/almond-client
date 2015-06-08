@@ -164,6 +164,11 @@ angular.module('almond.controllers', [])
 })
 
 .controller('StartCtrl', function($scope, $rootScope, destinationService, $http) {
+  $scope.$on('$ionicView.loaded', function() {
+    ionic.Platform.ready( function() {
+      if(navigator && navigator.splashscreen) navigator.splashscreen.hide();
+    });
+  });
 
   $scope.lat = $rootScope.userLat;
   $scope.long = $rootScope.userLong;
