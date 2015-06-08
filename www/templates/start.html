@@ -1,24 +1,19 @@
 <ion-view view-title="Start">
   <ion-content>
-    <span class="positive padding-top" style="display:table;margin:0 auto;font-size:16px;">
+    <img src="img/almond.png" class="almondLogo blockCenter">
+    <span class="light padding-top" style="display:table;margin:0 auto;font-size:16px;">
       <i class="ion-ios-location-outline"></i>
       Current Location:
       <reverse-geocode ng-if="lat" lat="{{lat}}" lng="{{long}}" />
     </span>
-    <div class="list list-inset">
+    <div class="list list-inset padding almondBlue absoluteTwoThirds">
       <label class="item item-input">
         <i class="icon ion-search placeholder-icon"></i>
         <ion-google-place placeholder="Enter an address, Apt# and ZIP" ng-model="location" ng-change="dest.update(location)" />
       </label>
-      <a class="button button-block button-balanced" href="#/app/travelModes" ng-show="location.formatted_address">
+      <a class="button button-block button-balanced" href="#/app/travelModes" ng-disabled="!location.formatted_address">
         Navigate!
       </a>
-      <!-- or -->
-      <a class="button button-block button-light" ng-hide="location.formatted_address">
-        <span class="assertive">Please choose a valid address.</span>
-      </a>
-
-
     </div>
   </ion-content>
   <div ng-if="$root.locationHealth === 0" class="bar bar-footer bar-balanced">

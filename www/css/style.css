@@ -54,3 +54,23 @@ html, body {
   width:36px;
   height:36px;
 }
+
+.almondLogo {
+  width: 300px;
+  padding-bottom: 10px;
+}
+
+.almondBlue {
+  background-color: #38a5f0 !important;
+}
+
+.blockCenter {
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.absoluteTwoThirds {
+  position: absolute;
+  top: 20%;
+}
