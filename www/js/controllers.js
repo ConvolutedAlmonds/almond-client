@@ -29,12 +29,6 @@ angular.module('almond.controllers', [])
 
   };
 
-  if (typeof String.prototype.startsWith != 'function') {
-      String.prototype.startsWith = function (str){
-          return this.indexOf(str) == 0;
-      };
-  }
-
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
 
