@@ -55,7 +55,14 @@
     
   </head>
 
-  <body ng-app="almond">
+  <body ng-app="almond" >
+    <ion-header-bar class="bar-dark almond-header">
+      <div class="button-bar">
+        <button ui-sref="app.start" class="button button-icon button-clear ion-location"></button>
+        <button ui-sref="app.events" class="button button-icon button-clear ion-calendar"></button>
+        <button ui-sref="app.settings" class="button button-icon button-clear ion-ios-gear"></button>
+      </div>
+    </ion-header-bar>
     <ion-nav-view></ion-nav-view>
   </body>
 </html>

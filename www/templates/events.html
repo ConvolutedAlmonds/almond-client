@@ -1,6 +1,6 @@
 <ion-view view-title="Upcoming Events">
   <ion-content>
-
+  <div ng-click="login()">Authorization</div>
   <div ng-repeat="event in events.items">
     <div class="card" ng-click="go('/app/travelModes')">
       <div>{{event.summary}}</div>
