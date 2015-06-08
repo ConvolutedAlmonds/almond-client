@@ -11,8 +11,7 @@ angular.module('almond', ['ionic',
   'ngCordova',
   'ionic.service.core',
   'ionic.service.push',
-  'starter.controllers',
-  'starter.services'])
+  'almond.controllers'])
 
 .run(function($ionicPlatform, $rootScope, userLocation, $cordovaSplashscreen) {
   $ionicPlatform.ready(function() {
