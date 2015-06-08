@@ -63,7 +63,10 @@ angular.module('authService', [])
 
   // if token exists, attaches it to header on $http requests
   interceptorFactory.request = function(config) {
-
+    console.log(config);
+    if(!config.url.startsWith(serverUrl)) {
+      return config;
+    }
     var token = AuthToken.getToken();
 
     if (token) {

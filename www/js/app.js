@@ -4,11 +4,23 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-
-angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-google-place', 'ngCordova', 'authService'])
-
+angular.module('almond', ['ionic', 
+  'almond.controllers', 
+  'angularMoment', 
+  'ion-google-place', 
+  'ngCordova',
+  'ionic.service.core',
+  'ionic.service.push',
+  'almond.controllers',
+	'authService'])
 .run(function($ionicPlatform, $rootScope, userLocation, $cordovaSplashscreen) {
   $ionicPlatform.ready(function() {
+
+    if (typeof String.prototype.startsWith != 'function') {
+      String.prototype.startsWith = function (str){
+          return this.indexOf(str) == 0;
+      };
+  }
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     // if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -358,5 +370,17 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
     create: create,
     drawRoute: drawRoute
   }
-});
+}).config(['$ionicAppProvider', function($ionicAppProvider) {
+  // Identify app
+  $ionicAppProvider.identify({
+    // The App ID (from apps.ionic.io) for the server
+    app_id: '21a5d31c',
+    // The public API key all services will use for this app
+    api_key: '639530a5fcb22fe6fa0e07a8186c941c9142b1ab041e80ac',
+    // Set the app to use development pushes
+    dev_push: true,
+    gcm_id: '664215290683'
+  });
+  console.log("identify");
+}]);
 
