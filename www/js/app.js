@@ -12,7 +12,8 @@ angular.module('almond', ['ionic',
   'ionic.service.core',
   'ionic.service.push',
   'almond.controllers',
-	'authService'])
+	'authService',
+  'pushService'])
 .run(function($ionicPlatform, $rootScope, userLocation, $cordovaSplashscreen) {
   $ionicPlatform.ready(function() {
 
