@@ -11,15 +11,18 @@ angular.module('almond', ['ionic',
   'ngCordova',
   'ionic.service.core',
   'ionic.service.push',
-  'almond.controllers'])
+  'almond.controllers',
+	'authService'])
+
+angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-google-place', 'ngCordova', 'authService'])
 
 .run(function($ionicPlatform, $rootScope, userLocation, $cordovaSplashscreen) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
-    if (window.cordova && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-    }
+    // if (window.cordova && window.cordova.plugins.Keyboard) {
+    //   cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+    // }
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
@@ -41,7 +44,7 @@ angular.module('almond', ['ionic',
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
   $stateProvider
 
   .state('app', {
@@ -60,7 +63,7 @@ angular.module('almond', ['ionic',
       }
     }
   })
-  
+
   .state('app.travelModes', {
     url: "/travelModes",
     views: {
@@ -99,9 +102,25 @@ angular.module('almond', ['ionic',
         controller: 'SettingsCtrl'
       }
     }
+  })
+  .state('app.events', {
+    url: "/events",
+    cache: false,
+    views: {
+      'menuContent': {
+        templateUrl: "templates/events.html",
+        controller: 'EventCtrl'
+      }
+    },
+    data: {
+      requresLogin: true
+    }
   });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/start');
+
+  // if a jwt is stored in localStorage it is automatically attached in the header of all requests
+  $httpProvider.interceptors.push('AuthInterceptor');
 })
 
 .directive('reverseGeocode', function () {
@@ -191,7 +210,7 @@ angular.module('almond', ['ionic',
     broadcast(dest);
     console.log('destinationService: updated, new value is ' + newDest);
   };
-  
+
   var listen = function ($scope, callback) {
     $scope.$on('Destination.Update', function (newDest) {
       console.log("destinationService: caught Update event")
@@ -210,6 +229,7 @@ angular.module('almond', ['ionic',
     get: get
   };
 })
+
 
 .filter('shortenTime',function(){
   return function(str) {
@@ -305,7 +325,7 @@ angular.module('almond', ['ionic',
       strokeWeight: 2
     };
 
-    var route = new google.maps.Polyline(options); 
+    var route = new google.maps.Polyline(options);
 
     // map.fitBounds(bounds);
     return route;
@@ -361,4 +381,3 @@ angular.module('almond', ['ionic',
   console.log("identify");
 }]);
 
-;

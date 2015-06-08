@@ -17,12 +17,15 @@
           <input type="password" ng-model="loginData.password">
         </label>
         <label class="item">
-          <button class="button button-block button-positive" ng-click="testUber()">Log in</button>
+          <button class="button button-block button-positive" ng-click="doLogin()">Log in</button>
         </label>
-        <label class="item">
-          <button class="button button-block button-positive" ng-click="testUber()">Go To Uber</button>
-        </label>
+        
       </div>
+    </form>
+    <form ng-submit="doLogout()">
+      <label class="item">
+        <button class="button button-block button-positive" value="submit">Log out</button>
+      </label>
     </form>
   </ion-content>
 </ion-modal-view>
