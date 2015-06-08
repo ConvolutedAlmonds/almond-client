@@ -70,7 +70,7 @@ html, body {
   text-align: center;
 }
 
-.absoluteTwoThirds {
+.absoluteBottomHalf {
   position: absolute;
-  top: 20%;
+  top: 18%;
 }
