@@ -14,7 +14,7 @@ angular.module('almond', ['ionic',
   'starter.controllers',
   'starter.services'])
 
-.run(function($ionicPlatform, $rootScope, userLocation) {
+.run(function($ionicPlatform, $rootScope, userLocation, $cordovaSplashscreen) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -214,7 +214,6 @@ angular.module('almond', ['ionic',
 
 .filter('shortenTime',function(){
   return function(str) {
-    console.log("shortenTime-ing: " + str)
     str = str.replace(/ mins/g,'m');
     str = str.replace(/ min/g,'m');
     return str;
