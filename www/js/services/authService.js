@@ -41,8 +41,7 @@ angular.module('authService', [])
 
   // retrieve token from local storage
   authTokenFactory.getToken = function() {
-    var token = $window.localStorage.getItem('token');
-    return token;
+    return $window.localStorage.getItem('token');
   };
 
   // if token is passed in, save it in local storage
