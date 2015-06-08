@@ -13,9 +13,6 @@ angular.module('almond', ['ionic',
   'ionic.service.push',
   'almond.controllers',
 	'authService'])
-
-angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-google-place', 'ngCordova', 'authService'])
-
 .run(function($ionicPlatform, $rootScope, userLocation, $cordovaSplashscreen) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard

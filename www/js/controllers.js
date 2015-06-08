@@ -1,4 +1,4 @@
-angular.module('almond.controllers', ['ngCordovaOauth'])
+angular.module('almond.controllers', [])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $state, Auth, AuthToken) {
   // Form data for the login modal
