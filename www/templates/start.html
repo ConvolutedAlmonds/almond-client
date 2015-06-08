@@ -19,13 +19,4 @@
       </a>
     </div>
   </ion-content>
-  <div ng-if="$root.locationHealth === 0" class="bar bar-footer bar-balanced animated slideInUp _4">
-    <div class="title">GPS OK</div>
-  </div>
-  <div ng-if="$root.locationHealth === 1" class="bar bar-footer bar-energized animated slideInUp _4">
-    <div class="title">GPS location out of date</div>
-  </div>
-  <div ng-if="$root.locationHealth === 2" class="bar bar-footer bar-assertive animated slideInUp _4">
-    <div class="title">GPS location not available</div>
-  </div>
 </ion-view>
