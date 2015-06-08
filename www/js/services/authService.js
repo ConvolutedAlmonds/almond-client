@@ -34,3 +34,56 @@ angular.module('authService', [])
   return authFactory;
 })
 
+// Auth factory for getting and setting tokens in localStorage
+.factory('AuthToken', function ($window) {
+  var authTokenFactory = {};
+
+  // retrieve token from local storage
+  authTokenFactory.getToken = function() {
+    return $window.localStorage.getItem('token');
+  };
+
+  // if token is passed in, save it in local storage
+  // if not, clear local storage
+  authTokenFactory.setToken = function(token) {
+    if (token) {
+      $window.localStorage.setItem('token', token);
+    } else {
+      $window.localStorage.removeItem('token');
+    }
+  }
+
+  return authTokenFactory;
+
+})
+
+// Auth factory for attaching jwt tokens to $http requests
+.factory('AuthInterceptor', function ($q, AuthToken) {
+  var interceptorFactory = {};
+
+  // if token exists, attaches it to header on $http requests
+  interceptorFactory.request = function(config) {
+
+    var token = AuthToken.getToken();
+
+    if (token) {
+      config.headers['x-access-token'] = token;
+    }
+
+    return config;
+  };
+
+  // TODO: handle 403 response!
+  interceptorFactory.responseError = function(response) {
+    
+    if (response.status === 403) {
+      AuthToken.setToken();
+      console.log('Server responded with a 403');
+    }
+  
+    return $q.reject(response);
+  }
+
+
+  return interceptorFactory;
+})
