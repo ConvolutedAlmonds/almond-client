@@ -7,7 +7,7 @@ angular.module('authService', [])
   var serverUrl = 'http://on-time-dev.elasticbeanstalk.com';
   // var serverUrl = 'http://10.6.31.117:3000';
 
-  authFactory.exchangeCode = function(code) {
+  authFactory.exchangeCode = function(code, cb) {
 
     $http.get(serverUrl + '/auth/code?code=' + code)
       .success(function(data){
@@ -15,6 +15,7 @@ angular.module('authService', [])
         // console.log('success:');
         // console.dir(data);
         AuthToken.setToken(data.jwt);
+        cb(data.jwt);
         // console.log('Jwt stored!', data.jwt);
 
     }).error(function(err) {
