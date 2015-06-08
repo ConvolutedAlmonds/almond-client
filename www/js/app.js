@@ -15,13 +15,13 @@ angular.module('almond', ['ionic',
 	'authService',
   'pushService'])
 .run(function($ionicPlatform, $rootScope, userLocation, $cordovaSplashscreen) {
+  if (typeof String.prototype.startsWith != 'function') {
+    String.prototype.startsWith = function (str){
+      return this.indexOf(str) == 0;
+    };
+  }
   $ionicPlatform.ready(function() {
 
-    if (typeof String.prototype.startsWith != 'function') {
-      String.prototype.startsWith = function (str){
-          return this.indexOf(str) == 0;
-      };
-  }
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     // if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -317,7 +317,6 @@ angular.module('almond', ['ionic',
       decoded = polylineUtilityService.decode(steps[i].polyline.points);
       for (var j = 0; j < decoded.length; j++) {
         points.push(new google.maps.LatLng(decoded[j][0],decoded[j][1]));
-        console.log("step " + i + ":" + steps[i].polyline.points)
       };
       // bounds.extend(new google.maps.LatLng(decoded[0],decoded[1]));
     }
