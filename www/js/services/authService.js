@@ -4,18 +4,18 @@ angular.module('authService', [])
 .factory('Auth', function ($http, $q, AuthToken) {
   var authFactory = {};
 
-  // var serverUrl = 'http://on-time-dev.elasticbeanstalk.com';
-  var serverUrl = 'http://192.168.1.4:3000';
+  var serverUrl = 'http://on-time-dev.elasticbeanstalk.com';
+  // var serverUrl = 'http://10.6.31.117:3000';
 
   authFactory.exchangeCode = function(code) {
 
     $http.get(serverUrl + '/auth/code?code=' + code)
       .success(function(data){
 
-        console.log('success:');
-        console.dir(data);
+        // console.log('success:');
+        // console.dir(data);
         AuthToken.setToken(data.jwt);
-        console.log('Jwt stored!', data.jwt);
+        // console.log('Jwt stored!', data.jwt);
 
     }).error(function(err) {
         console.log('error', err);
@@ -67,7 +67,13 @@ angular.module('authService', [])
     var token = AuthToken.getToken();
 
     if (token) {
+
+      // console.log('token found: ' + token)
       config.headers['x-access-token'] = token;
+      // console.dir(config.headers);
+    } else {
+      // console.log('token not found');
+      config.headers['x-access-token'] = 'dummyToken';
     }
 
     return config;
@@ -75,12 +81,12 @@ angular.module('authService', [])
 
   // TODO: handle 403 response!
   interceptorFactory.responseError = function(response) {
-    
+
     if (response.status === 403) {
       AuthToken.setToken();
       console.log('Server responded with a 403');
     }
-  
+
     return $q.reject(response);
   }
 
