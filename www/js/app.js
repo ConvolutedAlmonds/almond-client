@@ -14,13 +14,13 @@ angular.module('almond', ['ionic',
   'almond.controllers',
 	'authService'])
 .run(function($ionicPlatform, $rootScope, userLocation, $cordovaSplashscreen) {
+  if (typeof String.prototype.startsWith != 'function') {
+    String.prototype.startsWith = function (str){
+      return this.indexOf(str) == 0;
+    };
+  }
   $ionicPlatform.ready(function() {
 
-    if (typeof String.prototype.startsWith != 'function') {
-      String.prototype.startsWith = function (str){
-          return this.indexOf(str) == 0;
-      };
-  }
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     // if (window.cordova && window.cordova.plugins.Keyboard) {
