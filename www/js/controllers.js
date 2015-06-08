@@ -1,6 +1,6 @@
 angular.module('almond.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $state) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $state, Auth, AuthToken) {
   // Form data for the login modal
   $scope.loginData = {};
   $scope.currState = $state.current.name;
@@ -32,23 +32,37 @@ angular.module('almond.controllers', [])
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
 
-    // navigator.app.loadUrl(uberUrl, {openExternal: true});
-    var clientId = "664215290683-rv0ofoq8r51sffkujlv1garnoqrtk4s5.apps.googleusercontent.com"
-    var ref = window.open('https://accounts.google.com/o/oauth2/auth?client_id=' + clientId + '&redirect_uri=http://localhost/callback&scope=https://www.googleapis.com/auth/urlshortener&approval_prompt=force&response_type=code&access_type=offline', '_blank', 'location=no');
+    var clientId = "664215290683-thjone29b1n8md31t5n4aufbuansum0r.apps.googleusercontent.com";
+    var myUrl =     'https://accounts.google.com/o/oauth2/auth?client_id=' + clientId + '&redirect_uri=http://localhost/callback&scope=https://www.googleapis.com/auth/calendar+https://www.googleapis.com/auth/plus.login+https://www.googleapis.com/auth/userinfo.profile&approval_prompt=force&response_type=code&access_type=offline'
+
+    var ref = window.open(myUrl, '_blank', 'location=no');
     ref.addEventListener('loadstart', function(event) {
         if((event.url).startsWith("http://localhost/callback")) {
             requestToken = (event.url).split("code=")[1];
-            postAuthenticate($http, requestToken);
-            alert(requestToken);
+            // postAuthenticate($http, requestToken);
+            Auth.exchangeCode(requestToken);
+            console.log(requestToken);
+            // alert(requestToken);
             ref.close();
         }
     });
+    if (typeof String.prototype.startsWith != 'function') {
+        String.prototype.startsWith = function (str){
+            return this.indexOf(str) == 0;
+        };
+    }
     // Simulate a login delay. Remove this and replace with your login
     // code if using a login system
     $timeout(function() {
       $scope.closeLogin();
     }, 1000);
   };
+
+  $scope.doLogout = function() {
+    console.log('logging out');
+    AuthToken.setToken();
+  }
+
 })
 
 .controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http, $location, destinationService, $ionicLoading) {
@@ -79,7 +93,7 @@ angular.module('almond.controllers', [])
       $location.path(path);
     }
   };
-  
+
   $scope.refresh = function() {
 
     $scope.showLoading();
@@ -115,7 +129,7 @@ angular.module('almond.controllers', [])
         '&pickup[longitude]=' + data.misc.origin.longitude.toString() +
         '&pickup[formatted_address]=' + encodeURIComponent(data.misc.origin.address) +
         '&dropoff[latitude]=' + data.misc.destination.latitude.toString() +
-        '&dropoff[longitude]=' + data.misc.destination.longitude.toString() + 
+        '&dropoff[longitude]=' + data.misc.destination.longitude.toString() +
         '&dropoff[formatted_address]=' + encodeURIComponent(data.misc.destination.address);
 
       for (var i = 0; i < data.uber.length; i++) {
@@ -162,12 +176,58 @@ angular.module('almond.controllers', [])
 
 })
 
-.controller('StartCtrl', function($scope, $rootScope, destinationService, $http) {
+.controller('StartCtrl', function($scope, $rootScope, destinationService, $http, $ionicUser, $ionicPush) {
   $scope.$on('$ionicView.loaded', function() {
     ionic.Platform.ready( function() {
       if(navigator && navigator.splashscreen) navigator.splashscreen.hide();
     });
   });
+
+   // Handles incoming device tokens
+  $rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
+    alert("Successfully registered token " + data.token);
+    console.log('Ionic Push: Got token ', data.token, data.platform);
+    $scope.token = data.token;
+  });
+
+  $scope.identifyUser = function() {
+    console.log('Ionic User: Identifying with Ionic User service');
+
+    var user = $ionicUser.get();
+    if(!user.user_id) {
+      // Set your user_id here, or generate a random one.
+      user.user_id = $ionicUser.generateGUID();
+    };
+
+    // Add some metadata to your user object.
+    angular.extend(user, {
+      name: 'Ionitron',
+      bio: 'I come from planet Ion'
+    });
+
+    // Identify your user with the Ionic User Service
+    $ionicUser.identify(user).then(function(){
+      $scope.identified = true;
+      alert('Identified user ' + user.name + '\n ID ' + user.user_id);
+    });
+  };
+
+  $scope.pushRegister = function() {
+    console.log('Ionic Push: Registering user');
+
+    // Register with the Ionic Push service.  All parameters are optional.
+    $ionicPush.register({
+      canShowAlert: true, //Can pushes show an alert on your screen?
+      canSetBadge: true, //Can pushes update app icon badges?
+      canPlaySound: true, //Can notifications play a sound?
+      canRunActionsOnWake: true, //Can run actions outside the app,
+      onNotification: function(notification) {
+        // Handle new push notifications here
+        console.log(notification);
+        return true;
+      }
+    });
+  };
 
   $scope.lat = $rootScope.userLat;
   $scope.long = $rootScope.userLong;
@@ -248,3 +308,27 @@ angular.module('almond.controllers', [])
     }
   }
 })
+
+.controller('EventCtrl', function($http, $location, $scope, $stateParams, $rootScope, destinationService, mapService, Auth) {
+
+  $scope.go = function ( path ) {
+    console.log('event clicked on');
+    console.log('this:')
+    console.dir(this);
+    $location.path(path);
+  };
+
+  if (Auth.isLoggedIn()) {
+    console.log('user is logged in');
+
+    getCalendarEvents($http, function(data) {
+      console.log('got events');
+      $scope.events = data;
+    })
+
+  } else {
+    console.log('user is not logged in');
+  }
+
+
+});
