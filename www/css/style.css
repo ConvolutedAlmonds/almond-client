@@ -71,6 +71,10 @@ html, body {
 }
 
 .absoluteBottomHalf {
-  position: absolute;
-  top: 18%;
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+  position: absolute !important;
+  top: 40% !important;
 }
+

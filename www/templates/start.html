@@ -1,7 +1,7 @@
 <ion-view view-title="Start">
-  <ion-content>
-    <img src="img/almond.png" class="almondLogo blockCenter">
-    <span class="light padding-top" style="display:table;margin:0 auto;font-size:16px;">
+  <ion-content scroll="false">
+    <img src="img/almond.png" class="almondLogo blockCenter animated bounceInUp _1">
+    <span class="light blockCenter animated bounceInUp _1">
       <i class="ion-ios-location-outline"></i>
       Current Location:
       <reverse-geocode ng-if="lat" lat="{{lat}}" lng="{{long}}" />
@@ -11,7 +11,7 @@
         <i class="icon ion-search placeholder-icon"></i>
         <ion-google-place placeholder="Enter an address, Apt# and ZIP" ng-model="location" ng-change="dest.update(location)" />
       </label>
-      <a class="button button-block button-balanced" href="#/app/travelModes" ng-disabled="!location.formatted_address || (!lat || !long)">
+      <a class="button button-block button-balanced" href="#/app/travelModes" disabled="true" ng-disabled="!location.formatted_address || (!lat || !long)">
         <span ng-if="!location.formatted_address && (lat || long)">Please enter an address.</span>
         <span ng-if="!location.formatted_address && (!lat || !long)">Please enter an address.</span>
         <span ng-if="location.formatted_address && (!lat || !long)">Waiting for GPS</span>
