@@ -238,20 +238,3 @@ angular.module('almond.controllers', [])
     }
   }
 })
-
-.controller('MapCtrl', function($scope, $stateParams, $rootScope, destinationService, mapService) {
-
-  $scope.destination = destinationService.get();
-  destinationService.listen($scope, function(newDest){
-    $scope.destination = newDest;
-  });
-
-  var map = mapService.create('map');
-
-  $scope.$on('UserLocation.Update',function(){
-    mapService.updateUserLocation($rootScope.userLat,$rootScope.userLong,$rootScope.userAccuracy)
-  })
-
-
-  mapService.drawRoute($rootScope.userLat,$rootScope.userLong,$scope.destination.formatted_address);
-});
