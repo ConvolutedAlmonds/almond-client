@@ -7,11 +7,11 @@
       <reverse-geocode ng-if="lat" lat="{{lat}}" lng="{{long}}" />
     </span>
     <div class="list list-inset padding almondBlue absoluteBottomHalf">
-      <label class="item item-input">
+      <label class="item item-input animated bounceInUp _2">
         <i class="icon ion-search placeholder-icon"></i>
         <ion-google-place placeholder="Enter an address, Apt# and ZIP" ng-model="location" ng-change="dest.update(location)" />
       </label>
-      <a class="button button-block button-balanced" href="#/app/travelModes" disabled="true" ng-disabled="!location.formatted_address || (!lat || !long)">
+      <a class="button button-block button-balanced animated bounceInUp _3" href="#/app/travelModes" disabled="true" ng-disabled="!location.formatted_address || (!lat || !long)">
         <span ng-if="!location.formatted_address && (lat || long)">Please enter an address.</span>
         <span ng-if="!location.formatted_address && (!lat || !long)">Please enter an address.</span>
         <span ng-if="location.formatted_address && (!lat || !long)">Waiting for GPS</span>
@@ -19,13 +19,13 @@
       </a>
     </div>
   </ion-content>
-  <div ng-if="$root.locationHealth === 0" class="bar bar-footer bar-balanced">
+  <div ng-if="$root.locationHealth === 0" class="bar bar-footer bar-balanced animated slideInUp _4">
     <div class="title">GPS OK</div>
   </div>
-  <div ng-if="$root.locationHealth === 1" class="bar bar-footer bar-energized">
+  <div ng-if="$root.locationHealth === 1" class="bar bar-footer bar-energized animated slideInUp _4">
     <div class="title">GPS location out of date</div>
   </div>
-  <div ng-if="$root.locationHealth === 2" class="bar bar-footer bar-assertive">
+  <div ng-if="$root.locationHealth === 2" class="bar bar-footer bar-assertive animated slideInUp _4">
     <div class="title">GPS location not available</div>
   </div>
 </ion-view>
