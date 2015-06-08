@@ -1,5 +1,5 @@
 angular.module('pushService', [])
-.factory('PushService', function (Auth, AuthToken, $ionicUser, $ionicPush) {
+.factory('pushService', function (Auth, AuthToken, $ionicUser, $ionicPush) {
 	pushService = {}
 	pushService.identifyUser = function() {
     if(Auth.isLoggedIn()) {

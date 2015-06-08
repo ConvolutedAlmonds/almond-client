@@ -1,6 +1,6 @@
 angular.module('almond.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $state, Auth, AuthToken, PushService) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $state, Auth, AuthToken, pushService) {
   // Form data for the login modal
   $scope.loginData = {};
   $scope.currState = $state.current.name;
@@ -41,7 +41,7 @@ angular.module('almond.controllers', [])
             requestToken = (event.url).split("code=")[1];
             // postAuthenticate($http, requestToken);
             Auth.exchangeCode(requestToken, function() {
-              PushService.identifyUser();
+              pushService.identifyUser();
             });
             console.log(requestToken);
             // alert(requestToken);
@@ -178,11 +178,11 @@ angular.module('almond.controllers', [])
 
 })
 
-.controller('StartCtrl', function($scope, $rootScope, destinationService, $http, $ionicUser, $ionicPush, Auth, AuthToken, PushService) {
+.controller('StartCtrl', function($scope, $rootScope, destinationService, $http, $ionicUser, $ionicPush, Auth, AuthToken, pushService) {
   $scope.$on('$ionicView.loaded', function() {
     ionic.Platform.ready( function() {
       if(navigator && navigator.splashscreen) navigator.splashscreen.hide();
-      PushService.identifyUser();
+      pushService.identifyUser();
     });
   });
 
