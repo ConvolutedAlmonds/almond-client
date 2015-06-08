@@ -286,7 +286,6 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
       decoded = polylineUtilityService.decode(steps[i].polyline.points);
       for (var j = 0; j < decoded.length; j++) {
         points.push(new google.maps.LatLng(decoded[j][0],decoded[j][1]));
-        console.log("step " + i + ":" + steps[i].polyline.points)
       };
       // bounds.extend(new google.maps.LatLng(decoded[0],decoded[1]));
     }
