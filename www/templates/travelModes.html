@@ -1,16 +1,22 @@
 <ion-view view-title="Travel Modes">
   <ion-content>
+    <ion-refresher
+      pulling-text="Pull to refresh..."
+      spinner="none"
+      on-refresh="refresh()">
+    </ion-refresher>
     <div ng-repeat="mode in options.data.results">
       <div class="card" ng-repeat="route in mode" ng-click="go('/app/travelMode/{{route.travelMode}}')">
         <div class="row stackContainer">
         <div class="col col-10 col-center"></div>
           <div class="col col-10 col-center">
-            <span ng-switch on="route.travelMode" style="font-size:32px;padding-top:3em;">
-              <i class="icon ion-location" ng-switch-default></i>
-              <i class="icon ion-android-walk" ng-switch-when="walking"></i>
-              <i class="icon ion-android-bus" ng-switch-when="transit"></i>
-              <i class="icon ion-android-car" ng-switch-when="driving"></i>
-              <i class="icon ion-android-bicycle" ng-switch-when="bicycling"></i>
+            <span ng-switch on="route.travelMode">
+              <i class="travelTypeLogo icon ion-location" ng-switch-default></i>
+              <i class="travelTypeLogo icon ion-android-walk" ng-switch-when="walking"></i>
+              <i class="travelTypeLogo icon ion-android-bus" ng-switch-when="transit"></i>
+              <i class="travelTypeLogo icon ion-android-car" ng-switch-when="driving"></i>
+                <i class="travelTypeLogo icon ion-android-bicycle" ng-switch-when="bicycling"></i>
+              <img src="img/uber_36px.png" class="travelTypeLogo uberLogo" ng-switch-when="uberX"></img>
             </span>
           </div>
           <div class="col col-60">

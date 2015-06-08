@@ -42,3 +42,39 @@ html, body {
   right: 24px;
   bottom: 25px;
 }
+
+.travelTypeLogo {
+  position: absolute;
+  top: 35%;
+  left: 20px;
+  font-size: 48px;
+}
+
+.uberLogo {
+  width:36px;
+  height:36px;
+}
+
+.almondLogo {
+  width: 300px;
+  padding-bottom: 10px;
+}
+
+.almondBlue {
+  background-color: #38a5f0 !important;
+}
+
+.blockCenter {
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.absoluteBottomHalf {
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+  position: absolute !important;
+  top: 40% !important;
+}
+

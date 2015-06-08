@@ -4,9 +4,10 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-google-place', 'authService'])
 
-.run(function($ionicPlatform, $rootScope, userLocation) {
+angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-google-place', 'ngCordova', 'authService'])
+
+.run(function($ionicPlatform, $rootScope, userLocation, $cordovaSplashscreen) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -223,7 +224,6 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
 
 .filter('shortenTime',function(){
   return function(str) {
-    console.log("shortenTime-ing: " + str)
     str = str.replace(/ mins/g,'m');
     str = str.replace(/ min/g,'m');
     return str;
