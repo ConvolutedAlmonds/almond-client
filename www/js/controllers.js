@@ -170,7 +170,6 @@ angular.module('almond.controllers', [])
     console.log("dispatch called on TravelModesCtrl");
     $scope.$on('TravelMode.ReadyforData',function(){
       console.log("broadcasting data from TravelModesCtrl");
-      console.log($scope.options);
       $rootScope.$broadcast('TravelModes.Data',$scope.options, i, j);
     })
   }
@@ -267,7 +266,6 @@ angular.module('almond.controllers', [])
   var deregister = $scope.$on('TravelModes.Data', function(e,data,i,j) {
     $scope.data = data.data.results[i][j];
     console.log("Got data from event")
-    console.dir($scope.data)
   })
   $rootScope.$broadcast('TravelMode.ReadyforData');
   deregister();
