@@ -4,15 +4,16 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-google-place', 'ngCordova'])
+
+angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-google-place', 'ngCordova', 'authService'])
 
 .run(function($ionicPlatform, $rootScope, userLocation, $cordovaSplashscreen) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
-    if (window.cordova && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-    }
+    // if (window.cordova && window.cordova.plugins.Keyboard) {
+    //   cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+    // }
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
@@ -34,7 +35,7 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
   $stateProvider
 
   .state('app', {
@@ -53,7 +54,7 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
       }
     }
   })
-  
+
   .state('app.travelModes', {
     url: "/travelModes",
     views: {
@@ -92,9 +93,25 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
         controller: 'SettingsCtrl'
       }
     }
+  })
+  .state('app.events', {
+    url: "/events",
+    cache: false,
+    views: {
+      'menuContent': {
+        templateUrl: "templates/events.html",
+        controller: 'EventCtrl'
+      }
+    },
+    data: {
+      requresLogin: true
+    }
   });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/start');
+
+  // if a jwt is stored in localStorage it is automatically attached in the header of all requests
+  $httpProvider.interceptors.push('AuthInterceptor');
 })
 
 .directive('reverseGeocode', function () {
@@ -184,7 +201,7 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
     broadcast(dest);
     console.log('destinationService: updated, new value is ' + newDest);
   };
-  
+
   var listen = function ($scope, callback) {
     $scope.$on('Destination.Update', function (newDest) {
       console.log("destinationService: caught Update event")
@@ -203,6 +220,7 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
     get: get
   };
 })
+
 
 .filter('shortenTime',function(){
   return function(str) {
@@ -298,7 +316,7 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
       strokeWeight: 2
     };
 
-    var route = new google.maps.Polyline(options); 
+    var route = new google.maps.Polyline(options);
 
     // map.fitBounds(bounds);
     return route;
@@ -340,6 +358,5 @@ angular.module('almond', ['ionic', 'almond.controllers', 'angularMoment', 'ion-g
     create: create,
     drawRoute: drawRoute
   }
-})
+});
 
-;

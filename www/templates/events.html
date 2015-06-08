@@ -1,0 +1,14 @@
+<ion-view view-title="Upcoming Events">
+  <ion-content>
+  <div ng-click="login()">Authorization</div>
+  <div ng-repeat="event in events.items">
+    <div class="card" ng-click="go('/app/travelModes')">
+      <div>{{event.summary}}</div>
+      <div>{{event.location}}</div>
+      <div>{{event.start.dataTime}}</div>
+    </div>
+  </div>
+  
+    <br><br> <!-- a super hacky way to give padding to the cards so the footer doesn't cover them up -->
+  </ion-content>
+</ion-view>
