@@ -50,3 +50,18 @@ gulp.task('git-check', function(done) {
   }
   done();
 });
+
+// Import at the top of the file
+var karma = require('karma').server;
+
+/**
+* Test task, run test once and exit
+*/
+gulp.task('test', function(done) {
+    karma.start({
+        configFile: __dirname + '/tests/my.conf.js',
+        singleRun: true
+    }, function() {
+        done();
+    });
+});
