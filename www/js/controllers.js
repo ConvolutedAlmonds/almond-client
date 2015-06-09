@@ -110,8 +110,35 @@ angular.module('almond.controllers', [])
       for(var i = 0; i < data.directions.results.length; i++) {
         var result = data.directions.results[i];
         var formattedResult = [];
+
         for(var j = 0; j < result.length; j++) {
+
           var subResult = result[j];
+          var steps = subResult.legs[0].steps;
+          var lineNumber;
+          var transitLogo;
+          var somethingFound = false;
+
+          for (var k = 0; k < steps.length; k++) {
+            if (!somethingFound) {
+              if (steps[k].transit_details) {
+                var line = steps[k].transit_details.line;
+                if (line.short_name) {
+                  lineNumber = line.short_name;
+                  somethingFound = true;
+                } else {
+                  if (line.vehicle){
+                    var vehicle = line.vehicle
+                    if (vehicle.local_icon) {
+                      transitLogo = 'http:' + vehicle.local_icon;
+                      somethingFound = true;
+                    }
+                  }
+                }
+              }
+            }
+          }
+
           var formattedSubResult = {
             travelMode: subResult.travelMode,
             fare: subResult.fare || "$0",
@@ -120,8 +147,15 @@ angular.module('almond.controllers', [])
             summary: subResult.summary,
             durationByMode: [subResult.durationByMode[0], subResult.durationByMode[1]],
             directions: subResult.legs[0].steps,
-            lineNumber: Math.floor(Math.random()*50)
+            lineNumber: undefined,
+            transitLogo: undefined
           };
+
+          if (lineNumber) {
+            formattedSubResult.lineNumber = lineNumber;
+          } else if (transitLogo) {
+            formattedSubResult.transitLogo = transitLogo;
+          }
 
           formattedData.cards.push(formattedSubResult);
         }
