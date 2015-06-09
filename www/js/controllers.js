@@ -80,6 +80,8 @@ angular.module('almond.controllers', [])
     })
   };
 
+  $scope.Math = window.Math;
+
   $scope.showLoading = $ionicLoading.show.bind(this,{
         template: '<span style="color:white;"><ion-spinner></ion-spinner><br>Loading routes...</span>'
       });
@@ -117,7 +119,8 @@ angular.module('almond.controllers', [])
             duration: subResult.legs[0].duration.text,
             summary: subResult.summary,
             durationByMode: [subResult.durationByMode[0], subResult.durationByMode[1]],
-            directions: subResult.legs[0].steps
+            directions: subResult.legs[0].steps,
+            lineNumber: Math.floor(Math.random()*50)
           };
 
           formattedData.cards.push(formattedSubResult);
@@ -184,7 +187,7 @@ angular.module('almond.controllers', [])
 
 })
 
-.controller('StartCtrl', function($scope, $rootScope, destinationService, $http, $ionicUser, $ionicPush, Auth, AuthToken, pushService) {
+.controller('StartCtrl', function($scope, $rootScope, destinationService, $http, $ionicUser, $ionicPush, Auth, AuthToken, pushService, $location) {
   $scope.$on('$ionicView.loaded', function() {
     ionic.Platform.ready( function() {
       if(navigator && navigator.splashscreen) navigator.splashscreen.hide();
@@ -214,6 +217,10 @@ angular.module('almond.controllers', [])
   }, function() {
     $scope.long = $rootScope.userLong;
   }, true);
+
+  $scope.go = function ( path ) {
+    $location.path(path);
+  };
 
   // destinationService
 
