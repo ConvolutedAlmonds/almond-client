@@ -5,7 +5,7 @@
       spinner="none"
       on-refresh="refresh()">
     </ion-refresher>
-      <div class="card" ng-repeat="route in options.cards" ng-click="go('/app/travelMode/{{route.travelMode}}')">
+      <div class="card" ng-repeat="route in options.cards" ng-click="go('/app/travelMode/{{route.travelMode}}');dispatch({{$index}});">
         <a class="item">
           <div class="row routeGrid">
             <div class="col col-33">
