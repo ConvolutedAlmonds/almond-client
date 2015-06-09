@@ -141,3 +141,8 @@ html, body {
   position: absolute !important;
   top: 40% !important;
 }
+
+.button-half {
+  width: 40%;
+  display: inline;
+}

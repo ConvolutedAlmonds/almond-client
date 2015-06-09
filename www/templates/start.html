@@ -11,12 +11,16 @@
         <i class="icon ion-search placeholder-icon"></i>
         <ion-google-place placeholder="Enter an address, Apt# and ZIP" ng-model="location" ng-change="dest.update(location)" />
       </label>
-      <a class="button button-block button-balanced animated bounceInDown _3" href="#/app/travelModes" disabled="true" ng-disabled="!location.formatted_address || (!lat || !long)">
+      <a class="button button-block button-balanced animated bounceInDown _3" href="#/app/travelModes">
         <span ng-if="!location.formatted_address && (lat || long)">Please enter an address.</span>
         <span ng-if="!location.formatted_address && (!lat || !long)">Please enter an address.</span>
         <span ng-if="location.formatted_address && (!lat || !long)">Waiting for GPS</span>
         <span ng-if="location.formatted_address && (lat || long)">Navigate!</span>
       </a>
+      <br>
+      <button ng-click="go('/app/events')" class="button button-half icon-left ion-calendar button-positive animated bounceInLeft _3">Calendar</button>
+      <button ng-click="go('/app/settings')" class="button button-half icon-left ion-gear-a animated bounceInRight _3">Settings</button>
     </div>
+
   </ion-content>
 </ion-view>
