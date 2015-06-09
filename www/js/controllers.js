@@ -155,8 +155,6 @@ angular.module('almond.controllers', [])
         formattedData.cards.push(formattedSubResult);
         var formattedResult = [formattedSubResult];
       }
-      console.log("formattedData!")
-      console.dir(formattedData);
       $scope.options = formattedData;
       $scope.$broadcast('scroll.refreshComplete');
       $scope.hideLoading();
@@ -167,11 +165,11 @@ angular.module('almond.controllers', [])
   $scope.refresh();
 
 
-  $scope.dispatch = function(i,j) {
+  $scope.dispatch = function(i) {
     console.log("dispatch called on TravelModesCtrl");
     $scope.$on('TravelMode.ReadyforData',function(){
       console.log("broadcasting data from TravelModesCtrl");
-      $rootScope.$broadcast('TravelModes.Data',$scope.options, i, j);
+      $rootScope.$broadcast('TravelModes.Data',$scope.options, i);
     })
   }
 
@@ -235,8 +233,10 @@ angular.module('almond.controllers', [])
   $scope.activeTab = 'directions';
   var userMarker, route;
   console.log("TravelModeCtrl says hi");
-  var deregister = $scope.$on('TravelModes.Data', function(e,data,i,j) {
-    $scope.data = data.data.results[i][j];
+  var deregister = $scope.$on('TravelModes.Data', function(e,data,i) {
+    console.log("DATA!");
+    console.dir(data)
+    $scope.data = data.cards[i];
     console.log("Got data from event")
   })
   $rootScope.$broadcast('TravelMode.ReadyforData');
@@ -286,7 +286,6 @@ angular.module('almond.controllers', [])
   $scope.go = function ( path ) {
     console.log('event clicked on');
     console.log('this:')
-    console.dir(this);
     $location.path(path);
   };
 
