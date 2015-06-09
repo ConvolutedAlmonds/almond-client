@@ -113,7 +113,6 @@ angular.module('almond.controllers', [])
 
           var subResult = result[j];
           var steps = subResult.legs[0].steps;
-          console.log('steps', steps, steps.length)
           var lineNumber;
           var transitLogo;
           var somethingFound = false;
