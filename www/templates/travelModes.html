@@ -5,37 +5,37 @@
       spinner="none"
       on-refresh="refresh()">
     </ion-refresher>
-    <div ng-repeat="mode in options.data.results">
-      <div class="card" ng-repeat="route in mode" ng-click="go('/app/travelMode/{{route.travelMode}}')">
-        <div class="row stackContainer">
-        <div class="col col-10 col-center"></div>
-          <div class="col col-10 col-center">
-            <span ng-switch on="route.travelMode">
-              <i class="travelTypeLogo icon ion-location" ng-switch-default></i>
-              <i class="travelTypeLogo icon ion-android-walk" ng-switch-when="walking"></i>
-              <i class="travelTypeLogo icon ion-android-bus" ng-switch-when="transit"></i>
-              <i class="travelTypeLogo icon ion-android-car" ng-switch-when="driving"></i>
-                <i class="travelTypeLogo icon ion-android-bicycle" ng-switch-when="bicycling"></i>
-              <img src="img/uber_36px.png" class="travelTypeLogo uberLogo" ng-switch-when="uberX"></img>
-            </span>
-          </div>
-          <div class="col col-60">
-            <div class="item" ng-click="dispatch($parent.$index,$index);">
-              <h1>{{route.travelMode}}</h1>
-              <span ng-repeat="mode in route.durationByMode"><b>{{mode[1]}}</b> <span ng-if="mode[0] == 'transit'">riding </span>{{mode[0]}}
-              <span ng-if="!$last"><br></span>
+      <div class="card" ng-repeat="route in options.cards" ng-click="go('/app/travelMode/{{route.travelMode}}')">
+        <a class="item">
+          <div class="row routeGrid">
+            <div class="col col-33">
+              <span class="logoContainer" ng-switch on="route.travelMode">
+                <i class="travelTypeLogo icon ion-location" ng-switch-default></i>
+                <i class="travelTypeLogo icon ion-android-walk" style="position:relative;left:8px;" ng-switch-when="walking"></i>
+                <i class="travelTypeLogo icon ion-android-bus" ng-switch-when="transit"></i>
+                <i class="travelTypeLogo icon ion-android-car" ng-switch-when="driving"></i>
+                <i class="travelTypeLogo icon ion-android-bicycle" style="position:relative;right:4px;" ng-switch-when="bicycling"></i>
+                <img src="img/uber_36px.png" class="travelTypeLogo uberLogo" style="position:relative;right:1px;" ng-switch-when="uberX"></img>
+                <img src="img/uber_36px.png" class="travelTypeLogo uberLogo" style="position:relative;right:1px;" ng-switch-when="uberXL"></img>
+                <img src="img/uber_36px.png" class="travelTypeLogo uberLogo" style="position:relative;right:1px;" ng-switch-when="UberBLACK"></img>
+                <img src="img/uber_36px.png" class="travelTypeLogo uberLogo" style="position:relative;right:1px;" ng-switch-when="UberSUV"></img>
+                <img src="img/uber_36px.png" class="travelTypeLogo uberLogo" style="position:relative;right:1px;" ng-switch-when="uberTAXI"></img>
               </span>
-              ({{route.distance.text}})<br>
-              <span class="item-text-wrap" style="color:grey;font-style:italic;">via {{route.summary}}</span>
+              <div ng-if="route.lineNumber" class="lineStatContainer">
+                <span class="lineStat">{{lineNumber}}</span>
+              </div>
+            </div>
+            <div class="col col-33 modeStat">
+              <span class="number">{{route.fare.text || "$0"}}</span>
+              <span class="label">cost</span>
+            </div>
+            <div class="col col-33 modeStat">
+              <span class="number">{{route.duration | shortenTime}}</span>
+              <span class="label">time</span>
             </div>
           </div>
-          <div class="stack stackTop">
-            <span style="color:blue;">{{route.duration| shortenTime}}</span><br>
-            <span style="color:green;">{{route.fare.text || '$0'}}</span>
-          </div>
+        </a>
       </div>
-    </div>
-    </div>
     <br><br> <!-- a super hacky way to give padding to the cards so the footer doesn't cover them up -->
   </ion-content>
 </ion-view>

@@ -237,10 +237,26 @@ angular.module('almond', ['ionic',
 
 .filter('shortenTime',function(){
   return function(str) {
-    str = str.replace(/ mins/g,'m');
-    str = str.replace(/ min/g,'m');
+    str = str.replace('mins','m');
+    str = str.replace('mins','m');
+    str = str.replace('hours','h');
+    str = str.replace('hour','h');
+    str = str.replace(/\s/g,'');
     return str;
   };
+})
+
+.filter('modeFilter',function(){
+  return function (str) {
+    if(str.toLowerCase().indexOf("uber") !== -1) {
+      str = str.replace("uber","").replace("Uber","").replace("UBER","");
+      str = str.toUpperCase();
+      str = "uber" + str;
+    } else {
+      str = str.replace("SFMTA","MUNI");
+    }
+    return str;
+  }
 })
 
 // This is adapted from the implementation in Project-OSRM

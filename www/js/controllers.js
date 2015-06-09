@@ -67,7 +67,7 @@ angular.module('almond.controllers', [])
 
 })
 
-.controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http, $location, destinationService, $ionicLoading) {
+.controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http, $location, destinationService, $ionicLoading, $filter) {
   if(typeof destinationService.get() === 'undefined') {
     $scope.destination = {};
     $scope.destination.formatted_address = '875 Post Street, San Francisco, CA 94109, USA';
@@ -104,7 +104,7 @@ angular.module('almond.controllers', [])
       var formattedData = {};
       console.log('show loading')
       formattedData.data = [];
-      formattedData.data.results = [];
+      formattedData.cards = [];
       for(var i = 0; i < data.directions.results.length; i++) {
         var result = data.directions.results[i];
         var formattedResult = [];
@@ -120,9 +120,8 @@ angular.module('almond.controllers', [])
             directions: subResult.legs[0].steps
           };
 
-          formattedResult.push(formattedSubResult);
+          formattedData.cards.push(formattedSubResult);
         }
-        formattedData.data.results.push(formattedResult);
       }
 
 
@@ -153,10 +152,10 @@ angular.module('almond.controllers', [])
           uberAppUrl: uberAppLink + '&product_id=' + uberResult.time_product_id
         };
 
+        formattedData.cards.push(formattedSubResult);
         var formattedResult = [formattedSubResult];
-        formattedData.data.results.push(formattedResult);
       }
-
+      console.log("formattedData!")
       console.dir(formattedData);
       $scope.options = formattedData;
       $scope.$broadcast('scroll.refreshComplete');
@@ -174,6 +173,15 @@ angular.module('almond.controllers', [])
       console.log("broadcasting data from TravelModesCtrl");
       $rootScope.$broadcast('TravelModes.Data',$scope.options, i, j);
     })
+  }
+
+  $scope.itemCounter = 0;
+
+  $scope.itemColor = function() {
+    var colors = ["#2C82C9","#FC6042","#60646D","#249991","#FF7416"]
+    var i = $scope.itemCounter % colors.length;
+    $scope.itemCounter++;
+    return colors[i];
   }
 
 })

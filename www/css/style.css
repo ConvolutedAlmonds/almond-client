@@ -30,6 +30,67 @@ html, body {
   z-index: 999;
 }
 
+.modeStat {
+  font-family: 'Open Sans', sans-serif;
+  text-align:center;
+  margin-top: 6px;
+}
+
+.modeStat .number {
+  font-weight: 600;
+  display: block;
+  font-size:23px;
+}
+
+.modeStat .label {
+  color: grey;
+  text-transform: uppercase;
+  font-size: 14px;
+}
+
+/*.lineStat {
+  position: relative;
+  background-color: grey;
+  text-align:center;
+  border-radius: 50%;
+  height:50px;
+  width: 50px;
+  display: inline-block;
+}
+
+.lineStat .number {
+  color: white;
+  position: absolute;
+  top:50%;
+}*/
+
+.routeGrid div:not(:last-child) {
+  border-right: solid 1px lightgrey;
+}
+
+.lineStat {
+  background: grey;
+  border-radius: 50%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  color: #fff;
+  display: inline-block;
+  font-weight: bold;
+  line-height: 36px;
+  margin-right: 15px;
+  text-align: center;
+  width: 36px; 
+  position:absolute;
+  bottom:50%;
+
+}
+
+.lineStatContainer {
+  display:inline-block;
+  position:relative;
+  margin-left:10px;
+}
+
 .stackTop {
   position: absolute;
   right: 18px;
@@ -43,11 +104,14 @@ html, body {
   bottom: 25px;
 }
 
+.logoContainer {
+  height: 100px;
+  width: 100px;
+}
+
 .travelTypeLogo {
-  position: absolute;
-  top: 35%;
-  left: 20px;
   font-size: 48px;
+  display: inline;
 }
 
 .uberLogo {
