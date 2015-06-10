@@ -9,8 +9,17 @@
           <i class="icon ion-arrow-left-c" ng-switch-when="turn-left"></i>
           <i class="icon ion-arrow-right-c" ng-switch-when="turn-right"></i>
         </span>
-        <span class="item-text-wrap" ng-bind-html="step.html_instructions"></span>
-        <span class="item-note">
+        <span ng-if="!step.transit_details" class="item-text-wrap" ng-bind-html="step.html_instructions"></span>
+        <span ng-if="step.transit_details">{{step.transit_details.line.short_name}} towards {{step.transit_details.line.name}}</span>
+        <div ng-if="step.transit_details" class="secondary">
+          arriving <b><span am-time-ago="step.transit_details.departure_time.value" am-preprocess="unix"></span></b><br>
+          <span class="item-text-wrap">Board at {{step.transit_details.departure_stop.name}}</span><br>
+          <span class="item-text-wrap">Exit at {{step.transit_details.arrival_stop.name}}</span>
+        </div>
+        <span class="item-note" ng-if="step.transit_details">
+          {{step.transit_details.num_stops + " stops"}} | {{step.duration.text}}
+        </span>
+        <span class="item-note" ng-if="!step.transit_details">
           {{step.distance.text}} | {{step.duration.text}}
         </span>
       </li>

@@ -196,6 +196,8 @@ angular.module('almond.controllers', [])
         var formattedResult = [formattedSubResult];
       }
       $scope.options = formattedData;
+      console.log("FORMATTED DATA");
+      console.dir(formattedData);
       $scope.$broadcast('scroll.refreshComplete');
       $scope.hideLoading();
       console.log('hide loading')

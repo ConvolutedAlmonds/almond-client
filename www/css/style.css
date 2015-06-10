@@ -85,6 +85,24 @@ html, body {
 
 }
 
+.uberStat {
+  background: grey;
+  border-radius: 50%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  color: #fff;
+  display: inline-block;
+  font-weight: bold;
+  line-height: 36px;
+  margin-right: 15px;
+  text-align: center;
+  width: 36px; 
+  position:absolute;
+  bottom:50%;
+  font-size: 13px;
+
+}
+
 .lineStatContainer {
   display:inline-block;
   position:relative;
@@ -145,4 +163,9 @@ html, body {
 .button-half {
   width: 40%;
   display: inline;
+}
+
+.secondary {
+  color: grey;
+  font-size: 10.5pt;
 }
