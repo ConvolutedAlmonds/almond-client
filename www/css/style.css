@@ -164,3 +164,8 @@ html, body {
   width: 40%;
   display: inline;
 }
+
+.secondary {
+  color: grey;
+  font-size: 10.5pt;
+}
