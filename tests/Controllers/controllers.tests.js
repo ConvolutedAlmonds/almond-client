@@ -6,14 +6,51 @@ describe('Controllers', function(){
 
     beforeEach(inject(function($rootScope, $controller) {
         scope = $rootScope.$new();
-        $controller('TestCtrl', {$scope: scope});
-    }));
+        $controller('AppCtrl', {
+            $scope: scope, 
+            $ionicModal: {
+                fromTemplateUrl: function(view, obj) {
+                    return this;
+                },
+                then: function(cb) {
+                    cb({ hide: function() {
+
+                    },
+                    show: function() {
+                        
+                    }});
+                }
+            },
+            $timeout: function(cb, time) {
+                cb();
+            },
+            $http: {},
+            $state: {
+                current: {
+                    name: ''
+                }
+            },
+            Auth: {
+                exchangeCode: function(token, cb) {
+                    cb();
+                }
+            },
+            AuthToken: {
+                setToken: function() {
+
+                }
+            },
+            pushService: {
+                identifyUser: function() {
+
+                }
+            }});
+    })
+    );
 
     // tests start here
-    it('should have dummy set to dummy', function(){
-        expect(scope.dummy).toEqual("dummy");
-    });
-    it('should have dummy not set to dummy', function(){
-        expect(scope.dummy).not.toEqual("1");
+    it('should run without errors', function() {
+        scope.closeLogin();
+        expect(scope.loginData).toEqual({});
     });
 });
