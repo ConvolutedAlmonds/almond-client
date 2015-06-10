@@ -209,11 +209,12 @@ angular.module('almond.controllers', [])
   $scope.refresh();
 
 
-  $scope.dispatch = function(i) {
+  $scope.dispatch = function(route) {
     console.log("dispatch called on TravelModesCtrl");
     $scope.$on('TravelMode.ReadyforData',function(){
       console.log("broadcasting data from TravelModesCtrl");
-      $rootScope.$broadcast('TravelModes.Data',$scope.options, i);
+      console.dir(route)
+      $rootScope.$broadcast('TravelModes.Data', route);
     })
   }
 
@@ -281,10 +282,10 @@ angular.module('almond.controllers', [])
   $scope.activeTab = 'directions';
   var userMarker, route;
   console.log("TravelModeCtrl says hi");
-  var deregister = $scope.$on('TravelModes.Data', function(e,data,i) {
+  var deregister = $scope.$on('TravelModes.Data', function(e,data) {
     console.log("DATA!");
     console.dir(data)
-    $scope.data = data.cards[i];
+    $scope.data = data;
     console.log("Got data from event")
   })
   $rootScope.$broadcast('TravelMode.ReadyforData');
