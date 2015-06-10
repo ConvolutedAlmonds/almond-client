@@ -279,7 +279,7 @@ angular.module('almond.controllers', [])
   console.log("TravelModeCtrl says hi");
   var deregister = $scope.$on('TravelModes.Data', function(e,data,i) {
     console.log("DATA!");
-    console.dir(data)
+    // console.dir(data)
     $scope.data = data.cards[i];
     console.log("Got data from event")
   })
@@ -327,10 +327,12 @@ angular.module('almond.controllers', [])
 
 .controller('EventCtrl', function($http, $location, $scope, $stateParams, $rootScope, destinationService, mapService, Auth) {
 
-  $scope.go = function ( path ) {
-    console.log('event clicked on');
-    console.log('this:')
-    $location.path(path);
+  var test = '/app/travelModes';
+
+  $scope.go = function ( destination ) {
+    console.log('path: ' + destination);
+    destinationService.update({formatted_address: destination});
+    $location.path('app/travelModes');
   };
 
   if (Auth.isLoggedIn()) {
