@@ -22,7 +22,7 @@
                 <img src="img/uber_36px.png" class="travelTypeLogo uberLogo" style="position:relative;right:1px;" ng-switch-when="uberTAXI"></img>
               </span>
               <div ng-if="route.travelMode === 'transit'" class="lineStatContainer">
-                <span class="lineStat">{{[null,null,null,38,27,6][$index]}}</span>
+                <span class="lineStat">{{route.lineNumber}}</span>
               </div>
             </div>
             <div class="col col-33 modeStat">
