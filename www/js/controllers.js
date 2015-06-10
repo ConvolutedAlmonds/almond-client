@@ -146,7 +146,7 @@ angular.module('almond.controllers', [])
             travelMode: subResult.travelMode,
             fare: subResult.fare || "$0",
             distance: subResult.legs[0].distance,
-            duration: subResult.legs[0].duration.text,
+            duration: subResult.travelMode === "transit" ? Math.ceil((subResult.legs[0].arrival_time.value - Math.floor((new Date).getTime()/1000)) / 60) + "m" : subResult.duration.text,
             summary: subResult.summary,
             durationByMode: [subResult.durationByMode[0], subResult.durationByMode[1]],
             directions: subResult.legs[0].steps,
