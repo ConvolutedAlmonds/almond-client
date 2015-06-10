@@ -24,6 +24,9 @@
               <div ng-if="route.travelMode === 'transit'" class="lineStatContainer">
                 <span class="lineStat">{{route.lineNumber}}</span>
               </div>
+              <div ng-if="route.travelMode.toLowerCase().indexOf('uber') !== -1" class="lineStatContainer">
+                <span class="uberStat">{{route.travelMode | uberShorten}}</span>
+              </div>
             </div>
             <div class="col col-33 modeStat">
               <span class="number">{{route.fare.text || "$0"}}</span>
