@@ -1,4 +1,7 @@
 angular.module('almond.controllers', [])
+.controller('TestCtrl', function($scope) {
+  $scope.dummy = "dummy";
+})
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $state, Auth, AuthToken, pushService) {
   // Form data for the login modal
