@@ -1,11 +1,16 @@
 describe('Controllers', function(){
-    var scope;
+    var scope, AuthToken;
 
     // load the controller's module
     beforeEach(module('almond.controllers'));
 
     beforeEach(inject(function($rootScope, $controller) {
         scope = $rootScope.$new();
+        AuthToken = {
+            setToken: function() {
+
+            }
+        }
         $controller('AppCtrl', {
             $scope: scope, 
             $ionicModal: {
@@ -17,8 +22,9 @@ describe('Controllers', function(){
 
                     },
                     show: function() {
-                        
-                    }});
+
+                    }
+                });
                 }
             },
             $timeout: function(cb, time) {
@@ -35,11 +41,7 @@ describe('Controllers', function(){
                     cb();
                 }
             },
-            AuthToken: {
-                setToken: function() {
-
-                }
-            },
+            AuthToken: AuthToken,
             pushService: {
                 identifyUser: function() {
 
@@ -49,8 +51,21 @@ describe('Controllers', function(){
     );
 
     // tests start here
-    it('should run without errors', function() {
+    it('should call modal hide from closeLogin', function() {
+        spyOn(scope.modal, 'hide');
         scope.closeLogin();
-        expect(scope.loginData).toEqual({});
+        expect(scope.modal.hide).toHaveBeenCalled();
+    });
+
+    it('should call modal show from login', function() {
+        spyOn(scope.modal, 'show');
+        scope.login();
+        expect(scope.modal.show).toHaveBeenCalled();
+    });
+
+    it('should call setToken from doLogout', function() {
+        spyOn(AuthToken, 'setToken');
+        scope.doLogout();
+        expect(AuthToken.setToken).toHaveBeenCalled();
     });
 });
