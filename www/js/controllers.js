@@ -36,7 +36,7 @@ angular.module('almond.controllers', [])
   $scope.doLogin = function() {
 
     var clientId = "664215290683-thjone29b1n8md31t5n4aufbuansum0r.apps.googleusercontent.com";
-    var myUrl =     'https://accounts.google.com/o/oauth2/auth?client_id=' + clientId + '&redirect_uri=http://localhost/callback&scope=https://www.googleapis.com/auth/calendar+https://www.googleapis.com/auth/plus.login+https://www.googleapis.com/auth/userinfo.profile&approval_prompt=force&response_type=code&access_type=offline'
+    var myUrl =     'https://accounts.google.com/o/oauth2/auth?client_id=' + clientId + '&redirect_uri=http://localhost/callback&scope=https://www.googleapis.com/auth/calendar+profile&response_type=code&access_type=offline&prompt=select_account'
 
     var ref = window.open(myUrl, '_blank', 'location=no');
     ref.addEventListener('loadstart', function(event) {
