@@ -165,7 +165,21 @@ html, body {
   display: inline;
 }
 
+.error-box {
+  color: red;
+  /*background-color: red;*/
+  /*background-color: rgba(255,0,0,0.5);*/
+}
+
+.event-title {
+  font-weight: bold;
+}
+
 .secondary {
   color: grey;
   font-size: 10.5pt;
+}
+
+[ng\:cloak], [ng-cloak], .ng-cloak {
+  display: none !important;
 }

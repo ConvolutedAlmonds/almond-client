@@ -1,6 +1,5 @@
-<ion-view view-title="{{travelMode.title}}">
+<ion-view view-title="{{travelMode.title}}" can-swipe-back="false">
   <ion-content>
-
   <div class="full" ng-show="activeTab === 'directions'">
     <ul class="list">
       <li class="item item-icon-left" ng-repeat="step in data.directions">
@@ -32,10 +31,10 @@
 
   </ion-content>
   <div class="tabs tabs-stable">
-    <a ng-click="activeTab = 'directions'" class="tab-item {{activeTab === 'directions' ? 'active' : ''}}">
+    <a ng-click="activeTab = 'directions'" class="tab-item {{activeTab === 'directions' ? 'active' : ''}} secondary">
       Directions
     </a>
-    <a ng-click="activeTab = 'map'" class="tab-item {{activeTab === 'map' ? 'active' : ''}}">
+    <a ng-click="activeTab = 'map'" class="tab-item {{activeTab === 'map' ? 'active' : ''}} secondary">
       Map
     </a>
   </div>
