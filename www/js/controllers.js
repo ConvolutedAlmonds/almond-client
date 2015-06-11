@@ -303,7 +303,7 @@ angular.module('almond.controllers', [])
   var deregister = $scope.$on('TravelModes.Data', function(e,data) {
     console.log("DATA!");
     // console.dir(data)
-    $scope.data = data.cards[i];
+    $scope.data = data;
     console.log("Got data from event")
   })
   $rootScope.$broadcast('TravelMode.ReadyforData');
