@@ -172,8 +172,10 @@ angular.module('almond.controllers', [])
             var formattedSubResult = {
               travelMode: subResult.travelMode,
               fare: subResult.fare || "$0",
+              fareNum: (typeof subResult === "string" ? parseFloat(subResult.fare.replace("$","")) : typeof subResult.fare === "object" ? subResult.fare.value : 0  ),
               distance: subResult.legs[0].distance,
-              duration: subResult.legs[0].duration.text,
+              duration: subResult.travelMode === "transit" ? Math.ceil((subResult.legs[0].arrival_time.value - Math.floor((new Date).getTime()/1000)) / 60) + "m" : subResult.duration.text,
+              durationNum: subResult.travelMode === "transit" ? Math.ceil((subResult.legs[0].arrival_time.value - Math.floor((new Date).getTime()/1000)) / 60) : Math.ceil((subResult.duration.value / 60)),            
               summary: subResult.summary,
               durationByMode: [subResult.durationByMode[0], subResult.durationByMode[1]],
               directions: subResult.legs[0].steps,
