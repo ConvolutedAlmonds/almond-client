@@ -247,10 +247,10 @@ angular.module('almond.controllers', [])
 
 })
 
-.controller('StartCtrl', function($scope, $rootScope, destinationService, $http, $ionicUser, $ionicPush, Auth, AuthToken, pushService, $location) {
+.controller('StartCtrl', function($scope, $rootScope, destinationService, $http, $ionicUser, $ionicPush, Auth, AuthToken, pushService, $location, $cordovaSplashscreen) {
   $scope.$on('$ionicView.loaded', function() {
     ionic.Platform.ready( function() {
-      if(navigator && navigator.splashscreen) navigator.splashscreen.hide();
+      if(navigator && navigator.splashscreen) setTimeout(navigator.splashscreen.hide,250);
       pushService.identifyUser();
     });
   });
@@ -264,6 +264,15 @@ angular.module('almond.controllers', [])
 
   $scope.lat = $rootScope.userLat;
   $scope.long = $rootScope.userLong;
+
+  $scope.isFirstLoad = function(str) {
+    if($rootScope.firstStartLoad) {
+      setTimeout(function(){ $rootScope.firstStartLoad = false; },1000);
+      return str;
+    } else {
+      return '';
+    }
+  }
 
   // this syncs our scope's 'lat' and 'long' properties with the coordinates
   // provided by the userLocation service to the rootScope.

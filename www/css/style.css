@@ -169,3 +169,7 @@ html, body {
   color: grey;
   font-size: 10.5pt;
 }
+
+[ng\:cloak], [ng-cloak], .ng-cloak {
+  display: none !important;
+}
