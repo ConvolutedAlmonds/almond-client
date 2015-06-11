@@ -1,11 +1,15 @@
 <ion-view view-title="Travel Modes">
+  <ion-nav-buttons side="right">
+    <button class="button button-clear icon ion-more" ng-click="popover.show($event)">
+    </button>
+  </ion-nav-buttons>
   <ion-content>
     <ion-refresher
       pulling-text="Pull to refresh..."
       spinner="none"
       on-refresh="refresh()">
     </ion-refresher>
-      <div class="card" ng-repeat="route in options.cards | orderBy:'durationNum'" ng-click="go('/app/travelMode/{{route.travelMode}}');dispatch(route);">
+      <div class="card" ng-repeat="route in options.cards | orderBy:sortBy" ng-click="go('/app/travelMode/{{route.travelMode}}');dispatch(route);">
         <a class="item">
           <div class="row routeGrid">
             <div class="col col-33">

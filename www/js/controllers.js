@@ -70,7 +70,7 @@ angular.module('almond.controllers', [])
 
 })
 
-.controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http, $location, destinationService, $ionicLoading, $filter) {
+.controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http, $location, destinationService, $ionicLoading, $filter, $ionicPopover) {
   if(typeof destinationService.get() === 'undefined') {
     $scope.destination = {};
     $scope.destination.formatted_address = '875 Post Street, San Francisco, CA 94109, USA';
@@ -84,6 +84,22 @@ angular.module('almond.controllers', [])
   };
 
   $scope.Math = window.Math;
+
+  $scope.log = console.log;
+
+  $scope.$watch(function() {
+    return $rootScope.sortBy;
+  }, function() {
+    $scope.sortBy = $rootScope.sortBy;
+  }, true);
+
+  $rootScope.sortBy = 'durationNum';
+
+  $ionicPopover.fromTemplateUrl('templates/sortPopover.html', {
+    scope: $scope,
+  }).then(function(popover) {
+    $scope.popover = popover;
+  });
 
   $scope.showLoading = $ionicLoading.show.bind(this,{
         template: '<span style="color:white;"><ion-spinner></ion-spinner><br>Loading routes...</span>'
@@ -145,6 +161,7 @@ angular.module('almond.controllers', [])
           var formattedSubResult = {
             travelMode: subResult.travelMode,
             fare: subResult.fare || "$0",
+            fareNum: (typeof subResult === "string" ? parseFloat(subResult.fare.replace("$","")) : typeof subResult.fare === "object" ? subResult.fare.value : 0  ),
             distance: subResult.legs[0].distance,
             duration: subResult.travelMode === "transit" ? Math.ceil((subResult.legs[0].arrival_time.value - Math.floor((new Date).getTime()/1000)) / 60) + "m" : subResult.duration.text,
             durationNum: subResult.travelMode === "transit" ? Math.ceil((subResult.legs[0].arrival_time.value - Math.floor((new Date).getTime()/1000)) / 60) : Math.ceil((subResult.duration.value / 60)) ,
@@ -180,6 +197,7 @@ angular.module('almond.controllers', [])
         var formattedSubResult = {
           travelMode: uberResult.price_localized_display_name,
           fare: { text: uberResult.price_estimate },
+          fareNum: ((uberResult.price_low_estimate + uberResult.price_high_estimate) / 2),
           distance: { text: uberResult.price_distance },
           duration: Math.ceil((uberResult.price_duration + uberResult.time_estimate) / 60) + "m",
           durationNum: Math.ceil((uberResult.price_duration + uberResult.time_estimate) / 60),
@@ -278,7 +296,7 @@ angular.module('almond.controllers', [])
   })
 })
 
-.controller('TravelModeCtrl', function($scope,$stateParams,$rootScope, destinationService, mapService) {
+.controller('TravelModeCtrl', function($scope,$stateParams,$rootScope, destinationService, mapService, $ionicPopover) {
   $scope.activeTab = 'directions';
   var userMarker, route;
   console.log("TravelModeCtrl says hi");
@@ -296,6 +314,8 @@ angular.module('almond.controllers', [])
   destinationService.listen($scope, function(newDest){
     $scope.destination = newDest;
   });
+
+
 
   var map = mapService.create('map');
 
