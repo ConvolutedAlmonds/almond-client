@@ -1,29 +1,35 @@
 
-var serverUrl = 'http://on-time-dev.elasticbeanstalk.com';
+// var serverUrl = 'http://on-time-dev.elasticbeanstalk.com';
 // var serverUrl = 'http://10.6.31.117:3000';
+var serverUrl = 'http:/10.7.31.120:3000';
 
 var getRoutes = function($http, longitude, latitude, destAddress, callback) {
-    $http.post(serverUrl + '/api/routes',
-        {
-            origin: { "longitude": longitude, "latitude": latitude },
-            destAddress : destAddress
-        }).success(function(data) {
-            console.log(data);
-            callback(data);
-     }).error(function(data) {
-         console.log(data);
-     });
+  
+  $http.post(serverUrl + '/api/routes', {
+    origin: { "longitude": longitude, "latitude": latitude },
+    destAddress : destAddress
+  }).success(function(data) {
+    console.log('got routes');
+    callback(null, data);
+  }).error(function(data) {
+    console.log('error getting routes')
+    callback(true, data);
+  });
+
 };
 
 var getCalendarEvents = function($http, callback) {
 
-    $http.get(serverUrl + '/cal/events').success(function(data) {
-        callback(data);
-    }).error(function(error) {
-        console.log(error);
-    });
+  $http.get(serverUrl + '/cal/events').success(function(data) {
+      callback(data);
+  }).error(function(error) {
+      console.log(error);
+  });
+
 };
 
+
+// TODO: remove? see 'StartCtrl' controller
 var getEvents = function($http, callback) {
 
   // console.log('getEvents triggered');
