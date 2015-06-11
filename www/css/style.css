@@ -178,5 +178,8 @@ html, body {
 .secondary {
   color: grey;
   font-size: 10.5pt;
-  text-transform: uppercase;
+}
+
+[ng\:cloak], [ng-cloak], .ng-cloak {
+  display: none !important;
 }
