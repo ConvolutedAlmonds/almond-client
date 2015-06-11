@@ -1,0 +1,9 @@
+<ion-popover-view class="animated bounceIn" >
+  <ion-content>
+      <span class="secondary" style="display: block; margin: 0 auto;">Sorting Options</span>
+      <ion-radio ng-model="$root.sortBy" ng-value="'durationNum'">Time: Fast to Slow</ion-radio>
+      <ion-radio ng-model="$root.sortBy" ng-value="'-durationNum'">Time: Slow to Fast</ion-radio>
+      <ion-radio ng-model="$root.sortBy" ng-value="'fareNum'">Price: Low to High</ion-radio>
+      <ion-radio ng-model="$root.sortBy" ng-value="'-fareNum'">Price: High to Low</ion-radio>
+  </ion-content>
+</ion-popover-view>
