@@ -5,7 +5,7 @@ angular.module('authService', [])
   var authFactory = {};
 
   var serverUrl = 'http://on-time-dev.elasticbeanstalk.com';
-  // var serverUrl = 'http://10.6.31.117:3000';
+  // var serverUrl = 'http://192.168.1.4:3000';
 
   authFactory.exchangeCode = function(code, cb) {
 
