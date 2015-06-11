@@ -146,3 +146,15 @@ html, body {
   width: 40%;
   display: inline;
 }
+
+.error-box {
+  color: red;
+  /*background-color: red;*/
+  /*background-color: rgba(255,0,0,0.5);*/
+}
+
+.event-title {
+  font-weight: bold;
+}
+
+
