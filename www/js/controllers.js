@@ -51,7 +51,6 @@ angular.module('almond.controllers', [])
           ref.close();
         }
     });
-
     if (typeof String.prototype.startsWith != 'function') {
         String.prototype.startsWith = function (str){
             return this.indexOf(str) == 0;
@@ -71,7 +70,7 @@ angular.module('almond.controllers', [])
 
 })
 
-.controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http, $location, destinationService, $ionicLoading, $filter,  $ionicHistory) {
+.controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http, $location, destinationService, $ionicLoading, $filter, $ionicPopover, $ionicHistory) {
   if(typeof destinationService.get() === 'undefined') {
     $scope.destination = {};
     $scope.destination.formatted_address = '875 Post Street, San Francisco, CA 94109, USA';
@@ -86,10 +85,25 @@ angular.module('almond.controllers', [])
 
   $scope.Math = window.Math;
 
+  $scope.log = console.log;
+
+  $scope.$watch(function() {
+    return $rootScope.sortBy;
+  }, function() {
+    $scope.sortBy = $rootScope.sortBy;
+  }, true);
+
+  $rootScope.sortBy = 'durationNum';
+
+  $ionicPopover.fromTemplateUrl('templates/sortPopover.html', {
+    scope: $scope,
+  }).then(function(popover) {
+    $scope.popover = popover;
+  });
+
   $scope.showLoading = $ionicLoading.show.bind(this,{
     template: '<span style="color:white;"><ion-spinner></ion-spinner><br>Loading routes...</span>'
   });
-
   $scope.hideLoading =  $ionicLoading.hide;
 
   // If route is from Google Directions, show step-by-step and map polyline. If Uber selection, deep link to Uber app with pre-filled fields.
@@ -109,7 +123,7 @@ angular.module('almond.controllers', [])
     $scope.options = {};
 
     getRoutes($http, $rootScope.userLong, $rootScope.userLat, $scope.destination.formatted_address, function(err, data){
-
+      
       if (err) {
         console.log('error getting routes!');
         $scope.hideLoading();
@@ -121,9 +135,11 @@ angular.module('almond.controllers', [])
         console.log('show loading')
         formattedData.data = [];
         formattedData.cards = [];
+
         for(var i = 0; i < data.directions.results.length; i++) {
           var result = data.directions.results[i];
           var formattedResult = [];
+          if (!result) break;
 
           for(var j = 0; j < result.length; j++) {
 
@@ -175,53 +191,58 @@ angular.module('almond.controllers', [])
           }
         }
 
+      var uberAppLink = 'uber://?action=setPickup' +
+        '&pickup[latitude]=' + data.misc.origin.latitude.toString() +
+        '&pickup[longitude]=' + data.misc.origin.longitude.toString() +
+        '&pickup[formatted_address]=' + encodeURIComponent(data.misc.origin.address) +
+        '&dropoff[latitude]=' + data.misc.destination.latitude.toString() +
+        '&dropoff[longitude]=' + data.misc.destination.longitude.toString() +
+        '&dropoff[formatted_address]=' + encodeURIComponent(data.misc.destination.address);
 
-        var uberAppLink = 'uber://?action=setPickup' +
-          '&pickup[latitude]=' + data.misc.origin.latitude.toString() +
-          '&pickup[longitude]=' + data.misc.origin.longitude.toString() +
-          '&pickup[formatted_address]=' + encodeURIComponent(data.misc.origin.address) +
-          '&dropoff[latitude]=' + data.misc.destination.latitude.toString() +
-          '&dropoff[longitude]=' + data.misc.destination.longitude.toString() +
-          '&dropoff[formatted_address]=' + encodeURIComponent(data.misc.destination.address);
+      for (var i = 0; i < data.uber.length; i++) {
+        var uberResult = data.uber[i];
 
-        for (var i = 0; i < data.uber.length; i++) {
-          var uberResult = data.uber[i];
+        var formattedSubResult = {
+          travelMode: uberResult.price_localized_display_name,
+          fare: { text: uberResult.price_estimate },
+          fareNum: ((uberResult.price_low_estimate + uberResult.price_high_estimate) / 2),
+          distance: { text: uberResult.price_distance },
+          duration: Math.ceil((uberResult.price_duration + uberResult.time_estimate) / 60) + "m",
+          durationNum: Math.ceil((uberResult.price_duration + uberResult.time_estimate) / 60),
+          summary: uberResult.price_display_name,
+          durationByMode: [[uberResult.price_parsedArrivalTime, 'driving']],
+          directions: [],
+          timeTilArrivalSec: uberResult.time_estimate, // FIX
+          timeTilArrivalParsed: uberResult.time_parsedDuration, // FIX
+          origin: data.misc.origin,
+          destination: data.misc.destination,
+          productId: uberResult.time_product_id,
+          uberAppUrl: uberAppLink + '&product_id=' + uberResult.time_product_id
+        };
 
-          var formattedSubResult = {
-            travelMode: uberResult.price_localized_display_name,
-            fare: { text: uberResult.price_estimate },
-            distance: { text: uberResult.price_distance },
-            duration: uberResult.price_parsedArrivalTime,
-            summary: uberResult.price_display_name,
-            durationByMode: [[uberResult.price_parsedArrivalTime, 'driving']],
-            directions: [],
-            timeTilArrivalSec: uberResult.time_estimate, // FIX
-            timeTilArrivalParsed: uberResult.time_parsedDuration, // FIX
-            origin: data.misc.origin,
-            destination: data.misc.destination,
-            productId: uberResult.time_product_id,
-            uberAppUrl: uberAppLink + '&product_id=' + uberResult.time_product_id
-          };
-
-          formattedData.cards.push(formattedSubResult);
-          var formattedResult = [formattedSubResult];
-        }
-        $scope.options = formattedData;
-        $scope.$broadcast('scroll.refreshComplete');
-        $scope.hideLoading();
-        console.log('hide loading')
+        formattedData.cards.push(formattedSubResult);
+        var formattedResult = [formattedSubResult];
       }
 
+      $scope.options = formattedData;
+      console.log("FORMATTED DATA");
+      // console.dir(formattedData);
+      $scope.$broadcast('scroll.refreshComplete');
+      $scope.hideLoading();
+      console.log('hide loading')
+    }
     });
   }
 
   $scope.refresh();
 
-  $scope.dispatch = function(i) {
+
+  $scope.dispatch = function(route) {
     console.log("dispatch called on TravelModesCtrl");
     $scope.$on('TravelMode.ReadyforData',function(){
       console.log("broadcasting data from TravelModesCtrl");
-      $rootScope.$broadcast('TravelModes.Data',$scope.options, i);
+      console.dir(route)
+      $rootScope.$broadcast('TravelModes.Data', route);
     })
   }
 
@@ -285,14 +306,14 @@ angular.module('almond.controllers', [])
   })
 })
 
-.controller('TravelModeCtrl', function($scope,$stateParams,$rootScope, destinationService, mapService) {
+.controller('TravelModeCtrl', function($scope,$stateParams,$rootScope, destinationService, mapService, $ionicPopover) {
   $scope.activeTab = 'directions';
   var userMarker, route;
   console.log("TravelModeCtrl says hi");
-  var deregister = $scope.$on('TravelModes.Data', function(e,data,i) {
+  var deregister = $scope.$on('TravelModes.Data', function(e,data) {
     console.log("DATA!");
     // console.dir(data)
-    $scope.data = data.cards[i];
+    $scope.data = data;
     console.log("Got data from event")
   })
   $rootScope.$broadcast('TravelMode.ReadyforData');
@@ -303,6 +324,8 @@ angular.module('almond.controllers', [])
   destinationService.listen($scope, function(newDest){
     $scope.destination = newDest;
   });
+
+
 
   var map = mapService.create('map');
 
@@ -362,7 +385,7 @@ angular.module('almond.controllers', [])
 
     getCalendarEvents($http, function(data) {
       console.log('got events');
-      $scope.events = data;
+      $scope.events = data.events;
     })
 
   } else {

@@ -259,6 +259,19 @@ angular.module('almond', ['ionic',
   }
 })
 
+.filter('uberShorten',function(){
+  return function (str) {
+    if(str.toLowerCase().indexOf("uber") !== -1) {
+      str = str.replace("uber","").replace("Uber","").replace("UBER","");
+      str = str.toUpperCase();
+      str = str.replace("BLACK","BLK");
+    } else {
+      return;
+    }
+    return str;
+  }
+})
+
 // This is adapted from the implementation in Project-OSRM
 // https://github.com/DennisOSRM/Project-OSRM-Web/blob/master/WebContent/routing/OSRM.RoutingGeometry.js
 .service('polylineUtilityService',function() {

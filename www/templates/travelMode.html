@@ -1,6 +1,5 @@
-<ion-view view-title="{{travelMode.title}}">
+<ion-view view-title="{{travelMode.title}}" can-swipe-back="false">
   <ion-content>
-
   <div class="full" ng-show="activeTab === 'directions'">
     <ul class="list">
       <li class="item item-icon-left" ng-repeat="step in data.directions">
@@ -9,8 +8,17 @@
           <i class="icon ion-arrow-left-c" ng-switch-when="turn-left"></i>
           <i class="icon ion-arrow-right-c" ng-switch-when="turn-right"></i>
         </span>
-        <span class="item-text-wrap" ng-bind-html="step.html_instructions"></span>
-        <span class="item-note">
+        <span ng-if="!step.transit_details" class="item-text-wrap" ng-bind-html="step.html_instructions"></span>
+        <span ng-if="step.transit_details">{{step.transit_details.line.short_name}} towards {{step.transit_details.line.name}}</span>
+        <div ng-if="step.transit_details" class="secondary">
+          arriving <b><span am-time-ago="step.transit_details.departure_time.value" am-preprocess="unix"></span></b><br>
+          <span class="item-text-wrap">Board at {{step.transit_details.departure_stop.name}}</span><br>
+          <span class="item-text-wrap">Exit at {{step.transit_details.arrival_stop.name}}</span>
+        </div>
+        <span class="item-note" ng-if="step.transit_details">
+          {{step.transit_details.num_stops + " stops"}} | {{step.duration.text}}
+        </span>
+        <span class="item-note" ng-if="!step.transit_details">
           {{step.distance.text}} | {{step.duration.text}}
         </span>
       </li>
@@ -23,10 +31,10 @@
 
   </ion-content>
   <div class="tabs tabs-stable">
-    <a ng-click="activeTab = 'directions'" class="tab-item {{activeTab === 'directions' ? 'active' : ''}}">
+    <a ng-click="activeTab = 'directions'" class="tab-item {{activeTab === 'directions' ? 'active' : ''}} secondary">
       Directions
     </a>
-    <a ng-click="activeTab = 'map'" class="tab-item {{activeTab === 'map' ? 'active' : ''}}">
+    <a ng-click="activeTab = 'map'" class="tab-item {{activeTab === 'map' ? 'active' : ''}} secondary">
       Map
     </a>
   </div>
