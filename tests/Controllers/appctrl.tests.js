@@ -6,6 +6,7 @@ describe('Controllers', function(){
 
     beforeEach(inject(function($rootScope, $controller) {
         scope = $rootScope.$new();
+        console.log(scope);
         AuthToken = {
             setToken: function() {
 
@@ -18,7 +19,8 @@ describe('Controllers', function(){
                     return this;
                 },
                 then: function(cb) {
-                    cb({ hide: function() {
+                    cb(
+                    { hide: function() {
 
                     },
                     show: function() {
@@ -46,8 +48,11 @@ describe('Controllers', function(){
                 identifyUser: function() {
 
                 }
-            }});
-    })
+            },
+            $cordovaInAppBrowser: {},
+            $rootScope: scope
+        });
+        })
     );
 
     // tests start here

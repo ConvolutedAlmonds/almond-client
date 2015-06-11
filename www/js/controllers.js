@@ -3,7 +3,7 @@ angular.module('almond.controllers', [])
   $scope.dummy = "dummy";
 })
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $state, Auth, AuthToken, pushService) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $state, Auth, AuthToken, pushService, $cordovaInAppBrowser, $rootScope) {
   // Form data for the login modal
   $scope.loginData = {};
   $scope.currState = $state.current.name;
@@ -38,9 +38,9 @@ angular.module('almond.controllers', [])
     var clientId = "664215290683-thjone29b1n8md31t5n4aufbuansum0r.apps.googleusercontent.com";
     var myUrl =     'https://accounts.google.com/o/oauth2/auth?client_id=' + clientId + '&redirect_uri=http://localhost/callback&scope=https://www.googleapis.com/auth/calendar+https://www.googleapis.com/auth/plus.login+https://www.googleapis.com/auth/userinfo.profile&approval_prompt=force&response_type=code&access_type=offline'
 
-    var ref = window.open(myUrl, '_blank', 'location=no');
-    ref.addEventListener('loadstart', function(event) {
-        if((event.url).startsWith("http://localhost/callback")) {
+    $cordovaInAppBrowser.open(myUrl, '_blank', 'location=no');
+    $rootScope.$on('$cordovaInAppBrowser:loadstart', function(e, event){
+      if((event.url).startsWith("http://localhost/callback")) {
             requestToken = (event.url).split("code=")[1];
             // postAuthenticate($http, requestToken);
             Auth.exchangeCode(requestToken, function() {
@@ -48,14 +48,11 @@ angular.module('almond.controllers', [])
             });
             console.log(requestToken);
             // alert(requestToken);
-            ref.close();
+            $cordovaInAppBrowser.close();
         }
     });
-    if (typeof String.prototype.startsWith != 'function') {
-        String.prototype.startsWith = function (str){
-            return this.indexOf(str) == 0;
-        };
-    }
+    
+    
     // Simulate a login delay. Remove this and replace with your login
     // code if using a login system
     $timeout(function() {
@@ -70,7 +67,7 @@ angular.module('almond.controllers', [])
 
 })
 
-.controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http, $location, destinationService, $ionicLoading, $filter) {
+.controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http, $location, destinationService, $ionicLoading, $filter, $cordovaInAppBrowser) {
   if(typeof destinationService.get() === 'undefined') {
     $scope.destination = {};
     $scope.destination.formatted_address = '875 Post Street, San Francisco, CA 94109, USA';
