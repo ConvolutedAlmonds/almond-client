@@ -70,7 +70,7 @@ angular.module('almond.controllers', [])
 
 })
 
-.controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http, $location, destinationService, $ionicLoading, $filter, $ionicPopover, $ionicHistory) {
+.controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http, $location, destinationService, $ionicLoading, $filter, $ionicPopover, $ionicHistory, Settings) {
   if(typeof destinationService.get() === 'undefined') {
     $scope.destination = {};
     $scope.destination.formatted_address = '875 Post Street, San Francisco, CA 94109, USA';
@@ -82,6 +82,9 @@ angular.module('almond.controllers', [])
       $scope.destination = newDest;
     })
   };
+
+  var allowedModes = Settings.getAllowedModes();
+  console.dir(allowedModes)
 
   $scope.Math = window.Math;
 
@@ -141,6 +144,7 @@ angular.module('almond.controllers', [])
           var formattedResult = [];
           if (!result) break;
 
+
           for(var j = 0; j < result.length; j++) {
 
             var subResult = result[j];
@@ -187,7 +191,10 @@ angular.module('almond.controllers', [])
               formattedSubResult.transitLogo = transitLogo;
             }
 
-            formattedData.cards.push(formattedSubResult);
+            // only return cards allowed by user settings
+            if (allowedModes[subResult.travelMode]) {
+              formattedData.cards.push(formattedSubResult);
+            }
           }
         }
 
@@ -220,8 +227,10 @@ angular.module('almond.controllers', [])
           uberAppUrl: uberAppLink + '&product_id=' + uberResult.time_product_id
         };
 
-        formattedData.cards.push(formattedSubResult);
-        var formattedResult = [formattedSubResult];
+        if (allowedModes[formattedSubResult.travelMode]) {
+          formattedData.cards.push(formattedSubResult);
+        }
+
       }
 
       $scope.options = formattedData;
@@ -341,23 +350,9 @@ angular.module('almond.controllers', [])
 
 })
 
-.controller('SettingsCtrl', function($scope) {
-  $scope.settings = {
-    travelModes: {
-      uber: {
-        enabled: false,
-        title: "Uber"
-      },
-      driving: {
-        enabled: true,
-        title:"Driving"
-      },
-      transit: {
-        enabled: true,
-        title: "Public Transit"
-      }
-    }
-  }
+.controller('SettingsCtrl', function($scope, Settings) {
+  $scope.settings = Settings.getSettings();
+
 })
 
 .controller('EventCtrl', function($http, $location, $scope, $stateParams, $rootScope, destinationService, mapService, Auth) {

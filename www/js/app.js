@@ -13,7 +13,8 @@ angular.module('almond', ['ionic',
   'ionic.service.push',
   'almond.controllers',
 	'authService',
-  'pushService'])
+  'pushService',
+  'settingsService'])
 .run(function($ionicPlatform, $rootScope, userLocation, $cordovaSplashscreen) {
   if (typeof String.prototype.startsWith != 'function') {
     String.prototype.startsWith = function (str){
