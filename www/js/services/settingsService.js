@@ -4,55 +4,58 @@ angular.module('settingsService', [])
 
   var settingsFactory = {};
 
-  var travelModes = {
-    driving: {
+  // Default travel mode settings
+  var travelModes = [
+    { type: "driving",
       enabled: true,
       title:"Drive"
     },
-    walking: {
+    { type: "walking",
       enabled: true,
       title: "Walk"
     },
-    bicycle: {
+    { type: "bicycle",
       enabled: true,
       title: "Bicycle"
     },
-    transit: {
+    { type: "transit",
       enabled: true,
       title: "Public Transit"
     },
-    uberX: {
+    { type: "uberX",
       enabled: true,
       title: "UberX"
     },
-    uberXL: {
-      enabled: false,
+    { type: "uberXL",
+      enabled: true,
       title: "UberXL"
     },
-    uberBLACK: {
-      enabled: false,
+    { type: "UberBLACK",
+      enabled: true,
       title: "UberBlack"
     },
-    uberSUV: {
-      enabled: false,
+    { type: "UberSUV",
+      enabled: true,
       title: "UberSUV"
     }
-  };
+  ];
 
+  // Returns current settings
   settingsFactory.getSettings = function() {
     var currentSettings = { travelModes: travelModes };
     return currentSettings;
   }
 
+  // Returns object with currently enabled travel modes
   settingsFactory.getAllowedModes = function() {
 
     var allowedModes = {};
 
-    for (var mode in travelModes) {
-      if (travelModes[mode].enabled){
-        allowedModes[mode] = true;
+    travelModes.forEach(function(mode) {
+      if (mode.enabled){
+        allowedModes[mode.type] = true;
       }
-    }
+    })
 
     return allowedModes;
   };

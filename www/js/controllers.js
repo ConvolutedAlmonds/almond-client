@@ -83,8 +83,8 @@ angular.module('almond.controllers', [])
     })
   };
 
+  // Get currently allowed settings
   var allowedModes = Settings.getAllowedModes();
-  console.dir(allowedModes)
 
   $scope.Math = window.Math;
 
@@ -207,6 +207,7 @@ angular.module('almond.controllers', [])
         '&dropoff[formatted_address]=' + encodeURIComponent(data.misc.destination.address);
 
       for (var i = 0; i < data.uber.length; i++) {
+
         var uberResult = data.uber[i];
 
         var formattedSubResult = {
