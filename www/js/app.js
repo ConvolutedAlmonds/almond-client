@@ -15,13 +15,17 @@ angular.module('almond', ['ionic',
 	'authService',
   'pushService',
   'settingsService'])
+
 .run(function($ionicPlatform, $rootScope, userLocation, $cordovaSplashscreen) {
+
   if (typeof String.prototype.startsWith != 'function') {
     String.prototype.startsWith = function (str){
       return this.indexOf(str) == 0;
     };
   }
   $ionicPlatform.ready(function() {
+
+    $rootScope.firstStartLoad = true;
 
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)

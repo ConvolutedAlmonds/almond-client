@@ -176,8 +176,10 @@ angular.module('almond.controllers', [])
             var formattedSubResult = {
               travelMode: subResult.travelMode,
               fare: subResult.fare || "$0",
+              fareNum: (typeof subResult === "string" ? parseFloat(subResult.fare.replace("$","")) : typeof subResult.fare === "object" ? subResult.fare.value : 0  ),
               distance: subResult.legs[0].distance,
-              duration: subResult.legs[0].duration.text,
+              duration: subResult.travelMode === "transit" ? Math.ceil((subResult.legs[0].arrival_time.value - Math.floor((new Date).getTime()/1000)) / 60) + "m" : subResult.duration.text,
+              durationNum: subResult.travelMode === "transit" ? Math.ceil((subResult.legs[0].arrival_time.value - Math.floor((new Date).getTime()/1000)) / 60) : Math.ceil((subResult.duration.value / 60)),            
               summary: subResult.summary,
               durationByMode: [subResult.durationByMode[0], subResult.durationByMode[1]],
               directions: subResult.legs[0].steps,
@@ -267,10 +269,10 @@ angular.module('almond.controllers', [])
 
 })
 
-.controller('StartCtrl', function($scope, $rootScope, destinationService, $http, $ionicUser, $ionicPush, Auth, AuthToken, pushService, $location) {
+.controller('StartCtrl', function($scope, $rootScope, destinationService, $http, $ionicUser, $ionicPush, Auth, AuthToken, pushService, $location, $cordovaSplashscreen) {
   $scope.$on('$ionicView.loaded', function() {
     ionic.Platform.ready( function() {
-      if(navigator && navigator.splashscreen) navigator.splashscreen.hide();
+      if(navigator && navigator.splashscreen) setTimeout(navigator.splashscreen.hide,250);
       pushService.identifyUser();
     });
   });
@@ -284,6 +286,15 @@ angular.module('almond.controllers', [])
 
   $scope.lat = $rootScope.userLat;
   $scope.long = $rootScope.userLong;
+
+  $scope.isFirstLoad = function(str) {
+    if($rootScope.firstStartLoad) {
+      setTimeout(function(){ $rootScope.firstStartLoad = false; },1000);
+      return str;
+    } else {
+      return '';
+    }
+  }
 
   // this syncs our scope's 'lat' and 'long' properties with the coordinates
   // provided by the userLocation service to the rootScope.
