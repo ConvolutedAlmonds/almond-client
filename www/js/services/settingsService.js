@@ -41,13 +41,13 @@ angular.module('settingsService', [])
   ];
 
   // Returns current settings
-  settingsFactory.getSettings = function() {
+  var getSettings = function() {
     var currentSettings = { travelModes: travelModes };
     return currentSettings;
   }
 
   // Returns object with currently enabled travel modes
-  settingsFactory.getAllowedModes = function() {
+  var getAllowedModes = function() {
 
     var allowedModes = {};
 
@@ -60,6 +60,9 @@ angular.module('settingsService', [])
     return allowedModes;
   };
 
-  return settingsFactory;
+  return {
+    getSettings: getSettings,
+    getAllowedModes: getAllowedModes
+  };
 
 });
