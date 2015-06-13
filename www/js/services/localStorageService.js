@@ -2,8 +2,9 @@ angular.module('localStorageService', [])
 
 .factory('LocalStorage', function(){
   var get = function(k) {
-    return window.localStorage[k] ? window.localStorage[k] : undefined;
+    return window.localStorage[k];
   };
+
   var set = function(k,v) {
     if(window.localStorage) {
       window.localStorage[k] = JSON.stringify(v);
@@ -12,6 +13,10 @@ angular.module('localStorageService', [])
       return false;
     }
   };
+
+  var check = function(k) {
+    return typeof window.localStorage[k] === 'undefined';
+  }
 
   return {
     get: get,
