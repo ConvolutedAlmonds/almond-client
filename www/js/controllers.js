@@ -71,7 +71,7 @@ angular.module('almond.controllers', [])
 })
 
 
-.controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http, $location, destinationService, $ionicLoading, $filter, $ionicPopover, $ionicHistory, $cordovaAppAvailability, Settings, Routes) {
+.controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http, $location, destinationService, $ionicLoading, $filter, $ionicPopover, $ionicHistory, $cordovaAppAvailability, Settings, Routes, Uber) {
   if(typeof destinationService.get() === 'undefined') {
     $scope.destination = {};
     $scope.destination.formatted_address = '875 Post Street, San Francisco, CA 94109, USA';
@@ -83,9 +83,6 @@ angular.module('almond.controllers', [])
       $scope.destination = newDest;
     })
   };
-
-  // Get currently allowed settings
-  var allowedModes = Settings.getAllowedModes();
 
   $scope.Math = window.Math;
 
@@ -134,20 +131,25 @@ angular.module('almond.controllers', [])
 
     // Retrieve travel routes from server
     getRoutes($http, $rootScope.userLong, $rootScope.userLat, $scope.destination.formatted_address, function(err, data){
-      
+
       if (err) {
         console.log('error getting routes!');
         $scope.hideLoading();
         $ionicHistory.goBack();
       } else {
 
-        // Parse response from server to create formmated route cards
-        var routeCards = Routes.createCards(data.directions.results, allowedModes);
+        // Get currently allowed settings
+        var allowedModes = Settings.getAllowedModes();
 
-        $scope.options = routeCards;
+        // Parse response from server to create formmated route cards
+        var googleRouteCards = Routes.createCards(data.directions.results, allowedModes);
+        var uberCards = Uber.createCards(data.uber, data.misc, allowedModes);
+        var combinedCards = googleRouteCards.concat(uberCards);
+
+        // Insert cards into view and stop refresh/hide loading
+        $scope.options = { cards: combinedCards };
         $scope.$broadcast('scroll.refreshComplete');
         $scope.hideLoading();
-        console.log('hide loading')
       }
      });
   };

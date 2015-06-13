@@ -24,7 +24,7 @@ angular.module('settingsService', [])
     },
     { type: "uberX",
       enabled: true,
-      title: "UberX"
+      title : "UberX"
     },
     { type: "uberXL",
       enabled: true,
