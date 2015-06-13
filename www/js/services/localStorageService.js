@@ -20,6 +20,7 @@ angular.module('localStorageService', [])
 
   return {
     get: get,
-    set: set
+    set: set,
+    check: check
   }
 });

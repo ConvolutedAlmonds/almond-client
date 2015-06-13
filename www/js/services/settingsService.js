@@ -1,9 +1,9 @@
-angular.module('settingsService', [])
+angular.module('settingsService', ['localStorageService'])
 
-.factory('Settings', function(){
+.factory('Settings', function(LocalStorage){
 
-  // Default travel mode settings
-  var travelModes = [
+  
+  var travelModes = LocalStorage.check('travelModes') ? LocalStorage.get('travelModes') : [
     { type: "driving",
       enabled: true,
       title:"Drive"
