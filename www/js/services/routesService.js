@@ -43,7 +43,7 @@ angular.module('routesService', [])
           }
         }
       }
-    })
+    });
 
     if (lineNumber) {
       card.lineNumber = lineNumber;

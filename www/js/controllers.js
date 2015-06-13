@@ -132,22 +132,19 @@ angular.module('almond.controllers', [])
     $scope.showLoading();
     $scope.options = {};
 
-    // Retrieve routes from server
+    // Retrieve travel routes from server
     getRoutes($http, $rootScope.userLong, $rootScope.userLat, $scope.destination.formatted_address, function(err, data){
       
       if (err) {
         console.log('error getting routes!');
         $scope.hideLoading();
         $ionicHistory.goBack();
-        // $location.path('app/start');
       } else {
 
-        // Parse response from server to create array of cards
+        // Parse response from server to create formmated route cards
         var routeCards = Routes.createCards(data.directions.results, allowedModes);
 
         $scope.options = routeCards;
-        console.log("FORMATTED DATA");
-        // console.dir(formattedData);
         $scope.$broadcast('scroll.refreshComplete');
         $scope.hideLoading();
         console.log('hide loading')
