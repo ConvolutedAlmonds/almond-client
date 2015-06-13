@@ -243,9 +243,9 @@ angular.module('almond.controllers', [])
     // console.dir(data)
     $scope.data = data;
     console.log("Got data from event")
+    deregister();
   })
   $rootScope.$broadcast('TravelMode.ReadyforData');
-  deregister();
 
 
   $scope.destination = destinationService.get();
