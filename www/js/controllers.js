@@ -325,7 +325,7 @@ angular.module('almond.controllers', [])
 
 .controller('TravelModeCtrl', function($scope,$stateParams,$rootScope, destinationService, mapService, $ionicPopover) {
   $scope.activeTab = 'directions';
-  var userMarker, route;
+  var userMarker, accuracyCircle, route;
   console.log("TravelModeCtrl says hi");
   var deregister = $scope.$on('TravelModes.Data', function(e,data) {
     console.log("DATA!");
@@ -343,7 +343,6 @@ angular.module('almond.controllers', [])
   });
 
 
-
   var map = mapService.create('map');
 
   google.maps.event.addListenerOnce(map, 'idle', function(){
@@ -351,8 +350,14 @@ angular.module('almond.controllers', [])
     route.setMap(map);
   });
 
+  $scope.provisionMap = function() {
+    setTimeout(google.maps.event.trigger.bind(this,map, 'resize'),5);
+  }
+
   $scope.$on('UserLocation.Update',function(){
-    userMarker = mapService.updateUserLocation(map,$rootScope.userLat,$rootScope.userLong,$rootScope.userAccuracy, userMarker);
+    var result = mapService.updateUserLocation(map,$rootScope.userLat,$rootScope.userLong,$rootScope.userAccuracy, userMarker,accuracyCircle);
+    userMarker = result.userMarker;
+    accuracyCircle = result.accuracyCircle;
   })
 
 
