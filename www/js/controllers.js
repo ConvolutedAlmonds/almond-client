@@ -70,7 +70,8 @@ angular.module('almond.controllers', [])
 
 })
 
-.controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http, $location, destinationService, $ionicLoading, $filter, $ionicPopover, $ionicHistory, Settings) {
+
+.controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http, $location, destinationService, $ionicLoading, $filter, $ionicPopover, $ionicHistory, $cordovaAppAvailability, Settings) {
   if(typeof destinationService.get() === 'undefined') {
     $scope.destination = {};
     $scope.destination.formatted_address = '875 Post Street, San Francisco, CA 94109, USA';
@@ -114,7 +115,13 @@ angular.module('almond.controllers', [])
     var choice = this.route;
     console.log('THIS', choice);
     if (choice.uberAppUrl) {
-      window.open(choice.uberAppUrl, 'system');
+      $cordovaAppAvailability.check('uber://')
+        .then(function() {
+          // is available
+          window.open(choice.uberAppUrl, 'system');
+        }, function () {
+          window.open('https://itunes.apple.com/us/app/uber/id368677368?mt=8','system');
+        });
     } else {
       $location.path(path);
     }
