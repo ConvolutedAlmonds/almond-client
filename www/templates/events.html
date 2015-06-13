@@ -3,9 +3,9 @@
   <div ng-repeat="event in events">
     <div class="card" ng-click="go('{{event.location}}', ($index))" ng-class="{'error-box': $index===selectedIndex}">
       <a class="item">
-      <div class='event-title'>{{event.summary}}</div>
-      <div>{{event.location}}</div>
-      <div>{{event.start.formattedTime}}-{{event.end.formattedTime}}</div>
+        <div class='event-title'>{{event.summary}}</div>
+        <div>{{event.location}}</div>
+        <div>{{event.start.zoneTime}}-{{event.end.zoneTime}}</div>
       </a>
     </div>
   </div>

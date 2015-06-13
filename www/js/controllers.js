@@ -70,7 +70,8 @@ angular.module('almond.controllers', [])
 
 })
 
-.controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http, $location, destinationService, $ionicLoading, $filter, $ionicPopover, $ionicHistory, $cordovaAppAvailability) {
+
+.controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http, $location, destinationService, $ionicLoading, $filter, $ionicPopover, $ionicHistory, $cordovaAppAvailability, Settings, Routes, Uber) {
   if(typeof destinationService.get() === 'undefined') {
     $scope.destination = {};
     $scope.destination.formatted_address = '875 Post Street, San Francisco, CA 94109, USA';
@@ -128,119 +129,30 @@ angular.module('almond.controllers', [])
     $scope.showLoading();
     $scope.options = {};
 
+    // Retrieve travel routes from server
     getRoutes($http, $rootScope.userLong, $rootScope.userLat, $scope.destination.formatted_address, function(err, data){
-      
+
       if (err) {
         console.log('error getting routes!');
         $scope.hideLoading();
         $ionicHistory.goBack();
-        // $location.path('app/start');
       } else {
 
-        var formattedData = {};
-        console.log('show loading')
-        formattedData.data = [];
-        formattedData.cards = [];
+        // Get currently allowed settings
+        var allowedModes = Settings.getAllowedModes();
 
-        for(var i = 0; i < data.directions.results.length; i++) {
-          var result = data.directions.results[i];
-          var formattedResult = [];
-          if (!result) break;
+        // Parse response from server to create formmated route cards
+        var googleRouteCards = Routes.createCards(data.directions.results, allowedModes);
+        var uberCards = Uber.createCards(data.uber, data.misc, allowedModes);
+        var combinedCards = googleRouteCards.concat(uberCards);
 
-          for(var j = 0; j < result.length; j++) {
-
-            var subResult = result[j];
-            var steps = subResult.legs[0].steps;
-            var lineNumber;
-            var transitLogo;
-            var somethingFound = false;
-
-            for (var k = 0; k < steps.length; k++) {
-              if (!somethingFound) {
-                if (steps[k].transit_details) {
-                  var line = steps[k].transit_details.line;
-                  if (line.short_name) {
-                    lineNumber = line.short_name;
-                    somethingFound = true;
-                  } else {
-                    if (line.vehicle){
-                      var vehicle = line.vehicle
-                      if (vehicle.local_icon) {
-                        transitLogo = 'http:' + vehicle.local_icon;
-                        somethingFound = true;
-                      }
-                    }
-                  }
-                }
-              }
-            }
-
-            var formattedSubResult = {
-              travelMode: subResult.travelMode,
-              fare: subResult.fare || "$0",
-              fareNum: (typeof subResult === "string" ? parseFloat(subResult.fare.replace("$","")) : typeof subResult.fare === "object" ? subResult.fare.value : 0  ),
-              distance: subResult.legs[0].distance,
-              duration: subResult.travelMode === "transit" ? Math.ceil((subResult.legs[0].arrival_time.value - Math.floor((new Date).getTime()/1000)) / 60) + "m" : subResult.duration.text,
-              durationNum: subResult.travelMode === "transit" ? Math.ceil((subResult.legs[0].arrival_time.value - Math.floor((new Date).getTime()/1000)) / 60) : Math.ceil((subResult.duration.value / 60)),            
-              summary: subResult.summary,
-              durationByMode: [subResult.durationByMode[0], subResult.durationByMode[1]],
-              directions: subResult.legs[0].steps,
-              lineNumber: undefined,
-              transitLogo: undefined
-            };
-
-            if (lineNumber) {
-              formattedSubResult.lineNumber = lineNumber;
-            } else if (transitLogo) {
-              formattedSubResult.transitLogo = transitLogo;
-            }
-
-            formattedData.cards.push(formattedSubResult);
-          }
-        }
-
-      var uberAppLink = 'uber://?action=setPickup' +
-        '&pickup[latitude]=' + data.misc.origin.latitude.toString() +
-        '&pickup[longitude]=' + data.misc.origin.longitude.toString() +
-        '&pickup[formatted_address]=' + encodeURIComponent(data.misc.origin.address) +
-        '&dropoff[latitude]=' + data.misc.destination.latitude.toString() +
-        '&dropoff[longitude]=' + data.misc.destination.longitude.toString() +
-        '&dropoff[formatted_address]=' + encodeURIComponent(data.misc.destination.address);
-
-      for (var i = 0; i < data.uber.length; i++) {
-        var uberResult = data.uber[i];
-
-        var formattedSubResult = {
-          travelMode: uberResult.price_localized_display_name,
-          fare: { text: uberResult.price_estimate },
-          fareNum: ((uberResult.price_low_estimate + uberResult.price_high_estimate) / 2),
-          distance: { text: uberResult.price_distance },
-          duration: Math.ceil((uberResult.price_duration + uberResult.time_estimate) / 60) + "m",
-          durationNum: Math.ceil((uberResult.price_duration + uberResult.time_estimate) / 60),
-          summary: uberResult.price_display_name,
-          durationByMode: [[uberResult.price_parsedArrivalTime, 'driving']],
-          directions: [],
-          timeTilArrivalSec: uberResult.time_estimate, // FIX
-          timeTilArrivalParsed: uberResult.time_parsedDuration, // FIX
-          origin: data.misc.origin,
-          destination: data.misc.destination,
-          productId: uberResult.time_product_id,
-          uberAppUrl: uberAppLink + '&product_id=' + uberResult.time_product_id
-        };
-
-        formattedData.cards.push(formattedSubResult);
-        var formattedResult = [formattedSubResult];
+        // Insert cards into view and stop refresh/hide loading
+        $scope.options = { cards: combinedCards };
+        $scope.$broadcast('scroll.refreshComplete');
+        $scope.hideLoading();
       }
-
-      $scope.options = formattedData;
-      console.log("FORMATTED DATA");
-      // console.dir(formattedData);
-      $scope.$broadcast('scroll.refreshComplete');
-      $scope.hideLoading();
-      console.log('hide loading')
-    }
-    });
-  }
+     });
+  };
 
   $scope.refresh();
 
@@ -362,23 +274,9 @@ angular.module('almond.controllers', [])
 
 })
 
-.controller('SettingsCtrl', function($scope) {
-  $scope.settings = {
-    travelModes: {
-      uber: {
-        enabled: false,
-        title: "Uber"
-      },
-      driving: {
-        enabled: true,
-        title:"Driving"
-      },
-      transit: {
-        enabled: true,
-        title: "Public Transit"
-      }
-    }
-  }
+.controller('SettingsCtrl', function($scope, Settings) {
+  $scope.settings = Settings.getSettings();
+
 })
 
 .controller('EventCtrl', function($http, $location, $scope, $stateParams, $rootScope, destinationService, mapService, Auth) {

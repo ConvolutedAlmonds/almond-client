@@ -11,8 +11,12 @@ angular.module('almond', ['ionic',
   'ngCordova',
   'ionic.service.core',
   'almond.controllers',
-	'authService'])
-.run(function($ionicPlatform, $rootScope, userLocation) {
+	'authService',
+  'settingsService',
+  'routesService'])
+
+.run(function($ionicPlatform, $rootScope, userLocation, $cordovaSplashscreen) {
+
   if (typeof String.prototype.startsWith != 'function') {
     String.prototype.startsWith = function (str){
       return this.indexOf(str) == 0;

@@ -21,7 +21,7 @@ var getRoutes = function($http, longitude, latitude, destAddress, callback) {
 var getCalendarEvents = function($http, callback) {
 
   $http.get(serverUrl + '/cal/events').success(function(data) {
-      console.log('got events', events);
+      console.log('got events');
       callback(data);
   }).error(function(error) {
       console.log(error);
