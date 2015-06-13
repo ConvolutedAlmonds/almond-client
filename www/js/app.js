@@ -10,10 +10,8 @@ angular.module('almond', ['ionic',
   'ion-google-place', 
   'ngCordova',
   'ionic.service.core',
-  'ionic.service.push',
   'almond.controllers',
 	'authService',
-  'pushService',
   'settingsService',
   'routesService'])
 
@@ -407,17 +405,5 @@ angular.module('almond', ['ionic',
     create: create,
     drawRoute: drawRoute
   }
-}).config(['$ionicAppProvider', function($ionicAppProvider) {
-  // Identify app
-  $ionicAppProvider.identify({
-    // The App ID (from apps.ionic.io) for the server
-    app_id: '21a5d31c',
-    // The public API key all services will use for this app
-    api_key: '639530a5fcb22fe6fa0e07a8186c941c9142b1ab041e80ac',
-    // Set the app to use development pushes
-    dev_push: true,
-    gcm_id: '664215290683'
-  });
-  console.log("identify");
-}]);
+})
 

@@ -177,11 +177,10 @@ angular.module('almond.controllers', [])
 
 })
 
-.controller('StartCtrl', function($scope, $rootScope, destinationService, $http, $ionicUser, $ionicPush, Auth, AuthToken, pushService, $location, $cordovaSplashscreen) {
+.controller('StartCtrl', function($scope, $rootScope, destinationService, $http, Auth, AuthToken, $location, $cordovaSplashscreen) {
   $scope.$on('$ionicView.loaded', function() {
     ionic.Platform.ready( function() {
       if(navigator && navigator.splashscreen) setTimeout(navigator.splashscreen.hide,250);
-      pushService.identifyUser();
     });
   });
 
