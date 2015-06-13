@@ -326,7 +326,6 @@ angular.module('almond', ['ionic',
 })
 
 .service('mapService',function(polylineUtilityService){
-  var accuracyCircle;
   var create = function(id,lat,lng) {
     lat = lat || 37.7483;
     lng = lng || -122.4367;
@@ -398,7 +397,10 @@ angular.module('almond', ['ionic',
       accuracyCircle.setCenter(new google.maps.LatLng(lat, lng));
       accuracyCircle.setRadius(accuracy);
     }
-    return userMarker;
+    return {
+      userMarker: userMarker,
+      accuracyCircle: accuracyCircle
+      }
   };
   return {
     updateUserLocation: updateUserLocation,

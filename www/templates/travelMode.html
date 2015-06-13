@@ -34,7 +34,7 @@
     <a ng-click="activeTab = 'directions'" class="tab-item {{activeTab === 'directions' ? 'active' : ''}} secondary">
       Directions
     </a>
-    <a ng-click="activeTab = 'map'" class="tab-item {{activeTab === 'map' ? 'active' : ''}} secondary">
+    <a ng-click="activeTab = 'map'; provisionMap()" class="tab-item {{activeTab === 'map' ? 'active' : ''}} secondary">
       Map
     </a>
   </div>
