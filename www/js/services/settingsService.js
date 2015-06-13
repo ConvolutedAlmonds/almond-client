@@ -2,8 +2,6 @@ angular.module('settingsService', [])
 
 .factory('Settings', function(){
 
-  var settingsFactory = {};
-
   // Default travel mode settings
   var travelModes = [
     { type: "driving",
