@@ -13,7 +13,8 @@ angular.module('almond', ['ionic',
   'almond.controllers',
 	'authService',
   'settingsService',
-  'routesService'])
+  'routesService',
+  'localStorageService'])
 
 .run(function($ionicPlatform, $rootScope, userLocation, $cordovaSplashscreen) {
 
