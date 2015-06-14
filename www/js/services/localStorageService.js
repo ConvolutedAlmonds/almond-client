@@ -15,7 +15,7 @@ angular.module('localStorageService', [])
   };
 
   var check = function(k) {
-    return !typeof window.localStorage[k] === 'undefined';
+    return !(typeof window.localStorage[k] === 'undefined');
   }
 
   return {
