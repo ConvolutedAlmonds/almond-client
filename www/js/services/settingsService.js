@@ -2,41 +2,44 @@ angular.module('settingsService', ['localStorageService'])
 
 .factory('Settings', function(LocalStorage){
 
+  if(!LocalStorage.check('travelModes')) {
+    LocalStorage.set('travelModes', [
+      { type: "driving",
+        enabled: true,
+        title:"Drive"
+      },
+      { type: "walking",
+        enabled: true,
+        title: "Walk"
+      },
+      { type: "bicycle",
+        enabled: true,
+        title: "Bicycle"
+      },
+      { type: "transit",
+        enabled: true,
+        title: "Public Transit"
+      },
+      { type: "uberX",
+        enabled: true,
+        title : "UberX"
+      },
+      { type: "uberXL",
+        enabled: true,
+        title: "UberXL"
+      },
+      { type: "UberBLACK",
+        enabled: true,
+        title: "UberBlack"
+      },
+      { type: "UberSUV",
+        enabled: true,
+        title: "UberSUV"
+      }
+    ]);
+  }
   
-  var travelModes = LocalStorage.check('travelModes') ? LocalStorage.get('travelModes') : [
-    { type: "driving",
-      enabled: true,
-      title:"Drive"
-    },
-    { type: "walking",
-      enabled: true,
-      title: "Walk"
-    },
-    { type: "bicycle",
-      enabled: true,
-      title: "Bicycle"
-    },
-    { type: "transit",
-      enabled: true,
-      title: "Public Transit"
-    },
-    { type: "uberX",
-      enabled: true,
-      title : "UberX"
-    },
-    { type: "uberXL",
-      enabled: true,
-      title: "UberXL"
-    },
-    { type: "UberBLACK",
-      enabled: true,
-      title: "UberBlack"
-    },
-    { type: "UberSUV",
-      enabled: true,
-      title: "UberSUV"
-    }
-  ];
+  var travelModes = LocalStorage.get('travelModes');
 
   // Returns current settings
   var getSettings = function() {
