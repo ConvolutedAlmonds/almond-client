@@ -277,6 +277,18 @@ angular.module('almond.controllers', [])
 .controller('SettingsCtrl', function($scope, Settings) {
   $scope.settings = Settings.getSettings();
 
+  var firstRun = true;
+
+  $scope.$watch(function() {
+    return $scope.settings;
+  },function(){
+    if(!firstRun) {
+      console.log('wrote settings')
+      Settings.writeSettings($scope.settings);
+    }
+    firstRun = false;
+  },true)
+
 })
 
 .controller('EventCtrl', function($http, $location, $scope, $stateParams, $rootScope, destinationService, mapService, Auth) {
