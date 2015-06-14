@@ -61,9 +61,14 @@ angular.module('settingsService', ['localStorageService'])
     return allowedModes;
   };
 
+  var writeSettings = function(currentSettings) {
+    LocalStorage.set('travelModes',currentSettings.travelModes);
+  }
+
   return {
     getSettings: getSettings,
-    getAllowedModes: getAllowedModes
+    getAllowedModes: getAllowedModes,
+    writeSettings: writeSettings
   };
 
 });
