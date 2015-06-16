@@ -160,9 +160,29 @@ html, body {
   top: 40% !important;
 }
 
-.button-half {
+button.button-half {
   width: 40%;
   display: inline;
+}
+
+button.button-half:nth-of-type(1) {
+  margin-left: 20px;
+}
+
+button.button-half:nth-of-type(2) {
+  margin-right: 10px;
+}
+
+button.bottom {
+  position: absolute;
+  bottom: 25px;
+}
+
+button.button-white {
+  border-color: #fff;
+  border-width: 1px;
+  background-color: #38a5f0;
+  color: #fff;
 }
 
 .error-box {

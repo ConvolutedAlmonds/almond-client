@@ -18,8 +18,10 @@
         <span ng-if="location.formatted_address && (lat || long)">Navigate!</span>
       </a>
       <br>
-      <button ng-click="go('/app/events')" class="button button-half icon-left ion-calendar {{isFirstLoad('animated bounceInLeft _1')}}">Calendar</button>
-      <button style="position:absolute;right:10px;" ng-click="go('/app/settings')" class="button button-half icon-left ion-gear-a {{isFirstLoad('animated bounceInRight _1')}}">Settings</button>
+    </div>
+    <div>
+      <button ng-click="go('/app/events')" class="button button-half icon-left ion-calendar {{isFirstLoad('animated bounceInLeft _1')}} button-white bottom">Calendar</button>
+      <button style="position:absolute;right:10px;" ng-click="go('/app/settings')" class="button button-half icon-left ion-gear-a {{isFirstLoad('animated bounceInRight _1')}} button-white bottom">Settings</button>
     </div>
 
   </ion-content>
