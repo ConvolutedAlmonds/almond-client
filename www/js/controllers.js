@@ -72,17 +72,11 @@ angular.module('almond.controllers', [])
 
 
 .controller('TravelModesCtrl', function($scope, userLocation, $rootScope, $http, $location, destinationService, $ionicLoading, $filter, $ionicPopover, $ionicHistory, $cordovaAppAvailability, Settings, Routes, Uber) {
-  if(typeof destinationService.get() === 'undefined') {
-    $scope.destination = {};
-    $scope.destination.formatted_address = '875 Post Street, San Francisco, CA 94109, USA';
-    $rootScope.userLat = 37.785834;
-    $rootScope.userLong = -122.406417;
-  } else {
-    $scope.destination = destinationService.get();
-    destinationService.listen($scope, function(newDest){
-      $scope.destination = newDest;
-    })
-  };
+
+  $scope.destination = destinationService.get();
+  destinationService.listen($scope, function(newDest){
+    $scope.destination = newDest;
+  })
 
   $scope.Math = window.Math;
 
