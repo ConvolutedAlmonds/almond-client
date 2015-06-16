@@ -11,11 +11,17 @@
         <i class="icon ion-search placeholder-icon"></i>
         <ion-google-place placeholder="Enter an address, Apt# and ZIP" ng-model="location" ng-change="dest.update(location)" />
       </label>
-      <a class="button button-block button-balanced {{isFirstLoad('animated bounceInDown _1')}}" href="#/app/travelModes">
-        <span ng-if="!location.formatted_address && (lat || long)">Please enter an address.</span>
-        <span ng-if="!location.formatted_address && (!lat || !long)">Please enter an address.</span>
-        <span ng-if="location.formatted_address && (!lat || !long)">Waiting for GPS</span>
-        <span ng-if="location.formatted_address && (lat || long)">Navigate!</span>
+      <a ng-if="!location.formatted_address && (lat || long)" class="button button-block disabled button-balanced {{isFirstLoad('animated bounceInDown _1')}}" href="#/app/travelModes">
+        <span>Please enter an address.</span>
+      </a>
+      <a ng-if="!location.formatted_address && (!lat || !long)" class="button button-block disabled button-balanced {{isFirstLoad('animated bounceInDown _1')}}" href="#/app/travelModes">
+        <span>Please enter an address.</span>
+      </a>
+      <a ng-if="location.formatted_address && (!lat || !long)" class="button button-block disabled button-balanced {{isFirstLoad('animated bounceInDown _1')}}" href="#/app/travelModes">
+        <span>Waiting for GPS</span>
+      </a>
+      <a ng-if="location.formatted_address && (lat || long)" class="button button-block button-balanced {{isFirstLoad('animated bounceInDown _1')}}" href="#/app/travelModes">
+        <span>Navigate!</span>
       </a>
       <br>
     </div>
