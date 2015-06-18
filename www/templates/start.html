@@ -11,15 +11,23 @@
         <i class="icon ion-search placeholder-icon"></i>
         <ion-google-place placeholder="Enter an address, Apt# and ZIP" ng-model="location" ng-change="dest.update(location)" />
       </label>
-      <a class="button button-block button-balanced {{isFirstLoad('animated bounceInDown _1')}}" href="#/app/travelModes">
-        <span ng-if="!location.formatted_address && (lat || long)">Please enter an address.</span>
-        <span ng-if="!location.formatted_address && (!lat || !long)">Please enter an address.</span>
-        <span ng-if="location.formatted_address && (!lat || !long)">Waiting for GPS</span>
-        <span ng-if="location.formatted_address && (lat || long)">Navigate!</span>
+      <a ng-if="!location.formatted_address && (lat || long)" class="button button-block disabled button-balanced {{isFirstLoad('animated bounceInDown _1')}}" href="#/app/travelModes">
+        <span>Please enter an address.</span>
+      </a>
+      <a ng-if="!location.formatted_address && (!lat || !long)" class="button button-block disabled button-balanced {{isFirstLoad('animated bounceInDown _1')}}" href="#/app/travelModes">
+        <span>Please enter an address.</span>
+      </a>
+      <a ng-if="location.formatted_address && (!lat || !long)" class="button button-block disabled button-balanced {{isFirstLoad('animated bounceInDown _1')}}" href="#/app/travelModes">
+        <span>Waiting for GPS</span>
+      </a>
+      <a ng-if="location.formatted_address && (lat || long)" class="button button-block button-balanced {{isFirstLoad('animated bounceInDown _1')}}" href="#/app/travelModes">
+        <span>Navigate!</span>
       </a>
       <br>
-      <button ng-click="go('/app/events')" class="button button-half icon-left ion-calendar {{isFirstLoad('animated bounceInLeft _1')}}">Calendar</button>
-      <button style="position:absolute;right:10px;" ng-click="go('/app/settings')" class="button button-half icon-left ion-gear-a {{isFirstLoad('animated bounceInRight _1')}}">Settings</button>
+    </div>
+    <div>
+      <button ng-click="go('/app/events')" class="button button-half icon-left ion-calendar {{isFirstLoad('animated bounceInLeft _1')}} button-white bottom">Calendar</button>
+      <button style="position:absolute;right:10px;" ng-click="go('/app/settings')" class="button button-half icon-left ion-gear-a {{isFirstLoad('animated bounceInRight _1')}} button-white bottom">Settings</button>
     </div>
 
   </ion-content>
